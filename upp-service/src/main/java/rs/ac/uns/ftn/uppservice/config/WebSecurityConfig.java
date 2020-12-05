@@ -82,6 +82,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             .antMatchers("**/public/**").permitAll()
             .antMatchers("/auth/**").permitAll()
+            .antMatchers("/camunda/**").permitAll()
 
             // All other requests must be authorized
             .anyRequest().authenticated().and()
@@ -103,5 +104,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers(HttpMethod.POST, "/**/public/**");
         web.ignoring().antMatchers(HttpMethod.PUT, "/**/public/**");
         web.ignoring().antMatchers(HttpMethod.DELETE, "/**/public/**");
+
+        web.ignoring().antMatchers(HttpMethod.GET, "/camunda/**");
+        web.ignoring().antMatchers(HttpMethod.POST, "/camunda/**");
+        web.ignoring().antMatchers(HttpMethod.PUT, "/camunda/**");
+        web.ignoring().antMatchers(HttpMethod.DELETE, "/camunda/**");
     }
 }
