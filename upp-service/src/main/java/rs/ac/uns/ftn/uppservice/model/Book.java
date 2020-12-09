@@ -26,13 +26,14 @@ public class Book {
     private String isbn;
 
     @ManyToOne
+    @JoinColumn(name="writer_id", nullable=false)
     private Writer writer;
 
     @ElementCollection(targetClass=String.class)
     private Set<String> coWriters;
 
-    @Enumerated
-    @Column(name = "genre", nullable = false)
+    @ManyToOne
+    @JoinColumn(name="genre_id", nullable=false)
     private Genre genre;
 
     @ElementCollection(targetClass=String.class)
@@ -59,8 +60,12 @@ public class Book {
     @Column(name = "isPublished", nullable = false)
     private Boolean isPublished;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Suggestion> suggestions;
+
+    @ManyToOne
+    @JoinColumn(name="complaint_id", nullable=false)
+    private Complaint complaint;
 
 
 }

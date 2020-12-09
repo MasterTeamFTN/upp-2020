@@ -19,9 +19,11 @@ public class BoardMemberDecision {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "boardMember_id", nullable=false)
     private BoardMember boardMember;
 
     @ManyToOne
+    @JoinColumn(name="complaint_id", nullable=false)
     private Complaint complaint;
 
     @Column(name = "isPlagiarized")

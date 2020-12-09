@@ -22,12 +22,16 @@ public class Complaint {
     @OneToOne
     private Book questionedBook;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "complaint", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Book> originalBooks;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "complaint", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<BoardMemberDecision> boardMemberDecisions;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "complaint", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<CompliantAssignment> compliantAssignments;
+
+    @ManyToOne
+    @JoinColumn(name = "chiefEditor_id", nullable = false)
+    private ChiefEditor chiefEditor;
 }

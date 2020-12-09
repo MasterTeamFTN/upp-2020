@@ -5,14 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "reader")
+@Table(name = "readers")
 public class Reader extends User {
 
     @Column(name = "isBetaReader", nullable = false)
@@ -21,7 +20,10 @@ public class Reader extends User {
     @Column(name = "penaltyPoints", nullable = false)
     private int penaltyPoints;
 
-    @Enumerated
-    @ElementCollection(targetClass=Genre.class)
+    @ManyToMany
+    @JoinTable(
+            name = "reader_genre",
+            joinColumns = @JoinColumn(name = "reader_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id"))
     private Set<Genre> genres;
 }

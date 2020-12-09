@@ -14,6 +14,6 @@ import java.util.Set;
 @Table(name = "editors")
 public class Editor extends User {
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "editor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<CompliantAssignment> compliantAssignments;
 }
