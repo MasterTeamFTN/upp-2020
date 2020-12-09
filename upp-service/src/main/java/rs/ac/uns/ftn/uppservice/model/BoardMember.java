@@ -10,7 +10,7 @@ import java.util.Set;
 @Table(name = "boardMembers")
 public class BoardMember extends User {
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "boardMember", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<BoardMemberDecision> boardMemberDecisions;
 
 }

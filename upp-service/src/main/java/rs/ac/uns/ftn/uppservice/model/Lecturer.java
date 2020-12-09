@@ -14,7 +14,7 @@ import java.util.Set;
 @Table(name = "lecturers")
 public class Lecturer extends User {
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "lecturer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Suggestion> suggestionSet;
 
 

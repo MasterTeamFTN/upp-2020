@@ -14,10 +14,10 @@ import java.util.Set;
 @Table(name = "chiefEditors")
 public class ChiefEditor extends User {
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "chiefEditor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Suggestion> suggestions;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "chiefEditor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Complaint> complaints;
 
 }

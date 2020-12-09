@@ -23,12 +23,15 @@ public class Suggestion {
     private Set<String> foundErrors;
 
     @ManyToOne
+    @JoinColumn(name = "book_id", nullable=false)
     private Book book;
 
     @ManyToOne
+    @JoinColumn(name = "lecturer_id", nullable=false)
     private Lecturer lecturer;
 
     @ManyToOne
+    @JoinColumn(name = "chief_editor_id", nullable=false)
     private ChiefEditor chiefEditor;
 
 }

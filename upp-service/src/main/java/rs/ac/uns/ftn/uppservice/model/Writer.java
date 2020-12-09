@@ -15,10 +15,13 @@ import java.util.Set;
 @Table(name = "writers")
 public class Writer extends User {
 
-    @Enumerated(EnumType.STRING)
-    @ElementCollection(targetClass=Genre.class)
+    @ManyToMany
+    @JoinTable(
+            name = "writer_genre",
+            joinColumns = @JoinColumn(name = "writer_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id"))
     private Set<Genre> genres;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Book> books;
 }

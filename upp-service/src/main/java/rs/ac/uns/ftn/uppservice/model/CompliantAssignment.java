@@ -22,8 +22,10 @@ public class CompliantAssignment {
     private String notes;
 
     @ManyToOne
+    @JoinColumn(name="editor_id", nullable=false)
     private Editor editor;
 
     @ManyToOne
+    @JoinColumn(name="complaint_id", nullable=false)
     private Complaint complaint;
 }

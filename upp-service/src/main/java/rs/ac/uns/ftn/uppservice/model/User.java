@@ -18,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
-public class User implements UserDetails {
+public abstract class User implements UserDetails {
 
     private static final long serialVersionUID = 1L;
 
