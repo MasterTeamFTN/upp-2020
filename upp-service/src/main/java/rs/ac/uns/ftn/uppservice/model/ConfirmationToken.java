@@ -22,12 +22,16 @@ public class ConfirmationToken {
     @Column(name = "used", nullable = false)
     private boolean used;
 
+    @Column(name = "process_instance_id", nullable = false)
+    private String processInstanceId;
+
     @OneToOne
     private User user;
 
-    public ConfirmationToken(User user) {
+    public ConfirmationToken(User user, String processInstanceId) {
         this.token = UUID.randomUUID().toString();
         this.used = false;
         this.user = user;
+        this.processInstanceId = processInstanceId;
     }
 }

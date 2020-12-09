@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface ReaderService {
 
-    Reader add(List<FormSubmissionDto> formData);
+    Reader add(List<FormSubmissionDto> formData, String processInstanceId);
+    void activateAccount(String token);
 }

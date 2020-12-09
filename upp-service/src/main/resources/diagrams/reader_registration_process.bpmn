@@ -29,7 +29,7 @@
       <bpmn:incoming>Flow_0vsucgb</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_0vsucgb" sourceRef="Activity_0dm186g" targetRef="Event_1p9rkn3" />
-    <bpmn:userTask id="Activity_1i0x3ss" name="Input data">
+    <bpmn:userTask id="Activity_1i0x3ss" name="Input user data">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="FormField_username" label="Username" type="string">
@@ -76,7 +76,7 @@
       <bpmn:incoming>Flow_0yu1nuf</bpmn:incoming>
       <bpmn:outgoing>Flow_0vsucgb</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:serviceTask id="Activity_0xxpumn" name="Check data and send email" camunda:class="rs.ac.uns.ftn.uppservice.service.delegates.ReaderRegistrationValidateDelegate">
+    <bpmn:serviceTask id="Activity_0xxpumn" name="Save user and send email" camunda:class="rs.ac.uns.ftn.uppservice.service.delegates.ReaderRegistrationValidateDelegate">
       <bpmn:incoming>Flow_181em0w</bpmn:incoming>
       <bpmn:outgoing>Flow_0yu1nuf</bpmn:outgoing>
     </bpmn:serviceTask>

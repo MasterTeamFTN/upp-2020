@@ -18,7 +18,7 @@ public class ReaderRegistrationValidateDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         List<FormSubmissionDto> registrationForm = (List<FormSubmissionDto>) execution.getVariable("registrationFormData");
-        readerService.add(registrationForm);
+        readerService.add(registrationForm, execution.getProcessInstanceId());
     }
 
 }
