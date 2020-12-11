@@ -1,0 +1,29 @@
+<div class="login-container">
+    <form (ngSubmit)="onSubmit()">
+        <!-- USERNAME INPUT FIELD -->
+        <mat-form-field>
+            <input id="username-input" matInput placeholder="username" required [formControl]="username" type="text">
+            <mat-error>
+                {{ getErrorMessage('username') }}
+            </mat-error>
+        </mat-form-field>
+
+
+        <!-- PASSWORD INPUT FIELD -->
+        <mat-form-field>
+            <input id="password-input" matInput placeholder="password" [formControl]="password" required
+                type="password">
+            <mat-error>
+                {{ getErrorMessage('password') }}
+            </mat-error>
+        </mat-form-field>
+
+
+        <!-- SUBMIT FORM BUTTON -->
+        <button id="submitLogin-button" mat-raised-button type="submit" color="primary"
+            [disabled]="!username.valid || !password.valid">
+            Login
+        </button>
+
+    </form>
+</div>
