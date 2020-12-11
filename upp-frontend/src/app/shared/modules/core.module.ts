@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { CommonModule } from '@angular/common';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from './material.module';
+import { TranslateModule } from '@ngx-translate/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 
 /**
@@ -11,6 +13,7 @@ import { MaterialModule } from './material.module';
 @NgModule({
   declarations: [],
   imports: [
+    TranslateModule,
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
@@ -18,11 +21,13 @@ import { MaterialModule } from './material.module';
     RouterModule,
   ],
   exports: [
+    TranslateModule,
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
     MaterialModule,
     RouterModule,
-  ]
+  ],
+  providers: [DatePipe]
 })
 export class CoreModule { }

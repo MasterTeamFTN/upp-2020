@@ -14,7 +14,7 @@ import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/api/user")
+@RequestMapping(value = "/public/api/user")
 public class UserController {
 
     private final UserService userService;

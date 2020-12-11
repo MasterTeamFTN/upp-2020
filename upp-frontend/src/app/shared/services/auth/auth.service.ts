@@ -11,7 +11,7 @@ import { SnackbarComponent } from 'src/app/components/common/snackbar/snackbar.c
 const ENDPOINTS = {
   LOGIN: '/auth/login',
   REFRESH: '/auth/refresh',
-  PROFILE: '/api/user/profile',
+  PROFILE: '/public/api/user/profile',
   CHANGE_PASSWORD: '/auth/change-password',
   REGISTER: '/registration/public/reader-start',
 }
@@ -31,17 +31,19 @@ export class AuthService {
   ) { }
 
   login(loginDto: LoginDto): Observable<any> {
-    return this.http.post(this.apiUrl + ENDPOINTS.LOGIN, loginDto).pipe(
-      tap((data: { token: string }) => {
+    
+    return this.http.post(ENDPOINTS.LOGIN, loginDto).pipe(
+      tap((data: { accessToken: string }) => {
+        let tkn = data.accessToken
         this.authStore.update((state) => ({
-          token: data.token
+          token: tkn
         }))
       }, errorResponse => {
         this.showErrorFromBackend_login(errorResponse);
       })
     ).pipe(
       tap(() => {
-        this.http.get<any>(this.apiUrl + ENDPOINTS.PROFILE).subscribe(
+          this.http.get<any>(ENDPOINTS.PROFILE).subscribe(
           res => {
             let userFromResponse = {
               id: res.id,
@@ -63,10 +65,25 @@ export class AuthService {
     );
   }
 
+  /**
+   * Logout user
+   * Clear auth data from the localstorage
+   * @method logout
+   * @returns void
+   */
+  logout() {
+    this.authStore.update({
+      token: null,
+      user: null
+    })
+  }
+
   showErrorFromBackend_login(errorResponse) {
-    if (errorResponse.error.message != null) {
-      if (errorResponse.error.message.startsWith("Credentials are not valid!")) {
-        this.showSnackbarError("Credentials are not valid!");
+    if(errorResponse.error != undefined) {
+      if (errorResponse.error.message != null) {
+        if (errorResponse.error.message.startsWith("Credentials are not valid!")) {
+          this.showSnackbarError("Credentials are not valid!");
+        }
       }
     }
   }

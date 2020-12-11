@@ -83,6 +83,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("**/public/**").permitAll()
             .antMatchers("/auth/**").permitAll()
             .antMatchers("/camunda/**").permitAll()
+            .antMatchers("/api/user/**").hasAnyAuthority()
 
             // All other requests must be authorized
             .anyRequest().authenticated().and()
