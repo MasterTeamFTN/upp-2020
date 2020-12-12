@@ -9,7 +9,6 @@ import { AuthService } from 'src/app/shared';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  title = 'Register';
 
 
   public username = new FormControl('', [
@@ -32,7 +31,15 @@ export class RegisterComponent implements OnInit {
   public cityCountry = new FormControl('', [
     Validators.required
   ]);
-  public genres = new FormControl('genre1');
+
+  genresList: string[] = [
+    'Thriller',
+    'Drama',
+    'Horror',
+    'Comedy'
+  ]
+  public genres = new FormControl('Drama');
+  public userType = new FormControl('ROLE_READER');
   public isBetaReader = new FormControl(false);
 
 
@@ -53,6 +60,9 @@ export class RegisterComponent implements OnInit {
   onSubmit(): void {
   }
 
+  isReader() {
+    return this.userType.value === "ROLE_WRITER";
+  }
 
   /**
  * Get error message

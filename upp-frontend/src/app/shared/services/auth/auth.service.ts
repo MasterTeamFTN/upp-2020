@@ -11,7 +11,7 @@ import { SnackbarComponent } from 'src/app/components/common/snackbar/snackbar.c
 const ENDPOINTS = {
   LOGIN: '/auth/login',
   REFRESH: '/auth/refresh',
-  PROFILE: '/public/api/user/profile',
+  PROFILE: '/public/user/',
   CHANGE_PASSWORD: '/auth/change-password',
   REGISTER: '/registration/public/reader-start',
 }
@@ -33,36 +33,29 @@ export class AuthService {
   login(loginDto: LoginDto): Observable<any> {
     
     return this.http.post(ENDPOINTS.LOGIN, loginDto).pipe(
-      tap((data: { accessToken: string }) => {
-        let tkn = data.accessToken
+      tap((data: { token: { accessToken: string, expiresIn: number}, username: string, firstName: string, lastName: string, email: string, id: number, authorities: string[] }) => {
+        const tkn = data.token.accessToken;
+        const user = {
+          id: data.id,
+          username: data.username,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          authority: data.authorities[0]
+        }
+
         this.authStore.update((state) => ({
-          token: tkn
+          token: tkn,
+          user: user
         }))
       }, errorResponse => {
         this.showErrorFromBackend_login(errorResponse);
       })
-    ).pipe(
-      tap(() => {
-          this.http.get<any>(ENDPOINTS.PROFILE).subscribe(
-          res => {
-            let userFromResponse = {
-              id: res.id,
-              role: res.role,
-              email: res.email,
-              lastName: res.lastName,
-              username: res.username,
-              firstName: res.firstName,
-              city_country: res.city_country,
-              penalty_points: res.penalty_points,
-              is_beta_reader: res.is_beta_reader,
-              authority: res.authorities[0].authority,
-            }
-            this.authStore.update((state) => ({
-              user: userFromResponse
-            }))
-          })
-      })
     );
+  }
+
+  profile(id: number): Observable<any> {
+    return this.http.get(ENDPOINTS.PROFILE + id);
   }
 
   /**

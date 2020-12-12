@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { AuthQuery, AuthService } from 'src/app/shared';
 
 @Component({
   selector: 'app-profile',
@@ -7,9 +9,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfileComponent implements OnInit {
 
-  constructor() { }
+  id: number;
+  userSub: Subscription;
+
+  constructor(
+    private authService: AuthService,
+    private authQuery: AuthQuery
+  ) { }
 
   ngOnInit() {
+    
+    this.userSub = this.authQuery.user$.subscribe((user) => {
+      this.id = user.id;
+    });
+
+    this.authService.profile(this.id).subscribe((foundUser) => {
+      console.log(foundUser);
+    });
   }
 
 }

@@ -10,6 +10,10 @@
 
 .register-card {
     margin: 0 auto;
-    width: 40%;
+    width: 20%;
+    text-align: center;
+}
+
+input {
     text-align: center;
 }

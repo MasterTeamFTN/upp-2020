@@ -10,10 +10,10 @@
             </button>
         </div>
 
-        <button mat-button (click)="logout()">Logout</button>
-        <div>
-            <button id="register-button" mat-button routerLink="/register">Register</button>
-            <button id="login-button" mat-button routerLink="/login">Login</button>
+        <button mat-button (click)="logout()" *ngIf="loggedIn">Logout</button>
+        <div *ngIf="!loggedIn">
+            <button id="register-button" mat-button routerLink="/register" *ngIf="!isRegistrationPage()">Register</button>
+            <button id="login-button" mat-button routerLink="/login" *ngIf="!isLoginPage()">Login</button>
         </div>
     </mat-toolbar>
 </div>
