@@ -5,6 +5,7 @@ import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
+import org.camunda.bpm.engine.impl.form.validator.FormFieldValidatorException;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.uppservice.dto.request.ReaderRegistrationSubmitDTO;
 import rs.ac.uns.ftn.uppservice.dto.response.FormFieldsDto;
 import rs.ac.uns.ftn.uppservice.dto.response.FormSubmissionDto;
+import rs.ac.uns.ftn.uppservice.exception.exceptions.ApiRequestException;
 import rs.ac.uns.ftn.uppservice.service.ReaderService;
 
 import java.util.HashMap;
@@ -73,7 +75,12 @@ public class RegistrationController {
         Task task = taskService.createTaskQuery().taskId(data.getTaskId()).singleResult();
         String processInstanceId = task.getProcessInstanceId();
         runtimeService.setVariable(processInstanceId, "registrationFormData", data.getFormData());
-        formService.submitTaskForm(data.getTaskId(), map);
+
+        try {
+            formService.submitTaskForm(data.getTaskId(), map);
+        } catch (FormFieldValidatorException e) {
+            throw new ApiRequestException("Failed validation");
+        }
 
         return ResponseEntity.ok().build();
     }
