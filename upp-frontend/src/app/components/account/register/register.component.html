@@ -1,0 +1,80 @@
+<div class="register-container">
+    <mat-card class="register-card">
+        <mat-form-field appearance="fill">
+            <input matInput id="username-input" placeholder="username" [formControl]="username" required type="text">
+            <mat-error>
+                {{getErrorMessage('username')}}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <input matInput id="password-input" placeholder=password [formControl]="password" required type="password">
+            <mat-error *ngIf="password.invalid">
+                {{getErrorMessage('password')}}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <input matInput id="firstName-input" placeholder=firstName [formControl]="firstName" required type="text">
+            <mat-error>
+                {{ getErrorMessage('firstName') }}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <input matInput id="lastName-input" placeholder=lastName [formControl]="lastName" required type="text">
+            <mat-error>
+                {{ getErrorMessage('lastName') }}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <input matInput id="cityCountry-input" placeholder="cityCountry" [formControl]="cityCountry" required
+                type="text">
+            <mat-error>
+                {{ getErrorMessage('cityCountry') }}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <input id="email-input" matInput placeholder="email" [formControl]="email" required type="email">
+            <mat-error *ngIf="email.invalid">{{getErrorMessage('email')}}</mat-error>
+        </mat-form-field>
+
+        <!-- <mat-form-field appearance="fill" [color]="genres.value">
+            <mat-label>Genres</mat-label>
+            <mat-select [formControl]="genres">
+                <mat-option value="Thriller">Thriller</mat-option>
+                <mat-option value="Drama">Drama</mat-option>
+                <mat-option value="Horror">Horror</mat-option>
+                <mat-option value="Comedy">Comedy</mat-option>
+                <mat-option value="itd">...</mat-option>
+            </mat-select>
+        </mat-form-field> -->
+
+        <mat-form-field appearance="fill">
+            <mat-label>Genres</mat-label>
+            <mat-select [formControl]="genres" multiple>
+                <mat-option *ngFor="let genre of genresList" [value]="genre">{{genre}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>User type</mat-label>
+            <mat-select [formControl]="userType">
+                <mat-option value="ROLE_READER">READER</mat-option>
+                <mat-option value="ROLE_WRITER">WRITER</mat-option>
+                <mat-option value="ROLE_LECTURER">LECTURER</mat-option>
+                <mat-option value="ROLE_EDITOR">EDITOR</mat-option>
+                <mat-option value="ROLE_CHIEF_EDITOR">CHIEF EDITOR</mat-option>
+                <mat-option value="ROLE_BOARD_MEMBER">BOARD MEMBER</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-checkbox [formControl]="isBetaReader" *ngIf="isReader()">Are you a beta reader?</mat-checkbox> <br>
+
+        <button mat-button id="reg-submit" (click)="onSubmit()"
+            [disabled]="!username.valid ||!firstName.valid || !email.valid || !password.valid || !lastName.valid || !lastName.valid || !cityCountry.valid">Register</button>
+
+    </mat-card>
+</div>
