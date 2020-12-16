@@ -1,3 +1,4 @@
+import { UserModule } from './components/user/user.module';
 import { NavbarModule } from './components/navbar/navbar.module';
 import { MainModule } from './shared/modules/main.module';
 import { BrowserModule } from '@angular/platform-browser';
@@ -6,13 +7,13 @@ import { HTTP_INTERCEPTORS, HttpClientModule, HttpClient, HttpBackend } from '@a
 
 import { AppRoutingModule } from './router/app-routing.module';
 import { AppComponent } from './app.component';
-import { NavbarComponent } from './components/navbar/navbar.component';
 import { HomeComponent } from './components/home/home.component';
 import { SnackbarComponent } from './components/common/snackbar/snackbar.component';
 import { HttpApiInterceptor } from './shared/config';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
+import { NavbarComponent } from './components/navbar/navbar.component';
 
 
 export function HttpLoaderFactory(handler: HttpBackend) {
@@ -23,12 +24,12 @@ export function HttpLoaderFactory(handler: HttpBackend) {
   declarations: [
     AppComponent,
     HomeComponent,
-    NavbarComponent,
-    SnackbarComponent
+    NavbarComponent
   ],
   imports: [
     NavbarModule,
     CommonModule,
+    UserModule,
     BrowserModule.withServerTransition({ appId: 'angular-app' }),
     AppRoutingModule,
     HttpClientModule,

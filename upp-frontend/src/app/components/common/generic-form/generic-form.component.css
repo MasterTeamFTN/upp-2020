@@ -1,0 +1,21 @@
+#genericFormContainer form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#genericFormContainer {
+    display: flex;
+    flex-direction: column;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    position: relative;
+}
+
+.login-card {
+    margin: 0 auto;
+    width: 20%;
+    text-align: center;
+}

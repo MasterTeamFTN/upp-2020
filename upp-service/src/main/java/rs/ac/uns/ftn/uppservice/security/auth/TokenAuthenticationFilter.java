@@ -1,8 +1,11 @@
 package rs.ac.uns.ftn.uppservice.security.auth;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import rs.ac.uns.ftn.uppservice.security.TokenUtils;
 
@@ -13,15 +16,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /* Filter that will intercept every request to the services */
+@Component
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
+    @Autowired
     private TokenUtils tokenUtils;
+    @Autowired
     private UserDetailsService userDetailsService;
 
-    public TokenAuthenticationFilter(TokenUtils tokenUtils, UserDetailsService userDetailsService) {
-        this.tokenUtils = tokenUtils;
-        this.userDetailsService = userDetailsService;
-    }
 
     @Override
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)

@@ -13,7 +13,7 @@ import rs.ac.uns.ftn.uppservice.util.Mapper;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/public/user")
+@RequestMapping(value = "/api/user")
 public class UserController {
 
     private final UserService userService;

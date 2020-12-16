@@ -35,12 +35,14 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<UserDTO> login(@RequestBody @Valid LoginDTO authenticationRequest) {
-        return new ResponseEntity<>(userDetailsService.login(authenticationRequest), HttpStatus.OK);
+        return new ResponseEntity<UserDTO>(userDetailsService.login(authenticationRequest), HttpStatus.OK);
     }
+
 
     @PostMapping("/refresh")
     public ResponseEntity<UserTokenDTO> refreshAuthenticationToken(HttpServletRequest request) {
-        return new ResponseEntity<>(userDetailsService.refreshAuthenticationToken(request), HttpStatus.OK);
+        return new ResponseEntity("", HttpStatus.OK);
+//        return new ResponseEntity<>(userDetailsService.refreshAuthenticationToken(request), HttpStatus.OK);
     }
 
     @PostMapping("/change-password")

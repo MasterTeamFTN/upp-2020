@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.uppservice.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,33 +25,39 @@ import rs.ac.uns.ftn.uppservice.security.TokenUtils;
 import javax.servlet.http.HttpServletRequest;
 
 @Service
+@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
     protected final Log LOGGER = LogFactory.getLog(getClass());
 
     @Autowired
-    private UserRepository userRepository;
-
+    private  TokenUtils tokenUtils;
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
+    private  UserRepository userRepository;
     @Autowired
-    private TokenUtils tokenUtils;
-
+    private  PasswordEncoder passwordEncoder;
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private  AuthenticationManager authenticationManager;
+    @Autowired
+    private  UserDetailsService userDetailsService;
 
 
-    /* Return User from database */
+    public User getUserFromRequest(HttpServletRequest request) {
+        String token = tokenUtils.getToken(request);
+        String username = tokenUtils.getUsernameFromToken(token);
+        return (User) this.userDetailsService.loadUserByUsername(username);
+    }
+
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));
-        } else {
-            return user;
-        }
+        return userRepository.findOneByUsername(username)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException(
+                                String.format("No user found with username '%s'.", username)));
+
     }
+
 
     /* Change User's password */
     public void changePassword(String oldPassword, String newPassword) {
@@ -91,23 +98,24 @@ public class CustomUserDetailsService implements UserDetailsService {
         String jwt = tokenUtils.generateToken(user.getUsername());
         int expiresIn = tokenUtils.getExpiredIn();
 
+
         UserDTO userDto = new UserDTO(user);
         userDto.setToken(new UserTokenDTO(jwt, expiresIn));
 
         return userDto;
     }
-
-    public UserTokenDTO refreshAuthenticationToken(HttpServletRequest request) throws ApiRequestException {
-        String token = tokenUtils.getToken(request);
-        String username = tokenUtils.getUsernameFromToken(token);
-        User user = (User) loadUserByUsername(username);
-
-        if (tokenUtils.canTokenBeRefreshed(token, user.getLastPasswordResetDate())) {
-            String refreshedToken = tokenUtils.refreshToken(token);
-            int expiresIn = tokenUtils.getExpiredIn();
-            return new UserTokenDTO(refreshedToken, expiresIn);
-        } else {
-            throw new ApiRequestException("Token can not be refreshed.");
-        }
-    }
+//
+//    public UserTokenDTO refreshAuthenticationToken(HttpServletRequest request) throws ApiRequestException {
+//        String token = tokenUtils.getToken(request);
+//        String username = tokenUtils.getUsernameFromToken(token);
+//        User user = (User) loadUserByUsername(username);
+//
+//        if (tokenUtils.canTokenBeRefreshed(token, user.getLastPasswordResetDate())) {
+//            String refreshedToken = tokenUtils.refreshToken(token);
+//            int expiresIn = tokenUtils.getExpiredIn();
+//            return new UserTokenDTO(refreshedToken, expiresIn);
+//        } else {
+//            throw new ApiRequestException("Token can not be refreshed.");
+//        }
+//    }
 }

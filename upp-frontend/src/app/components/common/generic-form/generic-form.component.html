@@ -1,0 +1,33 @@
+<mat-card id="genericFormContainer">
+    <mat-card-title>
+        Todo
+    </mat-card-title>
+
+    <mat-card-content>
+        <form>
+            <mat-form-field apperance="fill" *ngFor="let field of formFields; let i=index">
+                
+                <div *ngIf="field.type.name == 'enum'">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Genres</mat-label>
+                        <mat-select *ngFor="let genre of field.type.values">
+                            <mat-option>{{genre.value}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div *ngIf="field.type.name == 'string'; else default">
+                    <input matInput id={{field.id}} apperance="fill" placeholder="{{field.name}}" required type="text">
+                </div>
+
+                <ng-template #default>
+                    <mat-checkbox>
+                        {{field.name}}
+                    </mat-checkbox>
+                </ng-template>
+
+                <input matInput hidden>
+            </mat-form-field>
+        </form>
+    </mat-card-content>
+</mat-card>

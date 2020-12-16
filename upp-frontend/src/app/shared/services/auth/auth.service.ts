@@ -13,7 +13,7 @@ const ENDPOINTS = {
   REFRESH: '/auth/refresh',
   PROFILE: '/public/user/',
   CHANGE_PASSWORD: '/auth/change-password',
-  REGISTER: '/registration/public/reader-start',
+  START_READER_REGISTRATION: '/registration/public/reader-start',
 }
 
 
@@ -53,6 +53,7 @@ export class AuthService {
       })
     );
   }
+
 
   profile(id: number): Observable<any> {
     return this.http.get(ENDPOINTS.PROFILE + id);
