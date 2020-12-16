@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.uppservice.service.impl;
 
+import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,14 +37,21 @@ public class ReaderServiceImpl implements ReaderService {
     @Autowired
     private TaskService taskService;
 
+    @Autowired
+    private IdentityService identityService;
+
 
     @Override
     public Reader add(List<FormSubmissionDto> formData, String processInstanceId) {
         Reader reader = new Reader();
+        String password = "";
 
         for (FormSubmissionDto field : formData) {
             if(field.getFieldId().equals("FormField_username")) reader.setUsername(field.getFieldValue());
-            if(field.getFieldId().equals("FormField_password")) reader.setPassword(passwordEncoder.encode(field.getFieldValue()));
+            if(field.getFieldId().equals("FormField_password")) {
+                password = field.getFieldValue();
+                reader.setPassword(passwordEncoder.encode(password));
+            }
             if(field.getFieldId().equals("FormField_firstName")) reader.setFirstName(field.getFieldValue());
             if(field.getFieldId().equals("FormField_lastName")) reader.setLastName(field.getFieldValue());
             if(field.getFieldId().equals("FormField_email")) reader.setEmail(field.getFieldValue());
@@ -65,6 +73,14 @@ public class ReaderServiceImpl implements ReaderService {
         reader.setEnabled(false);
 
         reader = userRepository.save(reader);
+
+        // Add user to the Camunda table
+        org.camunda.bpm.engine.identity.User camundaUser = identityService.newUser(reader.getUsername());
+        camundaUser.setEmail(reader.getEmail());
+        camundaUser.setFirstName(reader.getFirstName());
+        camundaUser.setLastName(reader.getLastName());
+        camundaUser.setPassword(password);
+        identityService.saveUser(camundaUser);
 
         ConfirmationToken token = new ConfirmationToken(reader, processInstanceId);
         confTokenRepository.save(token);
