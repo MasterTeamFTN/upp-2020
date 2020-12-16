@@ -92,11 +92,5 @@ public class ReaderServiceImpl implements ReaderService {
         userRepository.save(user);
         confirmationToken.setUsed(true);
         confTokenRepository.save(confirmationToken);
-
-        Task confirmationTask = taskService.createTaskQuery().processInstanceId(
-                confirmationToken.getProcessInstanceId())
-                .active().singleResult();
-
-        taskService.complete(confirmationTask.getId());
     }
 }

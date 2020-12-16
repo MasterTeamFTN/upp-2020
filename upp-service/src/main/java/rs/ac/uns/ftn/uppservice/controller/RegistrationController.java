@@ -17,6 +17,7 @@ import rs.ac.uns.ftn.uppservice.dto.request.ReaderRegistrationSubmitDTO;
 import rs.ac.uns.ftn.uppservice.dto.response.FormFieldsDto;
 import rs.ac.uns.ftn.uppservice.dto.response.FormSubmissionDto;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ApiRequestException;
+import rs.ac.uns.ftn.uppservice.service.ConfirmationTokenService;
 import rs.ac.uns.ftn.uppservice.service.ReaderService;
 
 import java.util.HashMap;
@@ -38,6 +39,9 @@ public class RegistrationController {
 
     @Autowired
     private ReaderService readerService;
+
+    @Autowired
+    private ConfirmationTokenService confTokenService;
 
 
     /**
@@ -85,7 +89,6 @@ public class RegistrationController {
         return ResponseEntity.ok().build();
     }
 
-
     /**
      * This endpoint is used for activating user's account after registration.
      * Send token value as URL path variable.
@@ -94,7 +97,18 @@ public class RegistrationController {
      */
     @GetMapping(path = "/public/verify-account/{token}")
     public ResponseEntity verifyAccount(@PathVariable String token) {
-        readerService.activateAccount(token);
+//        readerService.activateAccount(token);
+
+        String processInstanceId = confTokenService.getProcessInstanceId(token);
+
+        Task currentTask = taskService.createTaskQuery()
+                .processInstanceId(processInstanceId)
+                .active()
+                .singleResult();
+
+        runtimeService.setVariable(processInstanceId, "token", token);
+        taskService.complete(currentTask.getId());
+
         return ResponseEntity.ok().build();
     }
 }
