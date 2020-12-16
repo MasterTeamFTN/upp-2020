@@ -35,13 +35,13 @@
           <camunda:formField id="FormField_email" label="Email" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
-              <camunda:constraint name="validator" config="rs.ac.uns.ftn.uppservice.validators.EmailExistsValidator" />
+              <camunda:constraint name="validator" config="rs.ac.uns.ftn.uppservice.camunda.validators.EmailExistsValidator" />
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="FormField_username" label="Username" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
-              <camunda:constraint name="validator" config="rs.ac.uns.ftn.uppservice.validators.UsernameExistsValidator" />
+              <camunda:constraint name="validator" config="rs.ac.uns.ftn.uppservice.camunda.validators.UsernameExistsValidator" />
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="FormField_password" label="Password" type="string">
@@ -65,17 +65,20 @@
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="FormField_isBetaReader" label="Beta reader" type="boolean" />
-          <camunda:formField id="FormField_genres" label="Genres" type="MultiSelect" defaultValue="def" />
-          <camunda:formField id="FormField_testEnumPolje" label="Test enum polje" type="enum">
-            <camunda:value id="Value_2ub41td" name="1" />
-            <camunda:value id="Value_06hnij7" name="2" />
-          </camunda:formField>
+          <camunda:formField id="FormField_genres" label="Genres" type="MultiSelect" />
         </camunda:formData>
+        <camunda:taskListener class="rs.ac.uns.ftn.uppservice.service.listeners.AddGenresToForm" event="create" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0ituuux</bpmn:incoming>
       <bpmn:outgoing>Flow_0yqfxfi</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:userTask id="Activity_1vnlnu3" name="Choose genre">
+      <bpmn:extensionElements>
+        <camunda:taskListener class="rs.ac.uns.ftn.uppservice.service.listeners.AddGenresToForm" event="create" />
+        <camunda:formData>
+          <camunda:formField id="FormField_genres" label="Genres" type="MultiSelect" />
+        </camunda:formData>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_1u0xxff</bpmn:incoming>
       <bpmn:outgoing>Flow_1o5syxq</bpmn:outgoing>
     </bpmn:userTask>

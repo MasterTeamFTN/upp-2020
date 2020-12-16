@@ -1,22 +1,24 @@
-package rs.ac.uns.ftn.uppservice.validators;
+package rs.ac.uns.ftn.uppservice.camunda.validators;
 
 import org.camunda.bpm.engine.impl.form.validator.FormFieldValidator;
 import org.camunda.bpm.engine.impl.form.validator.FormFieldValidatorContext;
 import rs.ac.uns.ftn.uppservice.config.SpringContext;
+import rs.ac.uns.ftn.uppservice.model.User;
 import rs.ac.uns.ftn.uppservice.repository.UserRepository;
 
-public class EmailExistsValidator implements FormFieldValidator {
+public class UsernameExistsValidator implements FormFieldValidator {
 
     private UserRepository userRepository;
 
-    public EmailExistsValidator() {
+    public UsernameExistsValidator() {
         this.userRepository = SpringContext.getBean(UserRepository.class);
     }
 
     // Returns true if form field is valid
     @Override
     public boolean validate(Object o, FormFieldValidatorContext formFieldValidatorContext) {
-        String email = (String) o;
-        return !userRepository.findByEmail(email).isPresent();
+        String username = (String) o;
+        User user = userRepository.findByUsername(username);
+        return user == null;
     }
 }
