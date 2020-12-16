@@ -42,8 +42,6 @@ public class ReaderServiceImpl implements ReaderService {
         Reader reader = new Reader();
 
         for (FormSubmissionDto field : formData) {
-            // TODO: Add data validation
-
             if(field.getFieldId().equals("FormField_username")) reader.setUsername(field.getFieldValue());
             if(field.getFieldId().equals("FormField_password")) reader.setPassword(passwordEncoder.encode(field.getFieldValue()));
             if(field.getFieldId().equals("FormField_firstName")) reader.setFirstName(field.getFieldValue());
@@ -54,6 +52,14 @@ public class ReaderServiceImpl implements ReaderService {
 
             // TODO: fix adding genres
             //if(field.getFieldId().equals("FormField_genres")) reader.setGenres(field.getFieldValue());
+        }
+
+        if (userRepository.findByUsername(reader.getUsername()) != null) {
+            throw new ApiRequestException("User with that username already exist");
+        }
+
+        if (userRepository.findByEmail(reader.getEmail()).isPresent()) {
+            throw new ApiRequestException("User with that email already exist");
         }
 
         reader.setEnabled(false);
