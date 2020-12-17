@@ -1,33 +1,43 @@
-<mat-card id="genericFormContainer">
-    <mat-card-title>
-        Todo
-    </mat-card-title>
+<div *ngIf="formLoaded(); then content else loader"></div>
 
-    <mat-card-content>
-        <form>
-            <mat-form-field apperance="fill" *ngFor="let field of formFields; let i=index">
-                
-                <div *ngIf="field.type.name == 'enum'">
-                    <mat-form-field appearance="fill">
-                        <mat-label>Genres</mat-label>
-                        <mat-select *ngFor="let genre of field.type.values">
-                            <mat-option>{{genre.value}}</mat-option>
+<ng-template #content>
+    <mat-card id="genericFormContainer">
+        <mat-card-title>
+            {{formDto.formName}}
+        </mat-card-title>
+
+        <mat-card-content>
+            <form>
+                <mat-form-field apperance="fill" *ngFor="let field of formDto.formFields.value; let i=index">
+                    <div *ngIf="field.type.name == 'MultiSelect'">
+                        <mat-select multiple>
+                            <mat-option *ngFor="let msValue of parseMultiselect(); let j=index" value="{{j}}">
+                                {{msValue}}</mat-option>
                         </mat-select>
-                    </mat-form-field>
-                </div>
+                    </div>
 
-                <div *ngIf="field.type.name == 'string'; else default">
-                    <input matInput id={{field.id}} apperance="fill" placeholder="{{field.name}}" required type="text">
-                </div>
+                    <div *ngIf="field.type.name == 'string'">
+                        <input matInput id={{field.id}} apperance="fill" placeholder="{{field.name}}" required
+                            type="text">
+                    </div>
 
-                <ng-template #default>
-                    <mat-checkbox>
-                        {{field.name}}
-                    </mat-checkbox>
-                </ng-template>
+                    <div *ngIf="field.type.name == 'boolean'">
+                        <mat-checkbox>
+                            {{field.name}}
+                        </mat-checkbox>
+                    </div>
 
-                <input matInput hidden>
-            </mat-form-field>
-        </form>
-    </mat-card-content>
-</mat-card>
+                    <input matInput hidden>
+                </mat-form-field>
+                <mat-form-field>
+                    <button mat-button id="submitForm" (click)="onSubmit()" [disabled]="checkValidation()">Submit</button>
+                    <input matInput hidden>
+                </mat-form-field>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</ng-template>
+
+<ng-template #loader>
+    <mat-spinner></mat-spinner>
+</ng-template>

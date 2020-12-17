@@ -1,3 +1,4 @@
+import { FormDto } from './../../../model/dto/FormDto';
 import { RegisterService } from './../../../shared/services/process/register.service';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -50,48 +51,74 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private registerService: RegisterService,
-    private router: Router,
     private snackbar: MatSnackBar,
     private formBuilder: FormBuilder
-  ) { 
+  ) {
     this.registrationForm = new FormGroup({
       registrationFormArray: this.formBuilder.array([])
     })
+
+    this.registratonFormArray = this.registrationForm.controls.registratonFormArray as FormArray;
   }
 
-  formField: FormField;
-  // formFields: FormField[];
-  formFields: any;
+  formDto: FormDto;
+
 
   registrationForm: FormGroup;
-  
+  registratonFormArray: FormArray;
   startProcessSub: Subscription;
 
 
   ngOnInit() {
-    this.startProcessSub = this.registerService.startReaderRegistration().subscribe((response) => {
-      const controlArray = this.registrationForm.get('registrationFormArray') as FormArray;
+    this.loadForm('reader');
+  }
+
+  loadForm(role: string) {
+    this.reset();
+
+    this.startProcessSub = this.registerService.startRegistration(role).subscribe((response) => {
+      this.registratonFormArray = this.registrationForm.get('registrationFormArray') as FormArray;
 
       Object.keys(response.formFields).forEach((i) => {
-        controlArray.push(
+        this.registratonFormArray.push(
           this.formBuilder.group({
-            name: new FormControl({value: response.formFields[i].label, disabled: true}),
-            type: new FormControl({value: response.formFields[i].type, disabled: true}),
-            id: new FormControl({value: response.formFields[i].id, disabled: true}),
-            validationConstraints: new FormControl({value: response.formFields[i].validationConstraints, disabled: true})
+            name: new FormControl({ value: response.formFields[i].label, disabled: true }),
+            type: new FormControl({ value: response.formFields[i].type, disabled: true }),
+            id: new FormControl({ value: response.formFields[i].id, disabled: true }),
+            validationConstraints: new FormControl({ value: response.formFields[i].validationConstraints, disabled: true })
           })
         )
       })
-      this.formFields = controlArray.value;
-      console.log(this.formFields);
+
+      console.log(this.registratonFormArray.value);
+
+      this.formDto = {
+        formName: 'Register as a '.concat(role),
+        formFields: this.registrationForm.get('registrationFormArray')
+      }
+
 
       this.snackbar.openFromComponent(SnackbarComponent, {
-        data: "Camunda process successfully started",
+        data: `Camunda process with id ${response.processInstanceId} successfully started!`,
         panelClass: ['snackbar-success']
       });
     });
   }
 
+  clearFormArray = (formArray: FormArray) => {
+    while (formArray.length !== 0) {
+      formArray.removeAt(0)
+    }
+  }
+
+  reset(): void {
+    if (this.formDto != undefined) {
+      this.clearFormArray(this.registratonFormArray);
+      this.formDto.formName = "";
+      this.formDto.formFields = [];
+      this.startProcessSub.unsubscribe();
+    }
+  }
 
   /**
    * Submit form to the server

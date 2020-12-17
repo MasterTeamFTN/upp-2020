@@ -6,6 +6,7 @@ import { AuthStore } from "../..";
 
 const ENDPOINTS = {
     START_READER_REGISTRATION: '/registration/public/reader-start',
+    START_WRITER_REGISTRATION: '/registration/public/writer-start',
 }
 
 @Injectable({
@@ -19,7 +20,11 @@ export class RegisterService {
         private snackbar: MatSnackBar
     ) { }
 
-    startReaderRegistration(): Observable<any> {
-        return this.http.get(ENDPOINTS.START_READER_REGISTRATION);
+    startRegistration(role: string): Observable<any> {
+        var url = ENDPOINTS.START_READER_REGISTRATION;
+        if (role === 'writer') {
+            url = ENDPOINTS.START_WRITER_REGISTRATION;
+        }
+        return this.http.get(url);
     }
 }

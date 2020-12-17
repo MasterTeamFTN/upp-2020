@@ -19,7 +19,7 @@ import { GenericFormComponent } from 'src/app/components/common/generic-form/gen
     // ovde ce biti Home, Admin, User module
   ],
   exports: [],
-  providers: [    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 5000, horizontalPosition: "right", verticalPosition: "bottom"},}
+  providers: [{provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2000, horizontalPosition: "right", verticalPosition: "bottom"},}
 ]
 })
 export class MainModule { }

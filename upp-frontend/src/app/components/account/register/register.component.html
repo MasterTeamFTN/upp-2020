@@ -1,3 +1,7 @@
 <div id="registrationDiv">
-    <app-generic-form [formFields]="formFields"></app-generic-form>
+    <mat-button-toggle-group name="registerType" aria-label="Register type" value="reader">
+        <mat-button-toggle (click)="loadForm('reader')" value="reader">Reader</mat-button-toggle>
+        <mat-button-toggle (click)="loadForm('writer')" value="writer">Writer</mat-button-toggle>
+    </mat-button-toggle-group>
+    <app-generic-form [formDto]="formDto"></app-generic-form>
 </div>
