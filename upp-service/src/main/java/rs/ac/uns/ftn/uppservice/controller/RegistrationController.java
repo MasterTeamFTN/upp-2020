@@ -45,6 +45,8 @@ public class RegistrationController {
     private ConfirmationTokenService confTokenService;
 
 
+    // NOTE: Don't use this endpoint. Instead use /process/public/start/{name}
+    // TODO: remove later
     /**
      * Call this endpoint when you want to start reader registration.
      * @return Returns form fields that frontend app needs to generate forms
