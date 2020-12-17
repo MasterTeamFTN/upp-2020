@@ -72,7 +72,7 @@
       <bpmn:incoming>Flow_0ituuux</bpmn:incoming>
       <bpmn:outgoing>Flow_0yqfxfi</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:userTask id="Activity_1vnlnu3" name="Choose genre">
+    <bpmn:userTask id="Activity_1vnlnu3" name="Choose genres for beta-readers">
       <bpmn:extensionElements>
         <camunda:taskListener class="rs.ac.uns.ftn.uppservice.service.listeners.AddGenresToForm" event="create" />
         <camunda:formData>

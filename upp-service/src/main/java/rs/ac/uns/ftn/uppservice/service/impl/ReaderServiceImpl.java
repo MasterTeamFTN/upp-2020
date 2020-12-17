@@ -48,7 +48,7 @@ public class ReaderServiceImpl implements ReaderService {
 
 
     @Override
-    public Reader add(List<FormSubmissionDto> formData, String processInstanceId) {
+    public Reader add(List<FormSubmissionDto> formData, List<FormSubmissionDto> chooseGenresForm, String processInstanceId) {
         Reader reader = new Reader();
         String password = "";
 
@@ -70,6 +70,14 @@ public class ReaderServiceImpl implements ReaderService {
             }
         }
 
+        // Set beta genres if user is beta-reader
+        if (chooseGenresForm != null) {
+            FormSubmissionDto field = chooseGenresForm.get(0); // We know that there is only one element (1 multi select form field)
+            List<String> genreNames = (List<String>) field.getFieldValue();
+            genreNames.stream().forEach(System.out::println);
+            reader.setBetaGenres(getGenresFromList((List<String>) field.getFieldValue()));
+        }
+
         if (userRepository.findByUsername(reader.getUsername()) != null) {
             throw new ApiRequestException("User with that username already exist");
         }
@@ -79,7 +87,6 @@ public class ReaderServiceImpl implements ReaderService {
         }
 
         reader.setEnabled(false);
-
         reader = userRepository.save(reader);
 
         // Add user to the Camunda table

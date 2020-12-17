@@ -80,6 +80,7 @@ public class RegistrationController {
         Task task = taskService.createTaskQuery().taskId(data.getTaskId()).singleResult();
         String processInstanceId = task.getProcessInstanceId();
         runtimeService.setVariable(processInstanceId, "registrationFormData", data.getFormData());
+        runtimeService.setVariable(processInstanceId, "chooseGenresFormData", null);
 
         try {
             formService.submitTaskForm(data.getTaskId(), map);
@@ -89,6 +90,28 @@ public class RegistrationController {
 
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping(path = "/public/reader-genres-submit")
+    public ResponseEntity submitBetaReadersGenres(@RequestBody CamundaFormSubmitDTO data) {
+        Map<String, Object> map = new HashMap<>();
+
+        for(FormSubmissionDto temp : data.getFormData()){
+            map.put(temp.getFieldId(), temp.getFieldValue());
+        }
+
+        Task task = taskService.createTaskQuery().taskId(data.getTaskId()).singleResult();
+        String processInstanceId = task.getProcessInstanceId();
+        runtimeService.setVariable(processInstanceId, "chooseGenresFormData", data.getFormData());
+
+        try {
+            formService.submitTaskForm(data.getTaskId(), map);
+        } catch (FormFieldValidatorException e) {
+            throw new ApiRequestException("Failed validation");
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
 
     /**
      * This endpoint is used for activating user's account after registration.

@@ -27,4 +27,12 @@ public class Reader extends User implements Serializable {
             joinColumns = @JoinColumn(name = "reader_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
     private Set<Genre> genres;
+
+    @ManyToMany
+    @JoinTable(
+            name = "reader_beta_genre",
+            joinColumns = @JoinColumn(name = "reader_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    private Set<Genre> betaGenres;
+
 }
