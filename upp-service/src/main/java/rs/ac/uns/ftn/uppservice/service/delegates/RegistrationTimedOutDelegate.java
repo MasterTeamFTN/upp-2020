@@ -16,7 +16,7 @@ public class RegistrationTimedOutDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
         Reader reader = (Reader) delegateExecution.getVariable("reader");
-        readerService.deleteData(reader);
+        readerService.delete(reader);
     }
 
 }
