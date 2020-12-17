@@ -13,9 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.ftn.uppservice.dto.request.ReaderRegistrationSubmitDTO;
+import rs.ac.uns.ftn.uppservice.dto.request.CamundaFormSubmitDTO;
 import rs.ac.uns.ftn.uppservice.dto.response.FormFieldsDto;
-import rs.ac.uns.ftn.uppservice.dto.response.FormSubmissionDto;
+import rs.ac.uns.ftn.uppservice.dto.request.FormSubmissionDto;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ApiRequestException;
 import rs.ac.uns.ftn.uppservice.service.ConfirmationTokenService;
 import rs.ac.uns.ftn.uppservice.service.ReaderService;
@@ -69,7 +69,7 @@ public class RegistrationController {
      * @return 200 - OK
      */
     @PostMapping(path = "/public/reader-submit")
-    public ResponseEntity submitReaderRegistrationData(@RequestBody ReaderRegistrationSubmitDTO data) {
+    public ResponseEntity submitReaderRegistrationData(@RequestBody CamundaFormSubmitDTO data) {
         Map<String, Object> map = new HashMap<>();
 
         for(FormSubmissionDto temp : data.getFormData()){
