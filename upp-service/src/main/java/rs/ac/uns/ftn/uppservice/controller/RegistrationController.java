@@ -19,6 +19,7 @@ import rs.ac.uns.ftn.uppservice.dto.response.FormFieldsDto;
 import rs.ac.uns.ftn.uppservice.dto.request.FormSubmissionDto;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ApiRequestException;
 import rs.ac.uns.ftn.uppservice.service.ConfirmationTokenService;
+import rs.ac.uns.ftn.uppservice.service.ProcessEngineService;
 import rs.ac.uns.ftn.uppservice.service.ReaderService;
 
 import java.util.HashMap;
@@ -43,6 +44,9 @@ public class RegistrationController {
 
     @Autowired
     private ConfirmationTokenService confTokenService;
+
+    @Autowired
+    private ProcessEngineService processEngineService;
 
 
     // NOTE: Don't use this endpoint. Instead use /process/public/start/{name}
@@ -73,47 +77,18 @@ public class RegistrationController {
      */
     @PostMapping(path = "/public/reader-submit")
     public ResponseEntity submitReaderRegistrationData(@RequestBody CamundaFormSubmitDTO data) {
-        Map<String, Object> map = new HashMap<>();
-
-        for(FormSubmissionDto temp : data.getFormData()){
-            map.put(temp.getFieldId(), temp.getFieldValue());
-        }
-
-        Task task = taskService.createTaskQuery().taskId(data.getTaskId()).singleResult();
-        String processInstanceId = task.getProcessInstanceId();
+        String processInstanceId = processEngineService.submitForm(data);
         runtimeService.setVariable(processInstanceId, "registrationFormData", data.getFormData());
         runtimeService.setVariable(processInstanceId, "chooseGenresFormData", null);
-
-        try {
-            formService.submitTaskForm(data.getTaskId(), map);
-        } catch (FormFieldValidatorException e) {
-            throw new ApiRequestException("Failed validation");
-        }
-
         return ResponseEntity.ok().build();
     }
 
     @PostMapping(path = "/public/reader-genres-submit")
     public ResponseEntity submitBetaReadersGenres(@RequestBody CamundaFormSubmitDTO data) {
-        Map<String, Object> map = new HashMap<>();
-
-        for(FormSubmissionDto temp : data.getFormData()){
-            map.put(temp.getFieldId(), temp.getFieldValue());
-        }
-
-        Task task = taskService.createTaskQuery().taskId(data.getTaskId()).singleResult();
-        String processInstanceId = task.getProcessInstanceId();
+        String processInstanceId = processEngineService.submitForm(data);
         runtimeService.setVariable(processInstanceId, "chooseGenresFormData", data.getFormData());
-
-        try {
-            formService.submitTaskForm(data.getTaskId(), map);
-        } catch (FormFieldValidatorException e) {
-            throw new ApiRequestException("Failed validation");
-        }
-
         return ResponseEntity.ok().build();
     }
-
 
     /**
      * This endpoint is used for activating user's account after registration.
