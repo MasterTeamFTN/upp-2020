@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.uppservice.controller;
 import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.exception.NullValueException;
 import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
 import org.camunda.bpm.engine.impl.form.validator.FormFieldValidatorException;
@@ -97,8 +98,6 @@ public class RegistrationController {
      */
     @GetMapping(path = "/public/verify-account/{token}")
     public ResponseEntity verifyAccount(@PathVariable String token) {
-//        readerService.activateAccount(token);
-
         String processInstanceId = confTokenService.getProcessInstanceId(token);
 
         Task currentTask = taskService.createTaskQuery()
@@ -106,7 +105,12 @@ public class RegistrationController {
                 .active()
                 .singleResult();
 
-        runtimeService.setVariable(processInstanceId, "token", token);
+        try {
+            runtimeService.setVariable(processInstanceId, "token", token);
+        } catch (NullValueException e) {
+            throw new ApiRequestException("Confirmation token timed out.");
+        }
+
         taskService.complete(currentTask.getId());
 
         return ResponseEntity.ok().build();

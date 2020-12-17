@@ -9,4 +9,5 @@ public interface ReaderService {
 
     Reader add(List<FormSubmissionDto> formData, String processInstanceId);
     void activateAccount(String token);
+    void deleteData(Reader reader);
 }

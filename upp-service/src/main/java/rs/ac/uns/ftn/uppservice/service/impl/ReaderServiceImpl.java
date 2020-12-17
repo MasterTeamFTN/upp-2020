@@ -129,4 +129,11 @@ public class ReaderServiceImpl implements ReaderService {
         confirmationToken.setUsed(true);
         confTokenRepository.save(confirmationToken);
     }
+
+    @Override
+    public void deleteData(Reader reader) {
+        ConfirmationToken token = confTokenRepository.findByUser(reader);
+        confTokenRepository.delete(token);
+        userRepository.delete(reader);
+    }
 }

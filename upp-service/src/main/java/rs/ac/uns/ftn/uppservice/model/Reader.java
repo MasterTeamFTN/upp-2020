@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
@@ -12,7 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "readers")
-public class Reader extends User {
+public class Reader extends User implements Serializable {
 
     @Column(name = "isBetaReader", nullable = false)
     private Boolean isBetaReader;
