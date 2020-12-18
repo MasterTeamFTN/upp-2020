@@ -36,12 +36,14 @@
             <camunda:validation>
               <camunda:constraint name="required" />
               <camunda:constraint name="validator" config="rs.ac.uns.ftn.uppservice.camunda.validators.EmailExistsValidator" />
+              <camunda:constraint name="validator" config="rs.ac.uns.ftn.uppservice.camunda.validators.EmailValidator" />
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="FormField_username" label="Username" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
               <camunda:constraint name="validator" config="rs.ac.uns.ftn.uppservice.camunda.validators.UsernameExistsValidator" />
+              <camunda:constraint name="minlength" config="3" />
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="FormField_password" label="Password" type="password">
@@ -65,8 +67,17 @@
               <camunda:constraint name="required" />
             </camunda:validation>
           </camunda:formField>
-          <camunda:formField id="FormField_isBetaReader" label="Beta reader" type="boolean" />
-          <camunda:formField id="FormField_genres" label="Genres" type="MultiSelect" />
+          <camunda:formField id="FormField_isBetaReader" label="Beta reader" type="boolean">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="FormField_genres" label="Genres" type="MultiSelect">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+              <camunda:constraint name="validator" config="rs.ac.uns.ftn.uppservice.camunda.validators.CheckOneOrMoreMultiSelectValidator" />
+            </camunda:validation>
+          </camunda:formField>
         </camunda:formData>
         <camunda:taskListener class="rs.ac.uns.ftn.uppservice.service.listeners.AddGenresToForm" event="create" />
       </bpmn:extensionElements>
@@ -77,7 +88,12 @@
       <bpmn:extensionElements>
         <camunda:taskListener class="rs.ac.uns.ftn.uppservice.service.listeners.AddGenresToForm" event="create" />
         <camunda:formData>
-          <camunda:formField id="FormField_genres" label="Genres" type="MultiSelect" />
+          <camunda:formField id="FormField_genres" label="Genres" type="MultiSelect">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+              <camunda:constraint name="validator" config="rs.ac.uns.ftn.uppservice.camunda.validators.CheckOneOrMoreMultiSelectValidator" />
+            </camunda:validation>
+          </camunda:formField>
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1u0xxff</bpmn:incoming>
