@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.uppservice.controller;
 import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.exception.NullValueException;
 import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
 import org.camunda.bpm.engine.impl.form.validator.FormFieldValidatorException;
@@ -13,10 +14,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.ftn.uppservice.dto.request.ReaderRegistrationSubmitDTO;
+import rs.ac.uns.ftn.uppservice.dto.request.CamundaFormSubmitDTO;
 import rs.ac.uns.ftn.uppservice.dto.response.FormFieldsDto;
-import rs.ac.uns.ftn.uppservice.dto.response.FormSubmissionDto;
+import rs.ac.uns.ftn.uppservice.dto.request.FormSubmissionDto;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ApiRequestException;
+import rs.ac.uns.ftn.uppservice.service.ConfirmationTokenService;
+import rs.ac.uns.ftn.uppservice.service.ProcessEngineService;
 import rs.ac.uns.ftn.uppservice.service.ReaderService;
 
 import java.util.HashMap;
@@ -39,7 +42,15 @@ public class RegistrationController {
     @Autowired
     private ReaderService readerService;
 
+    @Autowired
+    private ConfirmationTokenService confTokenService;
 
+    @Autowired
+    private ProcessEngineService processEngineService;
+
+
+    // NOTE: Don't use this endpoint. Instead use /process/public/start/{name}
+    // TODO: remove later
     /**
      * Call this endpoint when you want to start reader registration.
      * @return Returns form fields that frontend app needs to generate forms
@@ -65,26 +76,19 @@ public class RegistrationController {
      * @return 200 - OK
      */
     @PostMapping(path = "/public/reader-submit")
-    public ResponseEntity submitReaderRegistrationData(@RequestBody ReaderRegistrationSubmitDTO data) {
-        Map<String, Object> map = new HashMap<>();
-
-        for(FormSubmissionDto temp : data.getFormData()){
-            map.put(temp.getFieldId(), temp.getFieldValue());
-        }
-
-        Task task = taskService.createTaskQuery().taskId(data.getTaskId()).singleResult();
-        String processInstanceId = task.getProcessInstanceId();
+    public ResponseEntity submitReaderRegistrationData(@RequestBody CamundaFormSubmitDTO data) {
+        String processInstanceId = processEngineService.submitForm(data);
         runtimeService.setVariable(processInstanceId, "registrationFormData", data.getFormData());
-
-        try {
-            formService.submitTaskForm(data.getTaskId(), map);
-        } catch (FormFieldValidatorException e) {
-            throw new ApiRequestException("Failed validation");
-        }
-
+        runtimeService.setVariable(processInstanceId, "chooseGenresFormData", null);
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping(path = "/public/reader-genres-submit")
+    public ResponseEntity submitBetaReadersGenres(@RequestBody CamundaFormSubmitDTO data) {
+        String processInstanceId = processEngineService.submitForm(data);
+        runtimeService.setVariable(processInstanceId, "chooseGenresFormData", data.getFormData());
+        return ResponseEntity.ok().build();
+    }
 
     /**
      * This endpoint is used for activating user's account after registration.
@@ -94,7 +98,21 @@ public class RegistrationController {
      */
     @GetMapping(path = "/public/verify-account/{token}")
     public ResponseEntity verifyAccount(@PathVariable String token) {
-        readerService.activateAccount(token);
+        String processInstanceId = confTokenService.getProcessInstanceId(token);
+
+        Task currentTask = taskService.createTaskQuery()
+                .processInstanceId(processInstanceId)
+                .active()
+                .singleResult();
+
+        try {
+            runtimeService.setVariable(processInstanceId, "token", token);
+        } catch (NullValueException e) {
+            throw new ApiRequestException("Confirmation token timed out.");
+        }
+
+        taskService.complete(currentTask.getId());
+
         return ResponseEntity.ok().build();
     }
 }

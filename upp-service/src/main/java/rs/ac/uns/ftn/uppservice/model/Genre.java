@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 @Data
@@ -12,7 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "genres")
-public class Genre {
+public class Genre implements Serializable {
 
     @Id
     @Column(name = "id")
@@ -22,12 +23,12 @@ public class Genre {
     @Column(name = "name")
     private String name;
 
-    @ManyToMany(mappedBy = "genres")
-    private Set<Reader> readers;
-
-    @ManyToMany(mappedBy = "genres")
-    private Set<Writer> writers;
-
-    @OneToMany(mappedBy = "genre", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Book> books;
+//    @ManyToMany(mappedBy = "genres")
+//    private Set<Reader> readers;
+//
+//    @ManyToMany(mappedBy = "genres")
+//    private Set<Writer> writers;
+//
+//    @OneToMany(mappedBy = "genre", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    private Set<Book> books;
 }

@@ -1,4 +1,4 @@
-package rs.ac.uns.ftn.uppservice.dto.response;
+package rs.ac.uns.ftn.uppservice.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,6 +12,6 @@ import java.io.Serializable;
 public class FormSubmissionDto implements Serializable {
 
     private String fieldId;
-    private String fieldValue;
+    private Object fieldValue;
 
 }
