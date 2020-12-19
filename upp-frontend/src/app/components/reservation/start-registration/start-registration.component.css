@@ -1,0 +1,13 @@
+mat-grid-tile {
+    background: black;
+    cursor: pointer;
+    color: white;
+}
+mat-grid-tile:hover {
+  background-color: #ccc;
+}
+
+#startReservationContainer {
+    margin-top: 30px;
+    text-align: center;
+}

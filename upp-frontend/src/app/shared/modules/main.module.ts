@@ -5,6 +5,7 @@ import { AccountModule } from './../../components/account/account.module';
 import { NgModule } from '@angular/core';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material';
 import { GenericFormComponent } from 'src/app/components/common/generic-form/generic-form.component';
+import { ReservationModule } from 'src/app/components/reservation/reservation.module';
 
 
 /*
@@ -15,7 +16,8 @@ import { GenericFormComponent } from 'src/app/components/common/generic-form/gen
   entryComponents: [SnackbarComponent],
   imports: [
     UserModule,
-    AccountModule
+    AccountModule,
+    ReservationModule
     // ovde ce biti Home, Admin, User module
   ],
   exports: [],
