@@ -5,7 +5,7 @@ import { AccountModule } from './../../components/account/account.module';
 import { NgModule } from '@angular/core';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material';
 import { GenericFormComponent } from 'src/app/components/common/generic-form/generic-form.component';
-import { ReservationModule } from 'src/app/components/reservation/reservation.module';
+import { RegistrationModule } from 'src/app/components/registration/registration.module';
 
 
 /*
@@ -17,7 +17,7 @@ import { ReservationModule } from 'src/app/components/reservation/reservation.mo
   imports: [
     UserModule,
     AccountModule,
-    ReservationModule
+    RegistrationModule
     // ovde ce biti Home, Admin, User module
   ],
   exports: [],

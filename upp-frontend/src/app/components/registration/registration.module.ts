@@ -12,4 +12,4 @@ import { StartRegistrationComponent } from './start-registration/start-registrat
     MaterialModule
   ]
 })
-export class ReservationModule { }
+export class RegistrationModule { }

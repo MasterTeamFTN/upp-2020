@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { FormDto } from 'src/app/model/dto/FormDto';
 
 @Component({
@@ -8,34 +8,38 @@ import { FormDto } from 'src/app/model/dto/FormDto';
   styleUrls: ['./generic-form.component.css']
 })
 export class GenericFormComponent implements OnInit {
-  @Input() formDto : FormDto;
+  @Input() formDto: FormDto;
+  // @Input() formControl: FormControl;
+
   constructor() { }
-  
+
   ngOnInit() {
-    this.multiselectValues = [];
   }
-  
-  public multiselectValues: string[];
 
 
 
   formLoaded(): boolean {
+    // return this.formControl != undefined;
     return this.formDto != undefined;
+  }
+  get multiselectValues() {
+    return this.parseMultiselect();
   }
 
   parseMultiselect() {
-    if(this.formDto.formFields.value != null && this.multiselectValues.length == 0) {
-      for(let field of this.formDto.formFields.value) {
-        if(field.type.name == 'MultiSelect') {
-          const values = field.type.values;
-          
-          for(let key of Object.keys(values)) {
-            this.multiselectValues.push(values[key]);
+    var multiValues = [];
+    if (this.formLoaded()) {
+      for (let field of this.formDto.formFields.controls) {
+        if (field.controls.type.value.name == 'MultiSelect') {
+          const values = field.controls.type.value.values;
+
+          for (let key of Object.keys(values)) {
+            multiValues.push(values[key]);
           }
         }
       }
+      return multiValues;
     }
-    return this.multiselectValues;
   }
 
   checkValidation(): boolean {
@@ -47,7 +51,9 @@ export class GenericFormComponent implements OnInit {
   }
 
   onSubmit() {
-    alert("Submit")
+    this.formDto.formFields.controls.forEach(formField => {
+      console.log(formField.controls.actualValue.value);
+    })
   }
 
 }

@@ -5,8 +5,10 @@ import { Observable } from "rxjs/internal/Observable";
 import { AuthStore } from "../..";
 
 const ENDPOINTS = {
-    START_READER_REGISTRATION: '/registration/public/reader-start',
-    START_WRITER_REGISTRATION: '/registration/public/writer-start',
+    START_READER_REGISTRATION: '/process/public/start/Process_ReaderRegistration',
+    START_WRITER_REGISTRATION: '/process/public/start/Process_WriterRegistration',
+
+    GET_REGISTRATION_FORM_FIELDS: '/process/public/form/',
 }
 
 @Injectable({
@@ -25,6 +27,11 @@ export class RegisterService {
         if (role === 'writer') {
             url = ENDPOINTS.START_WRITER_REGISTRATION;
         }
-        return this.http.get(url);
+        return this.http.get(url, {responseType: 'text'});
+    }
+
+    getForm(processInstanceId: any): Observable<any> {
+        var url = ENDPOINTS.GET_REGISTRATION_FORM_FIELDS;
+        return this.http.get(url.concat(processInstanceId));
     }
 }

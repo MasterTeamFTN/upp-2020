@@ -1,7 +1,11 @@
 <div id="registrationDiv">
-    <mat-button-toggle-group name="registerType" aria-label="Register type" value="reader">
+    <!-- <mat-button-toggle-group name="registerType" aria-label="Register type" value="reader">
         <mat-button-toggle (click)="loadForm('reader')" value="reader">Reader</mat-button-toggle>
         <mat-button-toggle (click)="loadForm('writer')" value="writer">Writer</mat-button-toggle>
-    </mat-button-toggle-group>
+    </mat-button-toggle-group> -->
     <app-generic-form [formDto]="formDto"></app-generic-form>
+
+    <!-- <form id="parrentForm" [formGroup]="registrationForm">
+        <app-generic-form *ngFor="let formControl of registrationForm.controls.registrationFormArray; let i=index" [formControl]="formControl"></app-generic-form>
+    </form> -->
 </div>
