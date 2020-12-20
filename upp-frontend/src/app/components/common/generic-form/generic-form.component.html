@@ -14,32 +14,38 @@
              [formControl]="getName(frmControl)">
         </mat-card-content> -->
 
-        <mat-card-content>
+        <mat-card-content id="card-content">
             <form>
-                <mat-form-field apperance="fill" *ngFor="let field of formDto.formFields.controls; let i=index">
+                <mat-form-field id="form-field" apperance="fill"
+                    *ngFor="let field of formDto.formFields.controls; let i=index">
                     <div [ngSwitch]="field.controls.type.value.name">
 
                         <div *ngSwitchCase="'MultiSelect'">
-                            <mat-select multiple>
+                            <mat-select placeholder="{{field.controls.name.value}}" multiple>
                                 <mat-option *ngFor="let msValue of multiselectValues; let j=index" value="{{j}}">
                                     {{msValue}}</mat-option>
                             </mat-select>
                         </div>
                         <div *ngSwitchCase="'password'">
 
-                            <!-- <input matInput placeholder="Password" [type]="hide ? 'password' : 'text'"
-                                formControlName="password" required>
-                            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}
-                            </mat-icon>
-                            <mat-hint *ngIf="!passwordInput.value">Enter your password</mat-hint> -->
+                            <input matInput placeholder="Password" [type]="hide ? 'password' : 'text'"
+                                [formControl]="field.controls.actualValue" required>
 
-                            <input matInput [formControl]="field.controls.actualValue" id={{field.controls.id.value}}
-                                apperance="fill" placeholder="{{field.controls.name.value}}" type="password">
+                            <mat-icon matPrefix id="password-icon" (click)="hide = !hide">
+                                {{hide ? 'visibility_off' :
+                                'visibility'}}
+                            </mat-icon>
+                            <!-- <mat-hint *ngIf="!field.controls.actualValue.value">Enter your password</mat-hint> -->
+                            <!-- <input matInput [formControl]="field.controls.actualValue" id={{field.controls.id.value}}
+                                apperance="fill" placeholder="{{field.controls.name.value}}" type="password"> -->
                         </div>
 
                         <div *ngSwitchCase="'string'">
                             <input matInput [formControl]="field.controls.actualValue" id={{field.controls.id.value}}
                                 apperance="fill" [placeholder]="field.controls.name.value" type="text">
+                            <mat-error>
+                                {{ getErrorMessage(field.controls.name.value) }}
+                            </mat-error>
                         </div>
 
                         <div *ngSwitchCase="'boolean'">

@@ -10,6 +10,7 @@ import { FormDto } from 'src/app/model/dto/FormDto';
 export class GenericFormComponent implements OnInit {
   @Input() formDto: FormDto;
   // @Input() formControl: FormControl;
+  hide = true;
 
   constructor() { }
 
@@ -49,10 +50,38 @@ export class GenericFormComponent implements OnInit {
     })
     return isValid;
   }
+  
+  /**
+ * Get error message
+ * @method getErrorMessage
+ * @param fieldName
+ * @returns string
+ */
+getErrorMessage(fieldName) {
+  var msg = '';
+  this.formDto.formFields.controls.forEach(formField => {
+    if(formField.controls['name'].value == fieldName) {
+      if (formField.controls['actualValue'].hasError('required')) {
+        msg = `VALIDATION.${fieldName.toUpperCase()}_REQUIRED`;
+      }
+      else if (formField.controls['actualValue'].hasError('pattern')) {
+        msg = `VALIDATION.${fieldName.toUpperCase()}_NOT_VALID`;
+      }
+      else if (formField.controls['actualValue'].hasError('min')) {
+        msg = `VALIDATION.${fieldName.toUpperCase()}_MIN_LENGTH`;
+      }
+    }
+  })
+  
+  return msg;
+}
 
   onSubmit() {
     this.formDto.formFields.controls.forEach(formField => {
       console.log(formField.controls.actualValue.value);
+      
+      let theValidators = formField.controls['actualValue'].validator('');
+      console.log(theValidators);
     })
   }
 

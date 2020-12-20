@@ -1,7 +1,7 @@
 import { Subscription } from 'rxjs';
 import { AuthQuery } from 'src/app/shared';
 import { MatSnackBar } from '@angular/material';
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import { FormDto } from './../../../model/dto/FormDto';
 import { SnackbarComponent } from '../../common/snackbar/snackbar.component';
 import { RegisterService } from './../../../shared/services/process/register.service';
@@ -20,6 +20,7 @@ export class RegisterComponent implements OnInit {
     private snackbar: MatSnackBar,
     private formBuilder: FormBuilder,
     private registerService: RegisterService,
+    private injector: Injector
   ) {
     this.registrationForm = new FormGroup({
       registrationFormArray: this.formBuilder.array([])
@@ -60,13 +61,14 @@ export class RegisterComponent implements OnInit {
       Object.keys(response.formFields).forEach((i) => {
         this.registratonFormArray.push(
           this.formBuilder.group({
-            actualValue: new FormControl(''),
+            actualValue: new FormControl('', Array.from(this.getValidators(response.formFields[i]))),
             id: new FormControl({ value: response.formFields[i].id, disabled: true }),
             type: new FormControl({ value: response.formFields[i].type, disabled: true }),
             name: new FormControl({ value: response.formFields[i].label, disabled: true }),
             validationConstraints: new FormControl({ value: response.formFields[i].validationConstraints, disabled: true })
           })
         )
+        this.registratonFormArray.updateValueAndValidity();
       })
 
       this.formDto = {
@@ -130,20 +132,5 @@ export class RegisterComponent implements OnInit {
   onSubmit(): void {
   }
 
-  /**
- * Get error message
- * @method getErrorMessage
- * @param fieldName
- * @returns string
- */
-  getErrorMessage(fieldName) {
-    if (this[fieldName].hasError('required')) {
-      return `VALIDATION.${fieldName.toUpperCase()}_REQUIRED`;
-    }
-    else if (this[fieldName].hasError('pattern')) {
-      return `VALIDATION.${fieldName.toUpperCase()}_NOT_VALID`;
-    }
-    return '';
-  }
 
 }
