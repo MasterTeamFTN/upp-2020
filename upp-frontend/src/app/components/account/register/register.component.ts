@@ -6,6 +6,7 @@ import { FormDto } from './../../../model/dto/FormDto';
 import { SnackbarComponent } from '../../common/snackbar/snackbar.component';
 import { RegisterService } from './../../../shared/services/process/register.service';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AppConstants } from '../../common/AppConstants';
 
 @Component({
   selector: 'app-register',
@@ -13,7 +14,6 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-
 
   constructor(
     private authQuery: AuthQuery,
@@ -27,6 +27,8 @@ export class RegisterComponent implements OnInit {
     })
 
     this.registratonFormArray = this.registrationForm.controls.registratonFormArray as FormArray;
+
+
   }
 
   formDto: FormDto;
@@ -47,17 +49,6 @@ export class RegisterComponent implements OnInit {
 
     this.startProcessSub = this.registerService.getForm(processId).subscribe((response) => {
       this.registratonFormArray = this.registrationForm.get('registrationFormArray') as FormArray;
-
-      // Object.keys(response.formFields).forEach((i) => {
-      //   let formField = response.formFields[i];
-      //   this.registratonFormArray.push(
-      //     this.formBuilder.group({
-      //       [formField.label]: new FormControl('', this.getValidators(formField)),
-      //     })
-      //   )
-      // })
-
-
       Object.keys(response.formFields).forEach((i) => {
         this.registratonFormArray.push(
           this.formBuilder.group({
@@ -123,13 +114,6 @@ export class RegisterComponent implements OnInit {
     while (formArray.length !== 0) {
       formArray.removeAt(0)
     }
-  }
-  /**
-   * Submit form to the server
-   * @method onSubmit
-   * @returns void
-   */
-  onSubmit(): void {
   }
 
 

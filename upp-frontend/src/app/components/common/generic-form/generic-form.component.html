@@ -4,28 +4,26 @@
     <mat-card id="genericFormContainer">
         <mat-card-title>
             {{formDto.formName}}
-            <!-- V_02 -->
         </mat-card-title>
 
-        <!-- <mat-card-content>
-            <input matInput 
-            *ngFor="let frmControl of getControls(); let i=index"
-
-             [formControl]="getName(frmControl)">
-        </mat-card-content> -->
-
         <mat-card-content id="card-content">
-            <form>
+            <form #genericForm="ngForm">
+
+                <!-- GENERIC FORM FIELD -->
                 <mat-form-field id="form-field" apperance="fill"
                     *ngFor="let field of formDto.formFields.controls; let i=index">
                     <div [ngSwitch]="field.controls.type.value.name">
 
+                        <!-- MULTISELECT FORM FIELD -->
                         <div *ngSwitchCase="'MultiSelect'">
-                            <mat-select placeholder="{{field.controls.name.value}}" multiple>
+                            <mat-select [formControl]="field.controls.actualValue"
+                                placeholder="{{field.controls.name.value}}" multiple>
                                 <mat-option *ngFor="let msValue of multiselectValues; let j=index" value="{{j}}">
                                     {{msValue}}</mat-option>
                             </mat-select>
                         </div>
+
+                        <!-- PASSWORD FORM FIELD -->
                         <div *ngSwitchCase="'password'">
 
                             <input matInput placeholder="Password" [type]="hide ? 'password' : 'text'"
@@ -35,28 +33,29 @@
                                 {{hide ? 'visibility_off' :
                                 'visibility'}}
                             </mat-icon>
-                            <!-- <mat-hint *ngIf="!field.controls.actualValue.value">Enter your password</mat-hint> -->
-                            <!-- <input matInput [formControl]="field.controls.actualValue" id={{field.controls.id.value}}
-                                apperance="fill" placeholder="{{field.controls.name.value}}" type="password"> -->
                         </div>
 
+                        <!-- ANY TEXT FORM FIELD -->
                         <div *ngSwitchCase="'string'">
                             <input matInput [formControl]="field.controls.actualValue" id={{field.controls.id.value}}
                                 apperance="fill" [placeholder]="field.controls.name.value" type="text">
-                            <mat-error>
-                                {{ getErrorMessage(field.controls.name.value) }}
-                            </mat-error>
                         </div>
 
+                        <!-- CHECKBOX FORM FIELD -->
                         <div *ngSwitchCase="'boolean'">
                             <mat-checkbox [formControl]="field.controls.actualValue">
                                 {{field.controls.name.value}}
                             </mat-checkbox>
                         </div>
 
+                        <mat-error>
+                            {{ getErrorMessage(field.controls.name.value) }}
+                        </mat-error>
                         <input class="dummyHiddenInput" matInput hidden>
                     </div>
                 </mat-form-field>
+                
+                <!-- SUBMIT BUTTON -->
                 <mat-form-field>
                     <button mat-button id="submitForm" (click)="onSubmit()"
                         [disabled]="checkValidation()">Submit</button>

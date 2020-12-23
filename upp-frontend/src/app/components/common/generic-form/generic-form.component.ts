@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, NgForm } from '@angular/forms';
 import { FormDto } from 'src/app/model/dto/FormDto';
+import { AppConstants } from '../AppConstants';
 
 @Component({
   selector: 'app-generic-form',
@@ -10,14 +11,15 @@ import { FormDto } from 'src/app/model/dto/FormDto';
 export class GenericFormComponent implements OnInit {
   @Input() formDto: FormDto;
   // @Input() formControl: FormControl;
+
+
   hide = true;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }
-
-
 
   formLoaded(): boolean {
     // return this.formControl != undefined;
@@ -43,46 +45,61 @@ export class GenericFormComponent implements OnInit {
     }
   }
 
-  checkValidation(): boolean {
-    var isValid = false;
-    this.formDto.formFields.controls.forEach(formField => {
-      isValid = isValid && formField.valid;
-    })
-    return isValid;
-  }
-  
   /**
  * Get error message
  * @method getErrorMessage
  * @param fieldName
  * @returns string
  */
-getErrorMessage(fieldName) {
-  var msg = '';
-  this.formDto.formFields.controls.forEach(formField => {
-    if(formField.controls['name'].value == fieldName) {
-      if (formField.controls['actualValue'].hasError('required')) {
-        msg = `VALIDATION.${fieldName.toUpperCase()}_REQUIRED`;
+  getErrorMessage(fieldName) {
+    var msg = '';
+    this.formDto.formFields.controls.forEach(formField => {
+      if (formField.controls['name'].value == fieldName && !formField.controls['actualValue'].valid) {
+        msg = this.parseValidationConstraints(fieldName, formField.controls['validationConstraints']);
       }
-      else if (formField.controls['actualValue'].hasError('pattern')) {
-        msg = `VALIDATION.${fieldName.toUpperCase()}_NOT_VALID`;
+    })
+
+    return msg;
+  }
+
+  parseValidationConstraints(fieldName: string, formControl: any) {
+    var msg = '';
+    formControl.value.forEach((constraint) => {
+
+      if (constraint.name == 'required') {
+        msg = msg.concat('Field is required, ');
       }
-      else if (formField.controls['actualValue'].hasError('min')) {
-        msg = `VALIDATION.${fieldName.toUpperCase()}_MIN_LENGTH`;
+      else if (constraint.name == 'minlength') {
+        msg = msg.concat(`Field min length is ${constraint.configuration}, `);
       }
-    }
-  })
-  
-  return msg;
-}
+      else if (constraint.name == 'maxlength') {
+        msg = msg.concat(`Field max length is ${constraint.configuration}, `);
+      }
+      else if (constraint.name == 'min' || constraint.name == 'max') {
+        msg = msg.concat(`Field ${constraint.name} value is ${constraint.configuration}, `);
+      }
+      else if (formControl.hasError('pattern')) {
+        msg = msg.concat(`Field pattern is ${constraint.configuration}, `);
+      }
+    })
+
+    return msg.replace(/,\s*$/, "");  // remove last comma
+  }
+
+
+  checkValidation(): boolean {
+    var isValid = true;
+    this.formDto.formFields.controls.forEach(formField => {
+      isValid = isValid && formField.controls['actualValue'].valid;
+    })
+    return !isValid;
+  }
 
   onSubmit() {
     this.formDto.formFields.controls.forEach(formField => {
       console.log(formField.controls.actualValue.value);
-      
-      let theValidators = formField.controls['actualValue'].validator('');
-      console.log(theValidators);
     })
   }
+
 
 }
