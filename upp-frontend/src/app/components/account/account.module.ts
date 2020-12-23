@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { CommonComponentsModule } from '../common/common-components.module';
 import { GenericFormComponent } from '../common/generic-form/generic-form.component';
 import { MaterialModule } from 'src/app/shared/modules/material.module';
+import { AccountConfirmationComponent } from './account-confirmation/account-confirmation.component';
 
 
 @NgModule({
@@ -15,6 +16,7 @@ import { MaterialModule } from 'src/app/shared/modules/material.module';
     LoginComponent,
     RegisterComponent,
     GenericFormComponent,
+    AccountConfirmationComponent,
   ],
   imports: [
     CoreModule,

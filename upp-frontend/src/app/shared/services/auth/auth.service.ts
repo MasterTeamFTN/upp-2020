@@ -14,6 +14,7 @@ const ENDPOINTS = {
   PROFILE: '/public/user/',
   CHANGE_PASSWORD: '/auth/change-password',
   START_READER_REGISTRATION: '/registration/public/reader-start',
+  ACTIVATE_ACCOUNT: '/registration/public/verify-account'
 }
 
 
@@ -57,6 +58,10 @@ export class AuthService {
 
   profile(id: number): Observable<any> {
     return this.http.get(ENDPOINTS.PROFILE + id);
+  }
+
+  activateAccount(token: string): Observable<any> {
+    return this.http.get(`${ENDPOINTS.ACTIVATE_ACCOUNT}/${token}`);
   }
 
   /**
