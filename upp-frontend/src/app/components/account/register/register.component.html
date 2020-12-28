@@ -3,7 +3,7 @@
         <mat-button-toggle (click)="loadForm('reader')" value="reader">Reader</mat-button-toggle>
         <mat-button-toggle (click)="loadForm('writer')" value="writer">Writer</mat-button-toggle>
     </mat-button-toggle-group> -->
-    <app-generic-form [formDto]="formDto"></app-generic-form>
+    <app-generic-form [formDto]="formDto" (onFormSubmit)="submit($event)"></app-generic-form>
 
     <!-- <form id="parrentForm" [formGroup]="registrationForm">
         <app-generic-form *ngFor="let formControl of registrationForm.controls.registrationFormArray; let i=index" [formControl]="formControl"></app-generic-form>

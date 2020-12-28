@@ -9,6 +9,8 @@ const ENDPOINTS = {
     START_WRITER_REGISTRATION: '/process/public/start/Process_WriterRegistration',
 
     GET_REGISTRATION_FORM_FIELDS: '/process/public/form/',
+
+    SUBMIT_READERS_REGISTRATION: '/registration/public/reader-submit',
 }
 
 @Injectable({
@@ -33,5 +35,10 @@ export class RegisterService {
     getForm(processInstanceId: any): Observable<any> {
         var url = ENDPOINTS.GET_REGISTRATION_FORM_FIELDS;
         return this.http.get(url.concat(processInstanceId));
+    }
+
+    submit(formSubmitData: any): Observable<any> { 
+        const url = ENDPOINTS.SUBMIT_READERS_REGISTRATION;
+        return this.http.post(url, formSubmitData);
     }
 }

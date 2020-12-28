@@ -38,7 +38,11 @@ export class StartRegistrationComponent implements OnInit {
       this.authStore.update((state) => ({
         processId: response,
       }))
-      this.router.navigate(['/registerAsReader'])
+      if(role==='reader') {
+        this.router.navigate(['/registerAsReader'])
+      } else {
+        this.router.navigate(['/registerAsWriter'])
+      }
     })
   }
 

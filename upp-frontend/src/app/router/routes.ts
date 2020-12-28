@@ -28,6 +28,11 @@ export const routes: Routes = [
         // canActivate: []
     },
     {
+        path: 'registerAsWriter',
+        component: RegisterComponent,
+        // canActivate: []
+    },
+    {
         path: 'profile',
         component: ProfileComponent,
         // canActivate: []

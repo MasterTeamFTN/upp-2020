@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, NgForm } from '@angular/forms';
 import { FormDto } from 'src/app/model/dto/FormDto';
 import { AppConstants } from '../AppConstants';
@@ -10,6 +10,7 @@ import { AppConstants } from '../AppConstants';
 })
 export class GenericFormComponent implements OnInit {
   @Input() formDto: FormDto;
+  @Output() onFormSubmit: EventEmitter<any> = new EventEmitter<any>();
   // @Input() formControl: FormControl;
 
 
@@ -96,9 +97,13 @@ export class GenericFormComponent implements OnInit {
   }
 
   onSubmit() {
+    let submitData = {}
     this.formDto.formFields.controls.forEach(formField => {
-      console.log(formField.controls.actualValue.value);
+      submitData[formField.controls.name.value] = formField.controls.actualValue.value;
     })
+    console.log(submitData);
+
+    this.onFormSubmit.emit(submitData)
   }
 
 
