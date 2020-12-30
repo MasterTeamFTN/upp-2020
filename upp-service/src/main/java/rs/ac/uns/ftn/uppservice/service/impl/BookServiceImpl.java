@@ -82,4 +82,10 @@ public class BookServiceImpl implements BookService {
         bookRepository.delete(b);
     }
 
+    @Override
+    public void rejectAfterTimeOut(Book book) {
+        mailSenderService.notifyWriterFullBookTimedOut(book);
+        bookRepository.deleteById(book.getId());
+    }
+
 }

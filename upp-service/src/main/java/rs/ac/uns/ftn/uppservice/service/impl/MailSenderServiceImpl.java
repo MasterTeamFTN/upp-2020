@@ -56,6 +56,26 @@ public class MailSenderServiceImpl implements MailSenderService {
         mailSender.send(message);
     }
 
+    @Override
+    public void notifyWriterToSendFullBook(Book book) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("Book accepted - UPP");
+        message.setFrom("UPP-App");
+        message.setTo(book.getWriter().getEmail());
+        message.setText("Book - " + book.getTitle() + " has been accepted. \nPlease send full version");
+        mailSender.send(message);
+    }
+
+    @Override
+    public void notifyWriterFullBookTimedOut(Book book) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("Book rejected - UPP");
+        message.setFrom("UPP-App");
+        message.setTo(book.getWriter().getEmail());
+        message.setText("Book - " + book.getTitle() + " has been rejected. You didn't send the full version on time");
+        mailSender.send(message);
+    }
+
     private void send(String email, ConfirmationToken confirmationToken) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setSubject(String.join(

@@ -9,5 +9,5 @@ public interface BookService {
 
     Book submitInitForm(List<FormSubmissionDto> formData, String processInstanceId);
     void rejectFirstReview(List<FormSubmissionDto> formData, Book book);
-
+    void rejectAfterTimeOut(Book book);
 }

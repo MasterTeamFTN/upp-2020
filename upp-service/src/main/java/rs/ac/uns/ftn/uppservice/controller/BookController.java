@@ -2,16 +2,19 @@ package rs.ac.uns.ftn.uppservice.controller;
 
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.exception.NullValueException;
+import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.uppservice.dto.request.CamundaFormSubmitDTO;
+import rs.ac.uns.ftn.uppservice.exception.exceptions.ApiRequestException;
+import rs.ac.uns.ftn.uppservice.model.User;
 import rs.ac.uns.ftn.uppservice.service.ProcessEngineService;
 
 @RestController
@@ -27,6 +30,22 @@ public class BookController {
     @Autowired
     private TaskService taskService;
 
+    @GetMapping(path = "/publish-start-process")
+    @PreAuthorize("hasRole('ROLE_WRITER')")
+    public ResponseEntity<String> startProcess() {
+        ProcessInstance pi;
+
+        try {
+            pi = runtimeService.startProcessInstanceByKey("Process_BookPublishing");
+        } catch (NullValueException e) {
+            throw new ApiRequestException("Process with name doesn't exist!");
+        }
+
+//        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        runtimeService.setVariable(pi.getId(), "writerAssignee", user.getUsername());
+
+        return new ResponseEntity<>(pi.getId(), HttpStatus.OK);
+    }
 
     @PostMapping(path = "/init-book-submit")
     @PreAuthorize("hasRole('ROLE_WRITER')")

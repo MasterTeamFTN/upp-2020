@@ -15,4 +15,8 @@ public interface MailSenderService {
     void sendChiefEditorNewBookNotification(User chiefEditor, Book book);
 
     void sendWriterRejectBook(Book book, String reason);
+
+    void notifyWriterToSendFullBook(Book book);
+
+    void notifyWriterFullBookTimedOut(Book book);
 }
