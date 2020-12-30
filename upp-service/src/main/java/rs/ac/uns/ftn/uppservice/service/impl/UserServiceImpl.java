@@ -5,12 +5,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.uppservice.dto.response.UserDTO;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ApiRequestException;
+import rs.ac.uns.ftn.uppservice.exception.exceptions.ResourceNotFoundException;
+import rs.ac.uns.ftn.uppservice.model.ChiefEditor;
+import rs.ac.uns.ftn.uppservice.model.Editor;
 import rs.ac.uns.ftn.uppservice.model.User;
 import rs.ac.uns.ftn.uppservice.repository.UserRepository;
 import rs.ac.uns.ftn.uppservice.service.UserService;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,4 +48,19 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll().stream()
                 .map(user -> new UserDTO(user)).collect(Collectors.toList());
     }
+
+    @Override
+    public ChiefEditor getChiefEditor() {
+        return (ChiefEditor) userRepository.findChiefEditor()
+                .orElseThrow(() -> new ResourceNotFoundException("Chief editor doesn't exist"));
+    }
+
+    @Override
+    public Editor getRandomEditor() {
+        List<User> editors = userRepository.findAllEditors();
+        Random random = new Random();
+        return (Editor) editors.get(random.nextInt(editors.size()));
+    }
+
+
 }

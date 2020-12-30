@@ -22,7 +22,7 @@ public class Book {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "isbn", nullable = false)
+    @Column(name = "isbn")
     private String isbn;
 
     @ManyToOne
@@ -39,32 +39,32 @@ public class Book {
     @ElementCollection(targetClass=String.class)
     private Set<String> keywords;
 
-    @Column(name = "publisher", nullable = false)
+    @Column(name = "publisher")
     private String publisher;
 
-    @Column(name = "year", nullable = false)
+    @Column(name = "year")
     private int year;
 
-    @Column(name = "cityCountry", nullable = false)
+    @Column(name = "cityCountry")
     private String cityCountry;
 
     @Column(name = "synopsis", nullable = false)
     private String synopsis;
 
-    @Column(name = "numOfPages", nullable = false)
+    @Column(name = "numOfPages")
     private Integer numOfPages;
 
     @Column(name = "isPlagiarized", nullable = false)
-    private Boolean isPlagiarized;
+    private Boolean isPlagiarized = false;
 
-    @Column(name = "isPublished", nullable = false)
+    @Column(name = "isPublished")
     private Boolean isPublished;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Suggestion> suggestions;
 
     @ManyToOne
-    @JoinColumn(name="complaint_id", nullable=false)
+    @JoinColumn(name="complaint_id")
     private Complaint complaint;
 
 

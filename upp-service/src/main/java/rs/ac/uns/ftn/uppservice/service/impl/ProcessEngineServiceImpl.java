@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.uppservice.service.impl;
 
 import org.camunda.bpm.engine.FormService;
+import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.impl.form.validator.FormFieldValidatorException;
 import org.camunda.bpm.engine.task.Task;
@@ -23,6 +24,9 @@ public class ProcessEngineServiceImpl implements ProcessEngineService {
     @Autowired
     private FormService formService;
 
+    @Autowired
+    private RuntimeService runtimeService;
+
     /**
      * Sends the form to the Camunda and validates it.
      * @param data
@@ -40,6 +44,13 @@ public class ProcessEngineServiceImpl implements ProcessEngineService {
         String processInstanceId = task.getProcessInstanceId();
 
         try {
+            // @Hack: Boris - ovde sam stavio da se setuje svaka forma koja stigne kao procesna varijabla
+            // jer je bilo problema da se ovde pozove .submitTaskForm koji odma prebaci na sledeci task
+            // u procesu. Ako je tom sledecem tasku potrebna ova forma, Spring nece stici da je setuje
+            // tako da ce uvek dolaziti do exceptiona
+            // Ono sta se meni desavalo je da kad uradim submit, pozove se ova metoda, zatim se odma
+            // aktivira Delegat sledeceg taska, pa se tek onda setuje forma u kontroleru za submitovanje
+            runtimeService.setVariable(processInstanceId, "formData", data.getFormData());
             formService.submitTaskForm(data.getTaskId(), map);
         } catch (FormFieldValidatorException e) {
             throw new ApiRequestException("Failed validation");
