@@ -19,7 +19,7 @@ headers = login('john.doe', '123')
 
 # START PROCESS
 
-start_process_response = requests.get('http://localhost:8080/process/public/start/Process_BookPublishing')
+start_process_response = requests.get('http://localhost:8080/book/publish-start-process', headers=headers)
 process_id = start_process_response.text
 print(f'Process ID: {process_id}')
 
