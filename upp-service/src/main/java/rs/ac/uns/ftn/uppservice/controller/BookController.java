@@ -71,4 +71,17 @@ public class BookController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping(path = "/submit-full-book")
+    @PreAuthorize("hasRole('ROLE_WRITER')")
+    public ResponseEntity submitFullBook(@RequestBody CamundaFormSubmitDTO data) {
+        String processInstanceId = processEngineService.submitForm(data);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(path = "/submit-plagiarism-form")
+    @PreAuthorize("hasRole('ROLE_CHIEF_EDITOR')")
+    public ResponseEntity submitPlagiarismForm(@RequestBody CamundaFormSubmitDTO data) {
+        String processInstanceId = processEngineService.submitForm(data);
+        return ResponseEntity.ok().build();
+    }
 }

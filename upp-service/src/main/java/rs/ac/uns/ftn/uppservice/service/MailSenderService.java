@@ -19,4 +19,6 @@ public interface MailSenderService {
     void notifyWriterToSendFullBook(Book book);
 
     void notifyWriterFullBookTimedOut(Book book);
+
+    void notifyUserBookIsPlagiarised(Book book, String reason);
 }

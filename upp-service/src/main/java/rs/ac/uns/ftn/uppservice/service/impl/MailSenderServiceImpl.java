@@ -76,6 +76,17 @@ public class MailSenderServiceImpl implements MailSenderService {
         mailSender.send(message);
     }
 
+    @Override
+    public void notifyUserBookIsPlagiarised(Book book, String reason) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("Book rejected - plagiarised - UPP");
+        message.setFrom("UPP-App");
+        message.setTo(book.getWriter().getEmail());
+        message.setText("Book - " + book.getTitle() + " has been rejected because it's plagiarised." +
+                "\nReason: " + reason);
+        mailSender.send(message);
+    }
+
     private void send(String email, ConfirmationToken confirmationToken) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setSubject(String.join(
