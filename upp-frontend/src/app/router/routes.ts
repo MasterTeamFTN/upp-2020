@@ -5,6 +5,7 @@ import { ProfileComponent } from './../components/user/profile/profile.component
 import { HomeComponent } from './../components/home/home.component';
 import { Routes } from '@angular/router';
 import { StartRegistrationComponent } from '../components/registration/start-registration/start-registration.component';
+import { LoadFileComponent } from '../components/common/load-file/load-file.component';
 
 export const routes: Routes = [
     {
@@ -30,6 +31,11 @@ export const routes: Routes = [
     {
         path: 'registerAsWriter',
         component: RegisterComponent,
+        // canActivate: []
+    },
+    {
+        path: 'fileUpload',
+        component: LoadFileComponent,
         // canActivate: []
     },
     {

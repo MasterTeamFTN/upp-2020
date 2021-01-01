@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface WriterService {
 
-    Writer add(List<FormSubmissionDto> formData, List<FormSubmissionDto> chooseGenresForm, String processInstanceId);
+    Writer add(List<FormSubmissionDto> formData, String processInstanceId);
 
     void activateAccount(String token);
 

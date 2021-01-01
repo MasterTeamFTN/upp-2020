@@ -48,13 +48,21 @@
                             </mat-checkbox>
                         </div>
 
+                        <!-- FILE FORM FIELD -->
+                        <div *ngSwitchCase="'PdfFile'">
+                            <label>Fajl &nbsp; &nbsp;</label>
+                            <input [formControl]="field.controls.actualValue" type="file"
+                                placeholder="Choose science paper" (change)="selectFile($event)"
+                                value="Choose science paper">
+                        </div>
+
                         <mat-error>
                             {{ getErrorMessage(field.controls.name.value) }}
                         </mat-error>
                         <input class="dummyHiddenInput" matInput hidden>
                     </div>
                 </mat-form-field>
-                
+
                 <!-- SUBMIT BUTTON -->
                 <mat-form-field>
                     <button mat-button id="submitForm" (click)="onSubmit()"

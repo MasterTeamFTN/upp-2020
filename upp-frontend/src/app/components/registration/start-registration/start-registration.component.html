@@ -1,8 +1,20 @@
-<div id="startReservationContainer">
+<div *ngIf="!choiceMade; then content else loader"></div>
 
-    <mat-grid-list cols="2" rowHeight="2:1">
-        <mat-grid-tile (click)="register('reader')"><h2>Register as a reader</h2></mat-grid-tile>
-        <mat-grid-tile (click)="register('writer')"><h2>Register as a writer</h2></mat-grid-tile>
-    </mat-grid-list>
+<ng-template #content>
+    <div id="startReservationContainer">
 
-</div>
+        <mat-grid-list cols="2" rowHeight="2:1">
+            <mat-grid-tile (click)="register('reader')">
+                <h2>Register as a reader</h2>
+            </mat-grid-tile>
+            <mat-grid-tile (click)="register('writer')">
+                <h2>Register as a writer</h2>
+            </mat-grid-tile>
+        </mat-grid-list>
+
+    </div>
+</ng-template>
+
+<ng-template #loader>
+    <mat-spinner></mat-spinner>
+</ng-template>

@@ -1,7 +1,10 @@
 # App
 app:
   name: upp-service
-  secret-code: YOUR_APP_SECRET_CODE_HERE
+  secret-code: kpzpkwhrvpmkeeei
+
+multipart:
+  enabled: true
 
 # Spring DataSource
 spring:
@@ -22,15 +25,21 @@ spring:
     show-sql: true
     properties.hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
       naming.strategy: org.hibernate.cfg.ImprovedNamingStrategy
 
   mail:
     host: smtp.gmail.com
     port: 587
-    username: EMAIL_USERNAME
-    password: EMAIL_PASSWORD
+    username: ljubicjanko1@gmail.com
+    password: kpzpkwhrvpmkeeei
     properties.mail.smtp.starttls.enable: true
+
+
+  http:
+    multipart:
+      max-file-size: 500000KB
+      max-request-size: 500000KB
 
 # Camunda
 camunda:

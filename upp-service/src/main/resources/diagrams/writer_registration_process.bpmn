@@ -221,7 +221,7 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${workCount&gt;2}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_032cfhr" sourceRef="Activity_1rl1mg4" targetRef="Gateway_14t5bxw" />
-    <bpmn:userTask id="Activity_1rl1mg4" name="Submit reviews" camunda:candidateUsers="${boardMembers}">
+    <bpmn:userTask id="Activity_1rl1mg4" name="Submit reviews" camunda:assignee="boardMember.id">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="decision" label="Decision" type="enum">
@@ -233,6 +233,7 @@
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1a54md5</bpmn:incoming>
       <bpmn:outgoing>Flow_032cfhr</bpmn:outgoing>
+      <bpmn:multiInstanceLoopCharacteristics camunda:collection="${boardMembers}" camunda:elementVariable="boardMember" />
     </bpmn:userTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">

@@ -15,16 +15,16 @@ INSERT INTO user_authority (user_id, authority_id) VALUES (1, 2);   # john - wri
 INSERT INTO user_authority (user_id, authority_id) VALUES (2, 3);   # jane - lecturer
 INSERT INTO user_authority (user_id, authority_id) VALUES (3, 1);   # baby - reader
 
-INSERT INTO genres (id, name) VALUES (1, "Romance");
-INSERT INTO genres (id, name) VALUES (2, "Comedy");
-INSERT INTO genres (id, name) VALUES (3, "Drama");
-INSERT INTO genres (id, name) VALUES (4, "Animation");
-INSERT INTO genres (id, name) VALUES (5, "Fantasy");
-INSERT INTO genres (id, name) VALUES (6, "Adventure");
-INSERT INTO genres (id, name) VALUES (7, "Historical");
-INSERT INTO genres (id, name) VALUES (8, "Horror");
-INSERT INTO genres (id, name) VALUES (9, "Thriller");
-INSERT INTO genres (id, name) VALUES (10, "Mystery");
+INSERT INTO genres (name) VALUES ("Romance");
+INSERT INTO genres (name) VALUES ("Comedy");
+INSERT INTO genres (name) VALUES ("Drama");
+INSERT INTO genres (name) VALUES ("Animation");
+INSERT INTO genres (name) VALUES ("Fantasy");
+INSERT INTO genres (name) VALUES ("Adventure");
+INSERT INTO genres (name) VALUES ("Historical");
+INSERT INTO genres (name) VALUES ("Horror");
+INSERT INTO genres (name) VALUES ("Thriller");
+INSERT INTO genres (name) VALUES ("Mystery");
 
 INSERT INTO writer_genre (writer_id, genre_id) VALUES (1, 1);
 INSERT INTO writer_genre (writer_id, genre_id) VALUES (1, 2);

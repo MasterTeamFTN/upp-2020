@@ -23,21 +23,40 @@ export class HttpApiInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const url = environment.apiUrl;
         let observable: Observable<HttpEvent<any>>;
+
+        var isMultipart: boolean = false;
+        this.authQuery.isMultipartFileRequest$.subscribe((isMultipartFileRequest) => {
+            isMultipart = isMultipartFileRequest;
+        })
+
+
         this.authQuery.token$.subscribe((token) => {
             let authHeaders = token
                 ? {
                     'Authorization': `Bearer ${token}`,
                 }
                 : {};
+            let headers = isMultipart
+                ? {
+                    'Accept': 'application/json',
+                    ...authHeaders
+                }
+                : {
+                    'Content-Type': 'application/json; charset=utf-8',
+                    'Accept': 'application/json',
+                    ...authHeaders
+                };
 
 
             req = req.clone({
                 url: url + req.url,
-                setHeaders: {
-                    'Content-Type': 'application/json; charset=utf-8',
-                    'Accept': 'application/json',
-                    ...authHeaders
-                },
+                setHeaders: headers
+                // setHeaders: {
+                //     'Content-Type': 'application/json; charset=utf-8',
+                //     // 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW',
+                //     'Accept': 'application/json',
+                //     ...authHeaders
+                // },
             });
 
             observable = next.handle(req).pipe(catchError((error) => {

@@ -91,6 +91,18 @@ public class RegistrationController {
     }
 
     /**
+     * When user fills out the from on the frontend and wants to submit it, then you call this endpoint.
+     * @param data - Data from the from
+     * @return 200 - OK
+     */
+    @PostMapping(path = "/public/writer-submit")
+    public ResponseEntity submitWriterRegistrationData(@RequestBody CamundaFormSubmitDTO data) {
+        String processInstanceId = processEngineService.submitForm(data);
+        runtimeService.setVariable(processInstanceId, "registrationFormData", data.getFormData());
+        return ResponseEntity.ok().build();
+    }
+
+    /**
      * This endpoint is used for activating user's account after registration.
      * Send token value as URL path variable.
      * @param token

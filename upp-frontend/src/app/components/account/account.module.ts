@@ -15,7 +15,6 @@ import { AccountConfirmationComponent } from './account-confirmation/account-con
   declarations: [
     LoginComponent,
     RegisterComponent,
-    GenericFormComponent,
     AccountConfirmationComponent,
   ],
   imports: [

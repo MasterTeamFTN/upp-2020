@@ -1,0 +1,26 @@
+<div *ngIf="checkIsMember(); then memberContent else nonMemberContent"></div>
+
+<ng-template #memberContent>
+
+    <div *ngIf="writer!=null">
+        {{writer.firstName}}
+    </div>
+    <h1>This is home page of an writeeer</h1>
+</ng-template>
+
+<ng-template #nonMemberContent>
+    <div class="mat-card-cvr">
+        <mat-card class="writer-info-card">
+            <mat-card-header>
+                <div mat-card-avatar class="example-header-image"></div>
+                <mat-card-title>You are not a member yet.</mat-card-title>
+                <mat-card-subtitle>Your papers need to be approved.</mat-card-subtitle>
+            </mat-card-header>
+            <mat-divider></mat-divider>
+            <mat-card-content class="writer-card-content">
+                Todo: check here if files are already uploaded and wait for acceptance.
+                <app-load-file></app-load-file>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</ng-template>

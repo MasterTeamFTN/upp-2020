@@ -33,7 +33,7 @@ public class WriterServiceImpl implements WriterService {
     private final MailSenderService mailSenderService;
 
     @Override
-    public Writer add(List<FormSubmissionDto> formData, List<FormSubmissionDto> chooseGenresForm, String processInstanceId) {
+    public Writer add(List<FormSubmissionDto> formData, String processInstanceId) {
         Writer writer = new Writer();
         String password = "";
 
@@ -64,6 +64,7 @@ public class WriterServiceImpl implements WriterService {
         }
 
         writer.setEnabled(false);
+        writer.setMember(false);
         writer = userRepository.save(writer);
 
         org.camunda.bpm.engine.identity.User camundaUser = identityService.newUser(writer.getUsername());
@@ -84,9 +85,10 @@ public class WriterServiceImpl implements WriterService {
     private Set<Genre> getGenresFromList(List<String> genresNames) {
         Set<Genre> genres = new HashSet<>();
 
-        genresNames.stream().forEach(genreName -> {
-            Genre genre = genreRepository.findByName(genreName)
-                    .orElseThrow(() -> new ResourceNotFoundException("Genre with name " + genreName + " doesn't exist."));
+        genresNames.stream().forEach(genreId -> {
+            Long id = Long.valueOf(genreId);
+            Genre genre = genreRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Genre with id " + genreId + " doesn't exist."));
             genres.add(genre);
         });
 

@@ -24,4 +24,9 @@ public class Writer extends User {
 
     @OneToMany(mappedBy = "writer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Book> books;
+
+    @Column(name = "isMember", columnDefinition = "boolean default false")
+    private boolean isMember;
+
+    //Todo add pdf files
 }

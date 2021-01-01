@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, NgForm } from '@angular/forms';
 import { FormDto } from 'src/app/model/dto/FormDto';
 import { AppConstants } from '../AppConstants';
@@ -15,8 +15,10 @@ export class GenericFormComponent implements OnInit {
 
 
   hide = true;
+  selectedFiles: FileList;
+  currentFileUpload: File;
 
-  constructor() {
+  constructor(private cd: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -103,8 +105,46 @@ export class GenericFormComponent implements OnInit {
     })
     console.log(submitData);
 
-    this.onFormSubmit.emit(submitData)
+    if (this.selectedFiles) {
+      this.currentFileUpload = this.selectedFiles.item(0);
+      this.onFormSubmit.emit(this.currentFileUpload);
+    } else {
+      this.onFormSubmit.emit(submitData);
+    }
   }
+
+  selectFile(event: any) {
+    this.selectedFiles = event.target.files;
+
+    // let reader = new FileReader();
+
+    // if(event.target.files && event.target.files.length) {
+    //   const [file] = event.target.files;
+    //   reader.readAsDataURL(file);
+
+    //   reader.onload = () => {
+    //     this.formDto.formFields.controls.forEach(formField => {
+    //       if (formField.controls["name"].value === "PdfFile") {
+    //         // formField.controls["actualValue"].value = reader.result
+    //         formField.controls["actualValue"].value = this.selectedFiles
+
+
+    //         // formField.controls["actualValue"].patchValue({
+    //         //   value: this.selectedFiles
+    //         // })
+    //       }
+    //     })
+    //     // this.formDto.formFields.patchValue({
+    //     //   file: reader.result
+    //     // });
+
+    //     // need to run CD since file load runs outside of zone
+    //     this.cd.markForCheck();
+    //   };
+    // }
+  }
+
+
 
 
 }

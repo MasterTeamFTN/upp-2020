@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { MatSnackBar } from "@angular/material";
 import { Observable } from "rxjs/internal/Observable";
-import { AuthStore } from "../..";
+import { AuthQuery, AuthStore } from "../..";
 
 const ENDPOINTS = {
     START_READER_REGISTRATION: '/process/public/start/Process_ReaderRegistration',
@@ -11,6 +11,10 @@ const ENDPOINTS = {
     GET_REGISTRATION_FORM_FIELDS: '/process/public/form/',
 
     SUBMIT_READERS_REGISTRATION: '/registration/public/reader-submit',
+    SUBMIT_READERS_GENRES: '/registration/public/reader-genres-submit',
+
+    
+    SUBMIT_WRITERS_REGISTRATION: '/registration/public/writer-submit',
 }
 
 @Injectable({
@@ -20,6 +24,7 @@ export class RegisterService {
 
     constructor(
         private http: HttpClient,
+        private authQuery: AuthQuery,
         private authStore: AuthStore,
         private snackbar: MatSnackBar
     ) { }
@@ -33,12 +38,23 @@ export class RegisterService {
     }
 
     getForm(processInstanceId: any): Observable<any> {
+        console.log('get form');
         var url = ENDPOINTS.GET_REGISTRATION_FORM_FIELDS;
         return this.http.get(url.concat(processInstanceId));
     }
 
-    submit(formSubmitData: any): Observable<any> { 
-        const url = ENDPOINTS.SUBMIT_READERS_REGISTRATION;
-        return this.http.post(url, formSubmitData);
+    submitRegistrationData(camundaFormSubmitDTO: any): Observable<any> { 
+        var url = ENDPOINTS.SUBMIT_READERS_REGISTRATION;
+        this.authQuery.registrationRole$.subscribe(role => {
+            if (role === 'writer') {
+                url = ENDPOINTS.SUBMIT_WRITERS_REGISTRATION;
+            }
+        })
+        return this.http.post(url, camundaFormSubmitDTO);
+    }
+    
+    submitReaderGenres(camundaFormSubmitDTO: any): Observable<any> { 
+        const url = ENDPOINTS.SUBMIT_READERS_GENRES;
+        return this.http.post(url, camundaFormSubmitDTO);
     }
 }

@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.uppservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.camunda.bpm.engine.IdentityService;
+import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.identity.Group;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ApiRequestException;
@@ -24,6 +25,7 @@ public class BoardMemberServiceImpl implements BoardMemberService {
     private final ConfirmationTokenRepository confirmationTokenRepository;
     private final MailSenderService mailSenderService;
     private final IdentityService identityService;
+    private final RuntimeService runtimeService;
 
     @Override
     public void notifyBoardMembers(String token) {
@@ -46,6 +48,7 @@ public class BoardMemberServiceImpl implements BoardMemberService {
         mailSenderService.sendBoardMemberNotification(emails, confirmationToken);
 
         // runtimeService
-        identityService.saveGroup((Group) boardMembers);
+        runtimeService.setVariable(confirmationToken.getProcessInstanceId(), "boardMembers", boardMembers);
+//        identityService.saveGroup((Group) boardMembers);
     }
 }
