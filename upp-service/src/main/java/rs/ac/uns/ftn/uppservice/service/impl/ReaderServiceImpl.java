@@ -14,6 +14,7 @@ import rs.ac.uns.ftn.uppservice.model.Reader;
 import rs.ac.uns.ftn.uppservice.model.User;
 import rs.ac.uns.ftn.uppservice.repository.ConfirmationTokenRepository;
 import rs.ac.uns.ftn.uppservice.repository.GenreRepository;
+import rs.ac.uns.ftn.uppservice.repository.ReaderRepository;
 import rs.ac.uns.ftn.uppservice.repository.UserRepository;
 import rs.ac.uns.ftn.uppservice.service.MailSenderService;
 import rs.ac.uns.ftn.uppservice.service.ReaderService;
@@ -27,6 +28,9 @@ public class ReaderServiceImpl implements ReaderService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ReaderRepository readerRepository;
 
     @Autowired
     private ConfirmationTokenRepository confTokenRepository;
@@ -143,5 +147,20 @@ public class ReaderServiceImpl implements ReaderService {
         confTokenRepository.delete(token);
         identityService.deleteUser(reader.getUsername());
         userRepository.delete(reader);
+    }
+
+    @Override
+    public void handlePenaltyPoints(String username) {
+        Reader reader = readerRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("This reader doesn't exist"));
+
+        reader.setPenaltyPoints(reader.getPenaltyPoints() + 1);
+
+        if (reader.getPenaltyPoints() >= 5) {
+            reader.setIsBetaReader(false);
+            mailSenderService.notifyReaderLostBetaStatus(reader);
+        }
+
+        readerRepository.save(reader);
     }
 }

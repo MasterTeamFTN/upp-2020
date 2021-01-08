@@ -6,6 +6,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.uppservice.model.Book;
 import rs.ac.uns.ftn.uppservice.model.ConfirmationToken;
+import rs.ac.uns.ftn.uppservice.model.Reader;
 import rs.ac.uns.ftn.uppservice.model.User;
 import rs.ac.uns.ftn.uppservice.service.MailSenderService;
 
@@ -103,4 +104,16 @@ public class MailSenderServiceImpl implements MailSenderService {
                 + confirmationToken.getProcessInstanceId());
         mailSender.send(message);
     }
+
+    @Override
+    public void notifyReaderLostBetaStatus(Reader reader) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("You lost beta-reader status - UPP");
+        message.setFrom("UPP-App");
+        message.setTo(reader.getEmail());
+        message.setText(reader.getFirstName() + ", you lost beta reader status because you have " +
+                reader.getPenaltyPoints() + " penalty points");
+        mailSender.send(message);
+    }
+
 }

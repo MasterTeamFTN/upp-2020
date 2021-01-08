@@ -84,4 +84,11 @@ public class BookController {
         String processInstanceId = processEngineService.submitForm(data);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping(path = "/submit-send-to-beta")
+    @PreAuthorize("hasRole('ROLE_CHIEF_EDITOR')")
+    public ResponseEntity submitSendToBetaReadersForm(@RequestBody CamundaFormSubmitDTO data) {
+        String processInstanceId = processEngineService.submitForm(data);
+        return ResponseEntity.ok().build();
+    }
 }

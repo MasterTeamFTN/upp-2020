@@ -19,4 +19,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u JOIN u.authorities a WHERE a.name LIKE 'ROLE_EDITOR'")
     List<User> findAllEditors();
+
 }

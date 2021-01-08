@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.uppservice.service;
 
 import rs.ac.uns.ftn.uppservice.model.Book;
 import rs.ac.uns.ftn.uppservice.model.ConfirmationToken;
+import rs.ac.uns.ftn.uppservice.model.Reader;
 import rs.ac.uns.ftn.uppservice.model.User;
 
 import java.util.List;
@@ -21,4 +22,6 @@ public interface MailSenderService {
     void notifyWriterFullBookTimedOut(Book book);
 
     void notifyUserBookIsPlagiarised(Book book, String reason);
+
+    void notifyReaderLostBetaStatus(Reader reader);
 }
