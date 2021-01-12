@@ -20,3 +20,10 @@
     background-image: url('src\assets\images\user.jpg');
     background-size: cover;
   }
+
+
+  .divider{
+    width:10px;
+    height:auto;
+    display:inline-block;
+}

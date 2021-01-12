@@ -15,6 +15,9 @@ const ENDPOINTS = {
 
     
     SUBMIT_WRITERS_REGISTRATION: '/registration/public/writer-submit',
+    ANSWER_MEMBERSHIP_REQUEST: '/registration/public/answer-membership-request'
+    
+
 }
 
 @Injectable({
@@ -57,4 +60,9 @@ export class RegisterService {
         const url = ENDPOINTS.SUBMIT_READERS_GENRES;
         return this.http.post(url, camundaFormSubmitDTO);
     }
+
+    answerMembershipRequest(camundaFormSubmitDTO: any): Observable<any> {
+        return this.http.post(ENDPOINTS.ANSWER_MEMBERSHIP_REQUEST, camundaFormSubmitDTO);
+    }
+
 }

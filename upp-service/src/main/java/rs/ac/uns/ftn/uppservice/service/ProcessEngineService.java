@@ -4,6 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 import rs.ac.uns.ftn.uppservice.dto.request.CamundaFormSubmitDTO;
 
 import java.io.File;
+import java.io.IOException;
 
 public interface ProcessEngineService {
 
@@ -16,4 +17,6 @@ public interface ProcessEngineService {
      * @return
      */
     String submitFile(String taskId, MultipartFile file, File convertedFile);
+
+    String submitDecision(CamundaFormSubmitDTO data);
 }

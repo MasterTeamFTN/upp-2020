@@ -47,7 +47,7 @@ export class WriterService {
     //     return this.http.post(url, camundaFormSubmitDTO);
     // }
 
-    submitFiles(file: File): Observable<any>{
+    submitFiles(file: File): Observable<any> {
         this.authStore.update((state) => ({
             isMultipartFileRequest: true,
         }))
@@ -55,7 +55,7 @@ export class WriterService {
         const data: FormData = new FormData();
         data.append('file', file);
 
-        var taskId:string = '';
+        var taskId: string = '';
         this.authQuery.taskId$.subscribe((id) => {
             taskId = id;
         })
@@ -69,8 +69,11 @@ export class WriterService {
         // //'Content-Type': '',
         // headers.append('Content-Type', 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW')
 
-        return this.http.post(ENDPOINTS.SUBMIT_FILE, data);
-      }
+        return this.http.post(ENDPOINTS.SUBMIT_FILE, data, {
+            reportProgress: true,
+            responseType: 'text'
+        });
+    }
 
 
 

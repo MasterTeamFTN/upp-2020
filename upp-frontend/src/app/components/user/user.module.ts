@@ -6,16 +6,17 @@ import { WriterHomeComponent } from './writer-home/writer-home.component';
 import { ReaderHomeComponent } from './reader-home/reader-home.component';
 import { LecturerHomeComponent } from './lecturer-home/lecturer-home.component';
 import { CommonComponentsModule } from '../common/common-components.module';
+import { BoardMemberHomeComponent } from './board-member-home/board-member-home.component';
 
 
 
 @NgModule({
-  declarations: [ProfileComponent, WriterHomeComponent, ReaderHomeComponent, LecturerHomeComponent],
+  declarations: [ProfileComponent, WriterHomeComponent, ReaderHomeComponent, LecturerHomeComponent, BoardMemberHomeComponent],
   imports: [
     CommonModule,
     CoreModule,
     CommonComponentsModule
   ],
-  exports:[WriterHomeComponent, ReaderHomeComponent, LecturerHomeComponent]
+  exports:[WriterHomeComponent, ReaderHomeComponent, LecturerHomeComponent, BoardMemberHomeComponent]
 })
 export class UserModule { }

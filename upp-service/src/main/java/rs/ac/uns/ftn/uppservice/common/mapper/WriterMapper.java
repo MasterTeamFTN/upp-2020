@@ -10,12 +10,13 @@ public class WriterMapper implements CustomMapper<Writer, WriterDto> {
     @Override
     public WriterDto entityToDto(Writer writer) {
         WriterDto writerDto = new WriterDto();
-        writer.setId(writer.getId());
+        writerDto.setId(writer.getId());
         writerDto.setFirstName(writer.getFirstName());
         writerDto.setLastName(writer.getLastName());
         writerDto.setEmail(writer.getEmail());
-        writer.setMember(writer.isMember());
-        writer.setEnabled(writer.isEnabled());
+        writerDto.setMember(writer.isMember());
+        writerDto.setEnabled(writer.isEnabled());
+        writerDto.setRegistrationPapers(writer.getRegistrationPapers());
         return writerDto;
     }
 }

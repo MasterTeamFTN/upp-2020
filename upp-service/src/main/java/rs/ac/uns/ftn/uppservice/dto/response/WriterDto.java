@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,4 +18,5 @@ public class WriterDto {
     private String email;
     private boolean enabled;
     private boolean isMember;
+    private Set<String> registrationPapers;
 }

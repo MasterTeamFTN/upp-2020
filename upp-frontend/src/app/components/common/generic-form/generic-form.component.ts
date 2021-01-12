@@ -17,6 +17,7 @@ export class GenericFormComponent implements OnInit {
   hide = true;
   selectedFiles: FileList;
   currentFileUpload: File;
+  notSubmittedYet: boolean = true;
 
   constructor(private cd: ChangeDetectorRef) {
   }
@@ -25,11 +26,35 @@ export class GenericFormComponent implements OnInit {
   }
 
   formLoaded(): boolean {
-    // return this.formControl != undefined;
-    return this.formDto != undefined;
+    if(this.notSubmittedYet) {
+      return this.formDto != undefined;
+    }else {
+      return this.notSubmittedYet;
+    }
   }
   get multiselectValues() {
     return this.parseMultiselect();
+  }
+  get enumKeys() {
+    return this.parseEnumKeys();
+  }
+
+  parseEnumKeys() {
+    var enums = [];
+    if (this.formLoaded()) {
+      for (let field of this.formDto.formFields.controls) {
+        if (field.controls.type.value.name == 'enum') {
+          const values = field.controls.type.value.values;
+
+          for (let key of Object.keys(values)) {
+            var lower = values[key]
+            lower[0].toLowerCase()
+            enums.push(lower);
+          }
+        }
+      }
+      return enums;
+    }
   }
 
   parseMultiselect() {
@@ -100,6 +125,7 @@ export class GenericFormComponent implements OnInit {
 
   onSubmit() {
     let submitData = {}
+    this.notSubmittedYet = false;
     this.formDto.formFields.controls.forEach(formField => {
       submitData[formField.controls.name.value] = formField.controls.actualValue.value;
     })
@@ -107,7 +133,8 @@ export class GenericFormComponent implements OnInit {
 
     if (this.selectedFiles) {
       this.currentFileUpload = this.selectedFiles.item(0);
-      this.onFormSubmit.emit(this.currentFileUpload);
+      // this.onFormSubmit.emit(this.currentFileUpload);
+      this.onFormSubmit.emit(this.selectedFiles);
     } else {
       this.onFormSubmit.emit(submitData);
     }

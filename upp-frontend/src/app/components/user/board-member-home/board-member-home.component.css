@@ -1,0 +1,21 @@
+.membership-requests-card{ 
+    display:inline-block;
+    width: 55%;
+    text-align:left;
+}
+
+.mat-card-cvr {
+   width: 100%;
+   text-align:center;
+   /* height: 100vh;
+   display: flex;
+   justify-content: center;
+   align-items: center; */
+}
+.board-member-card-content {
+    padding-top: 50px;
+}
+
+.example-header-image {
+    background-size: cover;
+  }

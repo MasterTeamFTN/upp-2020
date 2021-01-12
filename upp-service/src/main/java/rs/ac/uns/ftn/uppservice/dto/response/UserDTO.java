@@ -4,6 +4,7 @@ import rs.ac.uns.ftn.uppservice.model.Authority;
 import rs.ac.uns.ftn.uppservice.model.User;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class UserDTO {
@@ -16,6 +17,7 @@ public class UserDTO {
     private boolean enabled;
     private List<String> authorities;
     private UserTokenDTO token;
+    private Set<String> registrationPapers;
 
 
     public UserDTO(User user) {
@@ -26,6 +28,7 @@ public class UserDTO {
         this.email = user.getEmail();
         this.enabled = user.isEnabled();
         this.token = null;
+        this.registrationPapers = user.getRegistrationPapers();
 
         this.authorities = user.getAuthorities().stream()
                 .map(authority -> ((Authority) authority).getName()).collect(Collectors.toList());
@@ -93,5 +96,13 @@ public class UserDTO {
 
     public void setToken(UserTokenDTO token) {
         this.token = token;
+    }
+
+    public Set<String> getRegistrationPapers() {
+        return registrationPapers;
+    }
+
+    public void setRegistrationPapers(Set<String> registrationPapers) {
+        this.registrationPapers = registrationPapers;
     }
 }

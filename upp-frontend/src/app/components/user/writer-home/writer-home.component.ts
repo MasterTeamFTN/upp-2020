@@ -33,5 +33,21 @@ export class WriterHomeComponent implements OnInit {
     }
     return decision;
   }
+
+
+  hasEnoughFiles = () => {
+    var hasEnough = false;
+    if(this.writer != null) {
+      hasEnough = this.writer.registrationPapers.length >= 2;
+    }
+    return hasEnough;
+  }
+
+
+  submit(eventMsg: any) {
+    console.log("uhvation event")
+    alert(eventMsg);
+    this.loadWriter()
+  }
   
 }

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { HttpEventType, HttpResponse } from '@angular/common/http';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, Validators, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CamundaFormSubmitDto } from 'src/app/model/dto/CamundaFormSubmitDto';
@@ -14,6 +15,8 @@ import { WriterService } from 'src/app/shared/services/writer/writer.service';
   styleUrls: ['./load-file.component.css']
 })
 export class LoadFileComponent implements OnInit {
+
+  @Output() onFileLoad: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(
     private authQuery: AuthQuery,
@@ -40,6 +43,8 @@ export class LoadFileComponent implements OnInit {
   uploadForm: FormGroup;
   uploadFormArray: FormArray;
   camundaFormSubmitDto: CamundaFormSubmitDto = new CamundaFormSubmitDto();
+
+  progress: { percentage: number } = { percentage: 0 };
 
   loadForm = () => {
     this.authQuery.processId$.subscribe((processId) => {
@@ -73,32 +78,30 @@ export class LoadFileComponent implements OnInit {
 
   }
 
-  submit = (currentFileUpload: any) => {
-    console.log("Inside load >> ");
-    console.log(currentFileUpload);
+  submit = (selectedFiles: any) => {
+    this.progress.percentage = 0;
+    var currentFileUpload = selectedFiles.item(0)
 
     this.writerService.submitFiles(currentFileUpload)
-      .subscribe(res => {
-        console.log(res);
+      .subscribe(response => {
+        console.log(response);
+
+        this.authStore.update((state) => ({
+          isMultipartFileRequest: false,
+        }))
+        this.formDto = {
+          'formName' : '',
+          'formFields': []
+        };
+        window.location.reload();
+        this.onFileLoad.emit(response);
+
 
       },
         err => {
           console.log('fail')
         });
 
-    this.authStore.update((state) => ({
-      isMultipartFileRequest: false,
-    }))
-
-
-    // this.mapcamundaForm(currentFileUpload);
-    // this.submitFields = this.writerService.submitFiles(this.camundaFormSubmitDto).subscribe((response) => {
-    //   console.log(response);
-    // })
-
-    // this.authStore.update((state) => ({
-    //   isMultipartFileRequest: false,
-    // }))
   }
 
 
@@ -110,15 +113,6 @@ export class LoadFileComponent implements OnInit {
     this.camundaFormSubmitDto["taskId"] = this.taskId;
     this.camundaFormSubmitDto["formData"] = []
     this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("PdfFile", currentFileUpload))
-    // Object.entries(formSubmitData).forEach(([key, value]) => {
-    //   switch (key) {
-    //     case 'PdfFile':
-    //       this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("PdfFile", value))
-    //       break;
-    //     default:
-    //       this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("PdfFile", value))
-    //   }
-    // });
 
   }
 

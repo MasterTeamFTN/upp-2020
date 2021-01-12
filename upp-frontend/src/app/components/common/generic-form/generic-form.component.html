@@ -50,11 +50,21 @@
 
                         <!-- FILE FORM FIELD -->
                         <div *ngSwitchCase="'PdfFile'">
-                            <label>Fajl &nbsp; &nbsp;</label>
+                            <label>File &nbsp; &nbsp;</label>
                             <input [formControl]="field.controls.actualValue" type="file"
                                 placeholder="Choose science paper" (change)="selectFile($event)"
                                 value="Choose science paper">
                         </div>
+
+                        <!-- ENUM FORM FIELD -->
+                        <div *ngSwitchCase="'enum'">
+                            <mat-select placeholder="Decide" [formControl]="field.controls.actualValue">
+                                <mat-option *ngFor="let decisionType of enumKeys" [value]="decisionType">
+                                    {{decisionType}}
+                                </mat-option>
+                            </mat-select>
+                        </div>
+                        
 
                         <mat-error>
                             {{ getErrorMessage(field.controls.name.value) }}
@@ -65,9 +75,11 @@
 
                 <!-- SUBMIT BUTTON -->
                 <mat-form-field>
-                    <button mat-button id="submitForm" (click)="onSubmit()"
-                        [disabled]="checkValidation()">Submit</button>
-                    <input matInput hidden>
+                    <div class="submit-button-wrapper">
+                        <button mat-raised-button class="submitButton" (click)="onSubmit()"
+                        [disabled]="checkValidation()" color="accent">Submit</button>
+                        <input matInput hidden>
+                    </div>
                 </mat-form-field>
             </form>
         </mat-card-content>
@@ -75,5 +87,7 @@
 </ng-template>
 
 <ng-template #loader>
-    <mat-spinner></mat-spinner>
+    <div class="mat-spinner-wrapper">
+        <mat-spinner class="spinner"></mat-spinner>
+    </div>
 </ng-template>

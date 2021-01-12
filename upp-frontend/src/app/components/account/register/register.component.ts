@@ -60,7 +60,7 @@ export class RegisterComponent implements OnInit {
 			Object.keys(response.formFields).forEach((i) => {
 				this.registratonFormArray.push(
 					this.formBuilder.group({
-						actualValue: new FormControl('', Array.from(this.getValidators(response.formFields[i]))),
+						actualValue: new FormControl('ljubicjanko1@gmail.com', Array.from(this.getValidators(response.formFields[i]))),
 						id: new FormControl({ value: response.formFields[i].id, disabled: true }),
 						type: new FormControl({ value: response.formFields[i].type, disabled: true }),
 						name: new FormControl({ value: response.formFields[i].label, disabled: true }),

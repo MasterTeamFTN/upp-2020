@@ -26,6 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Objects.isNull;
+
 @RestController
 @RequestMapping(value = "/registration", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RegistrationController {
@@ -125,6 +127,12 @@ public class RegistrationController {
 
         taskService.complete(currentTask.getId());
 
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(path = "/public/answer-membership-request")
+    public ResponseEntity answerRequest(@RequestBody CamundaFormSubmitDTO data) {
+        String processInstanceId = processEngineService.submitDecision(data);
         return ResponseEntity.ok().build();
     }
 }

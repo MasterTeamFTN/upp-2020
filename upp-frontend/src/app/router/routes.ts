@@ -1,4 +1,5 @@
 import { AccountConfirmationComponent } from './../components/account/account-confirmation/account-confirmation.component';
+import { MembershipRequestComponent } from './../components/account/membership-request/membership-request.component';
 import { RegisterComponent } from './../components/account/register/register.component';
 import { LoginComponent } from './../components/account/login/login.component';
 import { ProfileComponent } from './../components/user/profile/profile.component';
@@ -46,6 +47,11 @@ export const routes: Routes = [
     {
         path: 'verify',
         component: AccountConfirmationComponent,
+        // canActivate: []
+    },
+    {
+        path: 'membershipRequest',
+        component: MembershipRequestComponent,
         // canActivate: []
     }
 ]

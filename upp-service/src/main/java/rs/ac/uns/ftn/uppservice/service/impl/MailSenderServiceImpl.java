@@ -1,12 +1,16 @@
 package rs.ac.uns.ftn.uppservice.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.uppservice.model.ConfirmationToken;
 import rs.ac.uns.ftn.uppservice.service.MailSenderService;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.util.List;
 
 @Service
@@ -26,24 +30,40 @@ public class MailSenderServiceImpl implements MailSenderService {
     }
 
     @Override
-    public void sendBoardMemberNotification(List<String> emails, ConfirmationToken confirmationToken) {
-        emails.stream().forEach(email -> send(email, confirmationToken));
+    public void sendBoardMemberNotification(List<String> emails, ConfirmationToken confirmationToken, List<ByteArrayResource> userPapers) {
+        emails.stream().forEach(email -> send(email, confirmationToken, userPapers));
     }
 
-    private void send(String email, ConfirmationToken confirmationToken) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setSubject(String.join(
-                " ",
-                "Writer",
-                confirmationToken.getUser().getFirstName(),
-                confirmationToken.getUser().getLastName(),
-                " registration request"));
+    private void send(String email, ConfirmationToken confirmationToken, List<ByteArrayResource> userPapers) {
+        MimeMessage message = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom("UPP-App");
+            helper.setTo(email);
+            helper.setSubject(String.join(
+                    " ",
+                    "Writer",
+                    confirmationToken.getUser().getFirstName(),
+                    confirmationToken.getUser().getLastName(),
+                    " membership request"));
 
-        message.setFrom("UPP-App");
-        message.setTo(email);
-        message.setText("Go to this page to decide about writers registration request: " +
-                "http://localhost:4200/registrationRequest/"
-                + confirmationToken.getProcessInstanceId());
-        mailSender.send(message);
+            helper.setText("Go to this page to decide about writers registration request: " +
+                    "http://localhost:4200/membershipRequest?processInstanceId="
+                    + confirmationToken.getProcessInstanceId());
+            int[] idx = { 0 };
+            userPapers.stream().forEach(paper -> {
+                try {
+                    helper.addAttachment("file_" + idx[0] + ".pdf", paper);
+                    idx[0]++;
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+                }
+            });
+
+
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
     }
 }
