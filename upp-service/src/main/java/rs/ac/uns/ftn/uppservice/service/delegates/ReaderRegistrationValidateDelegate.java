@@ -12,6 +12,8 @@ import rs.ac.uns.ftn.uppservice.service.UserAccountService;
 
 import java.util.List;
 
+import static rs.ac.uns.ftn.uppservice.common.constants.Constants.*;
+
 @Component
 @RequiredArgsConstructor
 public class ReaderRegistrationValidateDelegate implements JavaDelegate {
@@ -20,11 +22,11 @@ public class ReaderRegistrationValidateDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        List<FormSubmissionDto> registrationForm = (List<FormSubmissionDto>) execution.getVariable("registrationFormData");
-        List<FormSubmissionDto> chooseGenresForm = (List<FormSubmissionDto>) execution.getVariable("chooseGenresFormData");
+        List<FormSubmissionDto> registrationForm = (List<FormSubmissionDto>) execution.getVariable(REGISTRATION_FORM_DATA);
+        List<FormSubmissionDto> chooseGenresForm = (List<FormSubmissionDto>) execution.getVariable(CHOOSE_GENRES_FORM_DATA);
 
         Reader reader = readerService.add(registrationForm, chooseGenresForm, execution.getProcessInstanceId());
-        execution.setVariable("reader", reader);
+        execution.setVariable(READER, reader);
     }
 
 }

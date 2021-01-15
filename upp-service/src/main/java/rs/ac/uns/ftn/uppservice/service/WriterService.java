@@ -7,6 +7,13 @@ import java.util.List;
 
 public interface WriterService {
 
+    /**
+     * Method used to save new writer to the database.
+     *
+     * @param formData
+     * @param processInstanceId
+     * @return
+     */
     Writer add(List<FormSubmissionDto> formData, String processInstanceId);
 
     void activateAccount(String token);

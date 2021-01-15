@@ -7,6 +7,8 @@ import { HomeComponent } from './../components/home/home.component';
 import { Routes } from '@angular/router';
 import { StartRegistrationComponent } from '../components/registration/start-registration/start-registration.component';
 import { LoadFileComponent } from '../components/common/load-file/load-file.component';
+import { LoggedInGuard } from './guards/logged-in.guard';
+import { WriterGuard } from './guards/writer.guard';
 
 export const routes: Routes = [
     {
@@ -37,7 +39,7 @@ export const routes: Routes = [
     {
         path: 'fileUpload',
         component: LoadFileComponent,
-        // canActivate: []
+        canActivate: [WriterGuard]
     },
     {
         path: 'profile',
@@ -52,6 +54,6 @@ export const routes: Routes = [
     {
         path: 'membershipRequest',
         component: MembershipRequestComponent,
-        // canActivate: []
+        // canActivate: [LoggedInGuard]
     }
 ]

@@ -79,7 +79,7 @@ public class RegistrationController {
      */
     @PostMapping(path = "/public/reader-submit")
     public ResponseEntity submitReaderRegistrationData(@RequestBody CamundaFormSubmitDTO data) {
-        String processInstanceId = processEngineService.submitForm(data);
+        String processInstanceId = processEngineService.submitForm(data, false);
         runtimeService.setVariable(processInstanceId, "registrationFormData", data.getFormData());
         runtimeService.setVariable(processInstanceId, "chooseGenresFormData", null);
         return ResponseEntity.ok().build();
@@ -87,7 +87,7 @@ public class RegistrationController {
 
     @PostMapping(path = "/public/reader-genres-submit")
     public ResponseEntity submitBetaReadersGenres(@RequestBody CamundaFormSubmitDTO data) {
-        String processInstanceId = processEngineService.submitForm(data);
+        String processInstanceId = processEngineService.submitForm(data, true);
         runtimeService.setVariable(processInstanceId, "chooseGenresFormData", data.getFormData());
         return ResponseEntity.ok().build();
     }
@@ -99,7 +99,7 @@ public class RegistrationController {
      */
     @PostMapping(path = "/public/writer-submit")
     public ResponseEntity submitWriterRegistrationData(@RequestBody CamundaFormSubmitDTO data) {
-        String processInstanceId = processEngineService.submitForm(data);
+        String processInstanceId = processEngineService.submitForm(data, false);
         runtimeService.setVariable(processInstanceId, "registrationFormData", data.getFormData());
         return ResponseEntity.ok().build();
     }

@@ -23,6 +23,7 @@ export class GenericFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.notSubmittedYet = true;
   }
 
   formLoaded(): boolean {
@@ -119,6 +120,7 @@ export class GenericFormComponent implements OnInit {
     var isValid = true;
     this.formDto.formFields.controls.forEach(formField => {
       isValid = isValid && formField.controls['actualValue'].valid;
+      // isValid = isValid && formField.controls['actualValue'].valid && formField.controls['actualValue'].touched;
     })
     return !isValid;
   }

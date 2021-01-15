@@ -60,7 +60,7 @@ export class RegisterComponent implements OnInit {
 			Object.keys(response.formFields).forEach((i) => {
 				this.registratonFormArray.push(
 					this.formBuilder.group({
-						actualValue: new FormControl('ljubicjanko1@gmail.com', Array.from(this.getValidators(response.formFields[i]))),
+						actualValue: new FormControl(null, Array.from(this.getValidators(response.formFields[i]))),
 						id: new FormControl({ value: response.formFields[i].id, disabled: true }),
 						type: new FormControl({ value: response.formFields[i].type, disabled: true }),
 						name: new FormControl({ value: response.formFields[i].label, disabled: true }),
@@ -113,18 +113,29 @@ export class RegisterComponent implements OnInit {
 	submit(formSubmitData: any) {
 		this.mapcamundaForm(formSubmitData);
 
-		this.submitRegistrationSub =
+		if(this.camundaFormSubmitDto.formData.length > 1) {
+
+			this.submitRegistrationSub =
 			this.registerService
-				.submitRegistrationData(this.camundaFormSubmitDto)
-				.subscribe((response) => {
-					this.showSnack(`Registration form successfully submitted.`)
+			.submitRegistrationData(this.camundaFormSubmitDto)
+			.subscribe((response) => {
+				this.showSnack(`Registration form successfully submitted.`)
 
-					if (Object.keys(formSubmitData).length <= 1) {
-						this.router.navigate(['/login'])
-					}
+				if (Object.keys(formSubmitData).length <= 1) {
+					this.router.navigate(['/login'])
+				}
 					this.loadBetaFormIfNeeded(formSubmitData);
-
 				})
+		} else {
+			this.submitRegistrationSub =
+			this.registerService
+			.submitReaderGenres(this.camundaFormSubmitDto)
+			.subscribe((response) => {
+				this.router.navigate(['/login'])
+				this.showSnack(`Registration form successfully submitted.`)
+					this.loadBetaFormIfNeeded(formSubmitData);
+				})
+		}
 	}
 
 	loadBetaFormIfNeeded = (formSubmitData) => {
@@ -143,15 +154,6 @@ export class RegisterComponent implements OnInit {
 				loginTitle: "Please go to your email and activate your account before continuing."
 			}))
 			this.router.navigate(['/login'])
-
-
-			// this.authQuery.registrationRole$.subscribe((role) => {
-			// 	if (role == 'writer') {
-			// 		this.router.navigate(['/fileUpload'])
-			// 	} else {
-			// 		this.router.navigate(['/login'])
-			// 	}
-			// })
 		}
 
 	}

@@ -17,6 +17,13 @@ export class AuthQuery extends QueryEntity<AuthState, User> {
   loginTitle$ = this.select(state => state.loginTitle);
   registrationRole$ = this.select(state => state.registrationRole);
   role$ = this.select(state => state.user ? state.user.authority : null);
+  
   isMultipartFileRequest$ = this.select(state => state.isMultipartFileRequest);
+
   isEditor$ = this.select(state => state.user ? state.user.authority === "ROLE_EDITOR" : null);
+  isWriter$ = this.select(state => state.user ? state.user.authority === "ROLE_WRITER" : null);
+  isReader$ = this.select(state => state.user ? state.user.authority === "ROLE_READER" : null);
+  isLecturer$ = this.select(state => state.user ? state.user.authority === "ROLE_LECTURER" : null);
+  isChiefEditor$ = this.select(state => state.user ? state.user.authority === "ROLE_CHIEF_EDITOR" : null);
+  isBoardMember$ = this.select(state => state.user ? state.user.authority === "ROLE_BOARD_MEMBER" : null);
 }

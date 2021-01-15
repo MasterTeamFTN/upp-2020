@@ -10,23 +10,18 @@ import rs.ac.uns.ftn.uppservice.service.BoardMemberService;
 
 import java.util.List;
 
+import static rs.ac.uns.ftn.uppservice.common.constants.Constants.BOARD_MEMBERS;
+
 @RequiredArgsConstructor
 @Component
 public class NotifyBoardMembersDelegate implements JavaDelegate {
 
     private final BoardMemberService boardMemberService;
-    private final IdentityService identityService;
 
 
     @Override
-    public void execute(DelegateExecution execution) throws Exception {
+    public void execute(DelegateExecution execution) {
         List<User> boardMembers = boardMemberService.notifyBoardMembers(execution.getProcessInstanceId());
-//        List<User> boardMembers = (List<User>) boardMemberEmails
-//                .stream()
-//                .map(boardMemberEmail ->
-//                        identityService
-//                                .createUserQuery()
-//                                .userEmail(boardMemberEmail));
-        execution.setVariable("boardMembers", boardMembers);
+        execution.setVariable(BOARD_MEMBERS, boardMembers);
     }
 }

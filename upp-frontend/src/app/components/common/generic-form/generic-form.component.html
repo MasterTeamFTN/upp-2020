@@ -18,7 +18,7 @@
                         <div *ngSwitchCase="'MultiSelect'">
                             <mat-select [formControl]="field.controls.actualValue"
                                 placeholder="{{field.controls.name.value}}" multiple>
-                                <mat-option *ngFor="let msValue of multiselectValues; let j=index" value="{{j}}">
+                                <mat-option *ngFor="let msValue of multiselectValues; let j=index" value="{{j+1}}">
                                     {{msValue}}</mat-option>
                             </mat-select>
                         </div>
@@ -50,10 +50,15 @@
 
                         <!-- FILE FORM FIELD -->
                         <div *ngSwitchCase="'PdfFile'">
-                            <label>File &nbsp; &nbsp;</label>
-                            <input [formControl]="field.controls.actualValue" type="file"
-                                placeholder="Choose science paper" (change)="selectFile($event)"
-                                value="Choose science paper">
+                            <label class="custom-file-upload">
+                                <input [formControl]="field.controls.actualValue" type="file" id="file-upload"
+                                    placeholder="Choose science paper" (change)="selectFile($event)"
+                                    value="Choose science paper">
+                                <i class="fa fa-cloud-upload"></i> File upload
+                            </label>
+                            <ul *ngFor="let file of selectedFiles">
+                                <li>{{file.name}}</li>
+                            </ul>
                         </div>
 
                         <!-- ENUM FORM FIELD -->

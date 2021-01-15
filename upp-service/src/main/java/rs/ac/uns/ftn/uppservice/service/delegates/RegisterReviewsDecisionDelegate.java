@@ -8,6 +8,8 @@ import rs.ac.uns.ftn.uppservice.service.BoardMemberService;
 
 import java.util.List;
 
+import static rs.ac.uns.ftn.uppservice.common.constants.Constants.*;
+
 @Component
 @RequiredArgsConstructor
 public class RegisterReviewsDecisionDelegate implements JavaDelegate {
@@ -16,10 +18,8 @@ public class RegisterReviewsDecisionDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        // ovde dodje tek kad svi submituju, ekstraaaaaaaaaaa
-
-        var boardMemberDecision = (List<String>) execution.getVariable("boardMemberDecision");
-        execution.setVariable("decision",
+        var boardMemberDecision = (List<String>) execution.getVariable(BOARD_MEMBER_DECISIONS);
+        execution.setVariable(DECISION,
                 boardMemberService.registerDecision(boardMemberDecision, execution.getProcessInstanceId(), execution.getId()));
     }
 }

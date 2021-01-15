@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.util.*;
 
 import static java.util.Objects.isNull;
+import static rs.ac.uns.ftn.uppservice.common.constants.Constants.*;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +37,7 @@ public class ProcessEngineServiceImpl implements ProcessEngineService {
      * @return process instance id
      */
     @Override
-    public String submitForm(CamundaFormSubmitDTO data) {
+    public String submitForm(CamundaFormSubmitDTO data, boolean betaGenres) {
         Map<String, Object> map = new HashMap<>();
 
         for (FormSubmissionDto temp : data.getFormData()) {
@@ -47,7 +48,11 @@ public class ProcessEngineServiceImpl implements ProcessEngineService {
         String processInstanceId = task.getProcessInstanceId();
 
         try {
-            runtimeService.setVariable(processInstanceId, "registrationFormData", data.getFormData());
+            if(betaGenres) {
+                runtimeService.setVariable(processInstanceId, CHOOSE_GENRES_FORM_DATA, data.getFormData());
+            }else {
+                runtimeService.setVariable(processInstanceId, REGISTRATION_FORM_DATA, data.getFormData());
+            }
             formService.submitTaskForm(data.getTaskId(), map);
         } catch (FormFieldValidatorException e) {
             throw new ApiRequestException("Failed validation");
@@ -55,6 +60,7 @@ public class ProcessEngineServiceImpl implements ProcessEngineService {
 
         return processInstanceId;
     }
+
 
     @Override
     public String submitFile(String taskId, MultipartFile file, File convertedFile) {
@@ -64,10 +70,9 @@ public class ProcessEngineServiceImpl implements ProcessEngineService {
 
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         String processInstanceId = task.getProcessInstanceId();
-//        var workCount = runtimeService.getVariables(processInstanceId).get("workCount");
 
         try {
-            runtimeService.setVariable(processInstanceId, "submitFileData", convertedFile);
+            runtimeService.setVariable(processInstanceId, SUBMIT_FILE_DATA, convertedFile);
             formService.submitTaskForm(taskId, map);
         } catch (FormFieldValidatorException e) {
             throw new ApiRequestException("Failed validation");
@@ -86,9 +91,7 @@ public class ProcessEngineServiceImpl implements ProcessEngineService {
         map.put("decision", decisionVariable.substring(0, 1).toLowerCase() + decisionVariable.substring(1));
 
         saveToRuntime(task, decisionVariable);
-
         try {
-//            runtimeService.setVariable(processInstanceId, "decision", decisionVariable);
             formService.submitTaskForm(task.getId(), map);
         } catch (FormFieldValidatorException e) {
             throw new ApiRequestException("Failed validation");
@@ -98,16 +101,23 @@ public class ProcessEngineServiceImpl implements ProcessEngineService {
         return processInstanceId;
     }
 
+    /**
+     * Method used to add new decision to the list of decisions located in the runtime service. If the decision if
+     * the first submitted, new list is being created.
+     *
+     * @param task
+     * @param decisionVariable
+     */
     private void saveToRuntime(Task task, String decisionVariable) {
-        List<String> boardMemberDecisions = (List<String>) runtimeService.getVariable(task.getExecutionId(), "boardMemberDecision");
+        List<String> boardMemberDecisions = (List<String>) runtimeService.getVariable(task.getExecutionId(), BOARD_MEMBER_DECISIONS);
 
         if(!isNull(boardMemberDecisions)) {
             boardMemberDecisions.add(decisionVariable);
-            runtimeService.setVariable(task.getExecutionId(), "boardMemberDecision", boardMemberDecisions);
+            runtimeService.setVariable(task.getExecutionId(), BOARD_MEMBER_DECISIONS, boardMemberDecisions);
         }else {
             List<String> decisions = new ArrayList<>();
             decisions.add(decisionVariable);
-            runtimeService.setVariable(task.getExecutionId(), "boardMemberDecision", decisions);
+            runtimeService.setVariable(task.getExecutionId(), BOARD_MEMBER_DECISIONS, decisions);
         }
     }
 

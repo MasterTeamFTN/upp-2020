@@ -6,6 +6,7 @@ import org.camunda.bpm.engine.RuntimeService;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.uppservice.common.mapper.CamundaUserMapper;
+import rs.ac.uns.ftn.uppservice.dto.response.WriterPaperResourceDto;
 import rs.ac.uns.ftn.uppservice.model.BoardMember;
 import rs.ac.uns.ftn.uppservice.model.ConfirmationToken;
 import rs.ac.uns.ftn.uppservice.model.User;
@@ -18,11 +19,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static rs.ac.uns.ftn.uppservice.common.constants.Constants.*;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +39,7 @@ public class BoardMemberServiceImpl implements BoardMemberService {
 
     @Override
     public List<org.camunda.bpm.engine.identity.User> notifyBoardMembers(String processInstanceId) {
-        User user = (User) runtimeService.getVariable(processInstanceId, "requestedMember");
+        User user = (User) runtimeService.getVariable(processInstanceId, REQUESTED_MEMBER);
 
         ConfirmationToken confirmationToken = new ConfirmationToken(user, processInstanceId);
         confirmationTokenRepository.save(confirmationToken);
@@ -58,29 +60,27 @@ public class BoardMemberServiceImpl implements BoardMemberService {
         mailSenderService.sendBoardMemberNotification(emails, confirmationToken, getUserPapers(user));
 
         // runtimeService
-        runtimeService.setVariable(confirmationToken.getProcessInstanceId(), "boardMembers", boardMembers);
-        runtimeService.setVariable(confirmationToken.getProcessInstanceId(), "decision", "reject"); // initial value
+        runtimeService.setVariable(confirmationToken.getProcessInstanceId(), BOARD_MEMBERS, boardMembers);
+        runtimeService.setVariable(confirmationToken.getProcessInstanceId(), DECISION, "reject"); // initial value
 
         return camundaUsers;
     }
 
-    /**
-     * U slučaju da polovina ili više članova odbora smatra da pisac nije podoban za članstvo, pisac se notificira i proces se završava.
-     * U slučaju da je bar jedan član odbora tražio još materijala, pisac se notificira i zadaje mu se rok u kom je dužan da dostavi još svojih radova.
-     *
-     * @param decisions
-     * @param processInstanceId
-     */
     @Override
     public String registerDecision(List<String> decisions, String processInstanceId, String executionId) {
-        //Todo: logic for decision such as, how many rejections, need more info etc
+        /**
+         * U slučaju da polovina ili više članova odbora smatra da pisac nije podoban za članstvo,
+         *          pisac se notificira i proces se završava.
+         * U slučaju da je bar jedan član odbora tražio još materijala,
+         *          pisac se notificira i zadaje mu se rok u kom je dužan da dostavi još svojih radova.
+         */
         Map<String, Long> count =
                 decisions.stream().collect(Collectors.groupingBy(decision -> decision, Collectors.counting()));
 
-        Map<String, Long> decisionMap = Stream.of(new Object[][] {
-                { "reject", count.containsKey("Reject") ? count.get("Reject") : 0L },
-                { "approve", count.containsKey("Approve") ? count.get("Approve") : 0L },
-                { "needMoreInfo", count.containsKey("NeedMoreInfo") ? count.get("NeedMoreInfo") : 0L },
+        Map<String, Long> decisionMap = Stream.of(new Object[][]{
+                {"reject", count.containsKey("Reject") ? count.get("Reject") : 0L},
+                {"approve", count.containsKey("Approve") ? count.get("Approve") : 0L},
+                {"needMoreInfo", count.containsKey("NeedMoreInfo") ? count.get("NeedMoreInfo") : 0L},
         }).collect(Collectors.toMap(data -> (String) data[0], data -> (Long) data[1]));
 
 
@@ -94,36 +94,37 @@ public class BoardMemberServiceImpl implements BoardMemberService {
 
     private void removeBoardMembers(String executionId) {
         List<org.camunda.bpm.engine.identity.User> boardMembers = (List<org.camunda.bpm.engine.identity.User>)
-                runtimeService.getVariable(executionId, "boardMembers");
+                runtimeService.getVariable(executionId, BOARD_MEMBERS);
 
-        boardMembers.stream().peek(boardMember -> {
-            identityService.deleteUser(boardMember.getId());
-
-        });
+        for (org.camunda.bpm.engine.identity.User user : identityService.createUserQuery().list()) {
+            if (boardMembers.stream().filter(bm -> bm.getId().equals(user.getId())).findFirst().isPresent())
+                identityService.deleteUser(user.getId());
+        }
     }
 
     /**
+     * Method used to read all files from list of user papers and create WriterPaperResourceDto for each
      * Todo: read all files from papers/{username}
      *
      * @param user
      * @return
      */
-    private List<ByteArrayResource> getUserPapers(User user) {
-        List<ByteArrayResource> userPapers = new ArrayList<ByteArrayResource>();
+    private List<WriterPaperResourceDto> getUserPapers(User user) {
+        List<WriterPaperResourceDto> papers = new ArrayList<>();
 
         user.getRegistrationPapers().stream().forEach(path -> {
             try {
                 byte[] pdf = Files.readAllBytes(Paths.get(path));
-                String[] tokens = path.split("/");
+                String[] tokens = path.split("\\\\");
                 String fileName = tokens[tokens.length - 1];
 
-                userPapers.add(new ByteArrayResource(pdf, fileName));
+                papers.add(new WriterPaperResourceDto(fileName, new ByteArrayResource(pdf)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
 
-        return userPapers;
+        return papers;
     }
 
 

@@ -10,6 +10,9 @@ import rs.ac.uns.ftn.uppservice.service.WriterService;
 
 import java.util.List;
 
+import static rs.ac.uns.ftn.uppservice.common.constants.Constants.REGISTRATION_FORM_DATA;
+import static rs.ac.uns.ftn.uppservice.common.constants.Constants.WRITER;
+
 @RequiredArgsConstructor
 @Component
 public class WriterRegistrationValidateDelegate implements JavaDelegate {
@@ -19,8 +22,8 @@ public class WriterRegistrationValidateDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        var listOfFields = (List<FormSubmissionDto>) execution.getVariable("registrationFormData");
-        execution.setVariable("writer",
+        var listOfFields = (List<FormSubmissionDto>) execution.getVariable(REGISTRATION_FORM_DATA);
+        execution.setVariable(WRITER,
                 writerService.add(
                         listOfFields,
                         execution.getProcessInstanceId()));

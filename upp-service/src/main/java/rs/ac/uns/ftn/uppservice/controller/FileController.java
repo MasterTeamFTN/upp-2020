@@ -15,6 +15,8 @@ import rs.ac.uns.ftn.uppservice.service.ProcessEngineService;
 
 import java.io.IOException;
 
+import static rs.ac.uns.ftn.uppservice.common.constants.Constants.REQUESTED_MEMBER;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/file")
@@ -32,7 +34,7 @@ public class FileController {
         try {
             UserFileDto userFileDto = fileService.saveFile(taskId, file);
             String processInstanceId = processEngineService.submitFile(taskId, file, userFileDto.getFile());
-            runtimeService.setVariable(processInstanceId, "requestedMember", userFileDto.getUser());
+            runtimeService.setVariable(processInstanceId, REQUESTED_MEMBER, userFileDto.getUser());
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(e.getMessage());
         }

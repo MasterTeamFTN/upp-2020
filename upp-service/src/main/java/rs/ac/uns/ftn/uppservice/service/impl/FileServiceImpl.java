@@ -21,6 +21,7 @@ import java.nio.file.Paths;
 import java.util.logging.Logger;
 
 import static java.util.Objects.isNull;
+import static rs.ac.uns.ftn.uppservice.common.constants.Constants.REQUESTED_MEMBER;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +33,6 @@ public class FileServiceImpl implements FileService {
     private final TaskService taskService;
     private final UserRepository userRepository;
     private final RuntimeService runtimeService;
-    private final IdentityService identityService;
 
     @Override
     public UserFileDto saveFile(String taskId, MultipartFile file) throws IOException {
@@ -45,6 +45,7 @@ public class FileServiceImpl implements FileService {
             destinationPath = Paths.get(PAPERS_LOCATION.toString(), user.getUsername());
             user.getRegistrationPapers().add(destinationPath.resolve(fileName).toString());
             user = userRepository.save(user);
+            runtimeService.setVariable(task.getProcessInstanceId(), REQUESTED_MEMBER, user);
         } else {
             destinationPath = Paths.get(PAPERS_LOCATION.toString());
         }
