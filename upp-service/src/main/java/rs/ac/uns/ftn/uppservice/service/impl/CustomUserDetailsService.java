@@ -23,6 +23,7 @@ import rs.ac.uns.ftn.uppservice.repository.UserRepository;
 import rs.ac.uns.ftn.uppservice.security.TokenUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 
 @Service
 @RequiredArgsConstructor
@@ -31,15 +32,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     protected final Log LOGGER = LogFactory.getLog(getClass());
 
     @Autowired
-    private  TokenUtils tokenUtils;
+    private TokenUtils tokenUtils;
     @Autowired
-    private  UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    private  PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
     @Autowired
-    private  AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
     @Autowired
-    private  UserDetailsService userDetailsService;
+    private UserDetailsService userDetailsService;
 
 
     public User getUserFromRequest(HttpServletRequest request) {
@@ -98,8 +99,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         String jwt = tokenUtils.generateToken(user.getUsername());
         int expiresIn = tokenUtils.getExpiredIn();
 
-
+        var classNameList = user.getClass().getName().split("\\.");
         UserDTO userDto = new UserDTO(user);
+        userDto.setAuthorities(Arrays.asList(classNameList[classNameList.length - 1]));
         userDto.setToken(new UserTokenDTO(jwt, expiresIn));
 
         return userDto;

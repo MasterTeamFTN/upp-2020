@@ -15,10 +15,10 @@ import java.util.Set;
 @Table(name = "readers")
 public class Reader extends User implements Serializable {
 
-    @Column(name = "isBetaReader", nullable = false)
+    @Column(name = "isBetaReader", nullable = false, columnDefinition = "boolean default false")
     private Boolean isBetaReader;
 
-    @Column(name = "penaltyPoints", nullable = false)
+    @Column(name = "penaltyPoints")
     private int penaltyPoints;
 
     @ManyToMany

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import rs.ac.uns.ftn.uppservice.service.ReaderService;
 
+import static rs.ac.uns.ftn.uppservice.common.constants.Constants.TOKEN;
+
 @Component
 public class ActivateUserAccountDelegate implements JavaDelegate {
 
@@ -14,7 +16,7 @@ public class ActivateUserAccountDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
-        String token = (String) delegateExecution.getVariable("token");
+        String token = (String) delegateExecution.getVariable(TOKEN);
         readerService.activateAccount(token);
     }
 }

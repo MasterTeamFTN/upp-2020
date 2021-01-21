@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.uppservice.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
@@ -8,7 +9,6 @@ import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,24 +17,25 @@ import rs.ac.uns.ftn.uppservice.dto.request.CamundaFormSubmitDTO;
 import rs.ac.uns.ftn.uppservice.dto.response.FormFieldsDto;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ApiRequestException;
 import rs.ac.uns.ftn.uppservice.service.ProcessEngineService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import rs.ac.uns.ftn.uppservice.model.User;
 
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/process", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor
 public class ProcessEngineController {
 
-    @Autowired
-    private TaskService taskService;
-
-    @Autowired
-    private FormService formService;
-
-    @Autowired
-    private RuntimeService runtimeService;
-
-    @Autowired
-    private ProcessEngineService processEngineService;
+    private final TaskService taskService;
+    private final FormService formService;
+    private final RuntimeService runtimeService;
+    private final ProcessEngineService processEngineService;
 
 
     /**
@@ -63,6 +64,15 @@ public class ProcessEngineController {
     @GetMapping(path = "/public/form/{processInstanceId}")
     public ResponseEntity<FormFieldsDto> getFormForCurrentActiveTask(@PathVariable String processInstanceId) {
         Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).list().get(0);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth != null ) {
+            User user = (User) auth.getPrincipal();
+            if(user!= null) {
+                task.setAssignee(user.getUsername());
+                taskService.saveTask(task);
+            }
+        }
 
         TaskFormData tfd = formService.getTaskFormData(task.getId());
         List<FormField> properties = tfd.getFormFields();

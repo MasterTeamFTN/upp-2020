@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, NgForm } from '@angular/forms';
 import { FormDto } from 'src/app/model/dto/FormDto';
 import { AppConstants } from '../AppConstants';
@@ -15,19 +15,47 @@ export class GenericFormComponent implements OnInit {
 
 
   hide = true;
+  selectedFiles: FileList;
+  currentFileUpload: File;
+  notSubmittedYet: boolean = true;
 
-  constructor() {
+  constructor(private cd: ChangeDetectorRef) {
   }
 
   ngOnInit() {
+    this.notSubmittedYet = true;
   }
 
   formLoaded(): boolean {
-    // return this.formControl != undefined;
-    return this.formDto != undefined;
+    if(this.notSubmittedYet) {
+      return this.formDto != undefined;
+    }else {
+      return this.notSubmittedYet;
+    }
   }
   get multiselectValues() {
     return this.parseMultiselect();
+  }
+  get enumKeys() {
+    return this.parseEnumKeys();
+  }
+
+  parseEnumKeys() {
+    var enums = [];
+    if (this.formLoaded()) {
+      for (let field of this.formDto.formFields.controls) {
+        if (field.controls.type.value.name == 'enum') {
+          const values = field.controls.type.value.values;
+
+          for (let key of Object.keys(values)) {
+            var lower = values[key]
+            lower[0].toLowerCase()
+            enums.push(lower);
+          }
+        }
+      }
+      return enums;
+    }
   }
 
   parseMultiselect() {
@@ -92,19 +120,60 @@ export class GenericFormComponent implements OnInit {
     var isValid = true;
     this.formDto.formFields.controls.forEach(formField => {
       isValid = isValid && formField.controls['actualValue'].valid;
+      // isValid = isValid && formField.controls['actualValue'].valid && formField.controls['actualValue'].touched;
     })
     return !isValid;
   }
 
   onSubmit() {
     let submitData = {}
+    this.notSubmittedYet = false;
     this.formDto.formFields.controls.forEach(formField => {
       submitData[formField.controls.name.value] = formField.controls.actualValue.value;
     })
     console.log(submitData);
 
-    this.onFormSubmit.emit(submitData)
+    if (this.selectedFiles) {
+      this.currentFileUpload = this.selectedFiles.item(0);
+      // this.onFormSubmit.emit(this.currentFileUpload);
+      this.onFormSubmit.emit(this.selectedFiles);
+    } else {
+      this.onFormSubmit.emit(submitData);
+    }
   }
+
+  selectFile(event: any) {
+    this.selectedFiles = event.target.files;
+
+    // let reader = new FileReader();
+
+    // if(event.target.files && event.target.files.length) {
+    //   const [file] = event.target.files;
+    //   reader.readAsDataURL(file);
+
+    //   reader.onload = () => {
+    //     this.formDto.formFields.controls.forEach(formField => {
+    //       if (formField.controls["name"].value === "PdfFile") {
+    //         // formField.controls["actualValue"].value = reader.result
+    //         formField.controls["actualValue"].value = this.selectedFiles
+
+
+    //         // formField.controls["actualValue"].patchValue({
+    //         //   value: this.selectedFiles
+    //         // })
+    //       }
+    //     })
+    //     // this.formDto.formFields.patchValue({
+    //     //   file: reader.result
+    //     // });
+
+    //     // need to run CD since file load runs outside of zone
+    //     this.cd.markForCheck();
+    //   };
+    // }
+  }
+
+
 
 
 }

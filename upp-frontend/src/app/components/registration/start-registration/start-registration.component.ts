@@ -24,12 +24,14 @@ export class StartRegistrationComponent implements OnInit {
   }
 
   registerSub: Subscription;
+  choiceMade: boolean = false;
 
   /**
    * Method that calls an api in order to start registration process and then go to 
    * appropriate route and generate registration form.
    */
   register(role: string) {
+    this.choiceMade = true;
     this.registerSub = this.registerService.startRegistration(role).subscribe((response) => {
       this.snackbar.openFromComponent(SnackbarComponent, {
         data: `Camunda process with id ${response} successfully started!`,
@@ -37,6 +39,7 @@ export class StartRegistrationComponent implements OnInit {
       });
       this.authStore.update((state) => ({
         processId: response,
+        registrationRole: role,
       }))
       if(role==='reader') {
         this.router.navigate(['/registerAsReader'])
@@ -45,5 +48,6 @@ export class StartRegistrationComponent implements OnInit {
       }
     })
   }
+
 
 }

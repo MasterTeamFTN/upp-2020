@@ -1,10 +1,14 @@
 import { AccountConfirmationComponent } from './../components/account/account-confirmation/account-confirmation.component';
+import { MembershipRequestComponent } from './../components/account/membership-request/membership-request.component';
 import { RegisterComponent } from './../components/account/register/register.component';
 import { LoginComponent } from './../components/account/login/login.component';
 import { ProfileComponent } from './../components/user/profile/profile.component';
 import { HomeComponent } from './../components/home/home.component';
 import { Routes } from '@angular/router';
 import { StartRegistrationComponent } from '../components/registration/start-registration/start-registration.component';
+import { LoadFileComponent } from '../components/common/load-file/load-file.component';
+import { LoggedInGuard } from './guards/logged-in.guard';
+import { WriterGuard } from './guards/writer.guard';
 
 export const routes: Routes = [
     {
@@ -33,6 +37,11 @@ export const routes: Routes = [
         // canActivate: []
     },
     {
+        path: 'fileUpload',
+        component: LoadFileComponent,
+        canActivate: [WriterGuard]
+    },
+    {
         path: 'profile',
         component: ProfileComponent,
         // canActivate: []
@@ -41,5 +50,10 @@ export const routes: Routes = [
         path: 'verify',
         component: AccountConfirmationComponent,
         // canActivate: []
+    },
+    {
+        path: 'membershipRequest',
+        component: MembershipRequestComponent,
+        // canActivate: [LoggedInGuard]
     }
 ]

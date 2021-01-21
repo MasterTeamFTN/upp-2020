@@ -1,7 +1,7 @@
 package rs.ac.uns.ftn.uppservice.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.camunda.bpm.engine.RuntimeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.uppservice.dto.request.FormSubmissionDto;
@@ -22,28 +22,16 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
-    @Autowired
-    private BookRepository bookRepository;
-
-    @Autowired
-    private GenreRepository genreRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private MailSenderService mailSenderService;
-
-    @Autowired
-    private RuntimeService runtimeService;
-
-    @Autowired
-    private ReaderService readerService;
+    private final BookRepository bookRepository;
+    private final GenreRepository genreRepository;
+    private final UserRepository userRepository;
+    private final UserService userService;
+    private final MailSenderService mailSenderService;
+    private final RuntimeService runtimeService;
+    private final ReaderService readerService;
 
 
     @Override

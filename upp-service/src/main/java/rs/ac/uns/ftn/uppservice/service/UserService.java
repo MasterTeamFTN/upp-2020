@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.uppservice.service;
 import rs.ac.uns.ftn.uppservice.dto.response.UserDTO;
 import rs.ac.uns.ftn.uppservice.model.ChiefEditor;
 import rs.ac.uns.ftn.uppservice.model.Editor;
+import rs.ac.uns.ftn.uppservice.dto.response.WriterDto;
 
 import java.util.List;
 
@@ -13,4 +14,5 @@ public interface UserService {
     List<UserDTO> findAll();
     ChiefEditor getChiefEditor();
     Editor getRandomEditor();
+    WriterDto getWriter(Long id);
 }

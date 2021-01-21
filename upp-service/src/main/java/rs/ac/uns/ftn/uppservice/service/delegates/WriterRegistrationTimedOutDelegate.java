@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import rs.ac.uns.ftn.uppservice.model.Writer;
 import rs.ac.uns.ftn.uppservice.service.WriterService;
 
+import static rs.ac.uns.ftn.uppservice.common.constants.Constants.WRITER;
+
 @RequiredArgsConstructor
 @Component
 public class WriterRegistrationTimedOutDelegate implements JavaDelegate {
@@ -15,7 +17,7 @@ public class WriterRegistrationTimedOutDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
-        Writer writer = (Writer) delegateExecution.getVariable("writer");
+        Writer writer = (Writer) delegateExecution.getVariable(WRITER);
         writerService.delete(writer);
     }
 

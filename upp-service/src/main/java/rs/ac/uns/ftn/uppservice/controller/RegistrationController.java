@@ -26,6 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Objects.isNull;
+
 @RestController
 @RequestMapping(value = "/registration", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RegistrationController {
@@ -77,7 +79,7 @@ public class RegistrationController {
      */
     @PostMapping(path = "/public/reader-submit")
     public ResponseEntity submitReaderRegistrationData(@RequestBody CamundaFormSubmitDTO data) {
-        String processInstanceId = processEngineService.submitForm(data);
+        String processInstanceId = processEngineService.submitForm(data, false);
         runtimeService.setVariable(processInstanceId, "registrationFormData", data.getFormData());
         runtimeService.setVariable(processInstanceId, "chooseGenresFormData", null);
         return ResponseEntity.ok().build();
@@ -85,8 +87,20 @@ public class RegistrationController {
 
     @PostMapping(path = "/public/reader-genres-submit")
     public ResponseEntity submitBetaReadersGenres(@RequestBody CamundaFormSubmitDTO data) {
-        String processInstanceId = processEngineService.submitForm(data);
+        String processInstanceId = processEngineService.submitForm(data, true);
         runtimeService.setVariable(processInstanceId, "chooseGenresFormData", data.getFormData());
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * When user fills out the from on the frontend and wants to submit it, then you call this endpoint.
+     * @param data - Data from the from
+     * @return 200 - OK
+     */
+    @PostMapping(path = "/public/writer-submit")
+    public ResponseEntity submitWriterRegistrationData(@RequestBody CamundaFormSubmitDTO data) {
+        String processInstanceId = processEngineService.submitForm(data, false);
+        runtimeService.setVariable(processInstanceId, "registrationFormData", data.getFormData());
         return ResponseEntity.ok().build();
     }
 
@@ -113,6 +127,12 @@ public class RegistrationController {
 
         taskService.complete(currentTask.getId());
 
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(path = "/public/answer-membership-request")
+    public ResponseEntity answerRequest(@RequestBody CamundaFormSubmitDTO data) {
+        String processInstanceId = processEngineService.submitDecision(data);
         return ResponseEntity.ok().build();
     }
 }

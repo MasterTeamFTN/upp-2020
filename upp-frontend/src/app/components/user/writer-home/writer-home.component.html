@@ -1,0 +1,41 @@
+<div *ngIf="checkIsMember(); then memberContent else nonMemberContent"></div>
+
+<ng-template #memberContent>
+
+    <div *ngIf="writer!=null">
+        {{writer.firstName}}
+    </div>
+    <h1>This is home page of an writeeer</h1>
+</ng-template>
+
+<ng-template #nonMemberContent>
+    <div class="mat-card-cvr">
+        <mat-card class="writer-info-card">
+            <mat-card-header>
+                <div mat-card-avatar class="example-header-image"></div>
+                <mat-card-title>You are not a member yet.</mat-card-title>
+                <mat-card-subtitle>Your papers need to be approved.</mat-card-subtitle>
+            </mat-card-header>
+            <mat-divider></mat-divider>
+
+            <mat-card-content class="writer-card-content" *ngIf="hasEnoughFiles()">
+                <p>You have enough files submitted. Do you want to upload some more?</p>
+                <div class="example-button-row">
+                    <button mat-raised-button color="primary">Submit membership request</button>
+                    <div class="divider"></div>
+                    <button mat-raised-button color="warn">Add more files</button>
+                </div>
+
+            </mat-card-content>
+            <mat-card-content class="writer-card-content" *ngIf="!hasEnoughFiles()">
+                <p>You don't have enough papers submitted. Please provide some more.</p>
+                <app-load-file (onFileUpload)="submit($event)"></app-load-file>
+            </mat-card-content>
+
+            <p>Papers submitted</p>
+            <ul *ngFor="let paper of writer.registrationPapers">
+                <li><mat-icon>assignment</mat-icon> {{paper.split('\\').pop()}}</li>
+            </ul>
+        </mat-card>
+    </div>
+</ng-template>

@@ -1,10 +1,16 @@
 package rs.ac.uns.ftn.uppservice.service.delegates;
 
 import lombok.RequiredArgsConstructor;
+import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.camunda.bpm.engine.identity.User;
 import org.springframework.stereotype.Component;
 import rs.ac.uns.ftn.uppservice.service.BoardMemberService;
+
+import java.util.List;
+
+import static rs.ac.uns.ftn.uppservice.common.constants.Constants.BOARD_MEMBERS;
 
 @RequiredArgsConstructor
 @Component
@@ -12,10 +18,10 @@ public class NotifyBoardMembersDelegate implements JavaDelegate {
 
     private final BoardMemberService boardMemberService;
 
-    @Override
-    public void execute(DelegateExecution execution) throws Exception {
-        String token = (String) execution.getVariable("token");
-        boardMemberService.notifyBoardMembers(token);
 
+    @Override
+    public void execute(DelegateExecution execution) {
+        List<User> boardMembers = boardMemberService.notifyBoardMembers(execution.getProcessInstanceId());
+        execution.setVariable(BOARD_MEMBERS, boardMembers);
     }
 }

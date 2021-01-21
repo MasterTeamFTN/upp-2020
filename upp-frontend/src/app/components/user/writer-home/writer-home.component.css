@@ -1,0 +1,29 @@
+.writer-info-card{ 
+    display:inline-block;
+    width: 55%;
+    text-align:left;
+}
+
+.mat-card-cvr {
+   width: 100%;
+   text-align:center;
+   /* height: 100vh;
+   display: flex;
+   justify-content: center;
+   align-items: center; */
+}
+.writer-card-content {
+    padding-top: 25px;
+}
+
+.example-header-image {
+    background-image: url('src\assets\images\user.jpg');
+    background-size: cover;
+  }
+
+
+  .divider{
+    width:10px;
+    height:auto;
+    display:inline-block;
+}

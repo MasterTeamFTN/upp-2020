@@ -1,1 +1,9 @@
-<h1>This is home page</h1>
+
+<app-writer-home *ngIf="isWriter"></app-writer-home>
+<app-reader-home *ngIf="isReader"></app-reader-home> 
+<app-lecturer-home *ngIf="isLecturer"></app-lecturer-home>
+<app-board-member-home *ngIf="isBoardMember"></app-board-member-home>
+
+<div class="container" *ngIf="noRole">
+    <h1>home page</h1>
+</div>

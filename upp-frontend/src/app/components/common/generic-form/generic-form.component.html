@@ -18,7 +18,7 @@
                         <div *ngSwitchCase="'MultiSelect'">
                             <mat-select [formControl]="field.controls.actualValue"
                                 placeholder="{{field.controls.name.value}}" multiple>
-                                <mat-option *ngFor="let msValue of multiselectValues; let j=index" value="{{j}}">
+                                <mat-option *ngFor="let msValue of multiselectValues; let j=index" value="{{j+1}}">
                                     {{msValue}}</mat-option>
                             </mat-select>
                         </div>
@@ -48,18 +48,43 @@
                             </mat-checkbox>
                         </div>
 
+                        <!-- FILE FORM FIELD -->
+                        <div *ngSwitchCase="'PdfFile'">
+                            <label class="custom-file-upload">
+                                <input [formControl]="field.controls.actualValue" type="file" id="file-upload"
+                                    placeholder="Choose science paper" (change)="selectFile($event)"
+                                    value="Choose science paper">
+                                <i class="fa fa-cloud-upload"></i> File upload
+                            </label>
+                            <ul *ngFor="let file of selectedFiles">
+                                <li>{{file.name}}</li>
+                            </ul>
+                        </div>
+
+                        <!-- ENUM FORM FIELD -->
+                        <div *ngSwitchCase="'enum'">
+                            <mat-select placeholder="Decide" [formControl]="field.controls.actualValue">
+                                <mat-option *ngFor="let decisionType of enumKeys" [value]="decisionType">
+                                    {{decisionType}}
+                                </mat-option>
+                            </mat-select>
+                        </div>
+                        
+
                         <mat-error>
                             {{ getErrorMessage(field.controls.name.value) }}
                         </mat-error>
                         <input class="dummyHiddenInput" matInput hidden>
                     </div>
                 </mat-form-field>
-                
+
                 <!-- SUBMIT BUTTON -->
                 <mat-form-field>
-                    <button mat-button id="submitForm" (click)="onSubmit()"
-                        [disabled]="checkValidation()">Submit</button>
-                    <input matInput hidden>
+                    <div class="submit-button-wrapper">
+                        <button mat-raised-button class="submitButton" (click)="onSubmit()"
+                        [disabled]="checkValidation()" color="accent">Submit</button>
+                        <input matInput hidden>
+                    </div>
                 </mat-form-field>
             </form>
         </mat-card-content>
@@ -67,5 +92,7 @@
 </ng-template>
 
 <ng-template #loader>
-    <mat-spinner></mat-spinner>
+    <div class="mat-spinner-wrapper">
+        <mat-spinner class="spinner"></mat-spinner>
+    </div>
 </ng-template>

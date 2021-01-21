@@ -121,12 +121,15 @@ public class ReaderServiceImpl implements ReaderService {
         return reader;
     }
 
-    private Set<Genre> getGenresFromList(List<String> genresNames) {
+    private Set<Genre> getGenresFromList(List<String> genreIds) {
         Set<Genre> genres = new HashSet<>();
 
-        genresNames.stream().forEach(genreName -> {
-            Genre genre = genreRepository.findByName(genreName)
-                    .orElseThrow(() -> new ResourceNotFoundException("Genre with name " + genreName + " doesn't exist."));
+        genreIds.stream().forEach(genreId -> {
+//            Genre genre = genreRepository.findByName(genreName)
+//                    .orElseThrow(() -> new ResourceNotFoundException("Genre with name " + genreName + " doesn't exist."));
+            Long id = Long.valueOf(genreId);
+            Genre genre = genreRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Genre with id " + genreId + " doesn't exist."));
             genres.add(genre);
         });
 

@@ -2,7 +2,9 @@ package rs.ac.uns.ftn.uppservice.service.delegates.publishing;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SaveBookFileDelegate implements JavaDelegate {
 
     @Override

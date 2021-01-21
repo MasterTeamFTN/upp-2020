@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import rs.ac.uns.ftn.uppservice.model.Reader;
 import rs.ac.uns.ftn.uppservice.service.ReaderService;
 
+import static rs.ac.uns.ftn.uppservice.common.constants.Constants.READER;
+
 @Component
 public class RegistrationTimedOutDelegate implements JavaDelegate {
 
@@ -15,7 +17,7 @@ public class RegistrationTimedOutDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
-        Reader reader = (Reader) delegateExecution.getVariable("reader");
+        Reader reader = (Reader) delegateExecution.getVariable(READER);
         readerService.delete(reader);
     }
 

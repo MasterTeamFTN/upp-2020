@@ -1,4 +1,4 @@
-#genericFormContainer form{
+#genericFormContainer form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -11,7 +11,6 @@
     margin-right: 20%;
     position: relative;
     /* width:100%; */
-
 }
 
 .login-card {
@@ -21,17 +20,52 @@
 }
 
 #card-content {
-    width:100%;
+    width: 100%;
 }
 #form-field {
-    width:100%;
+    width: 100%;
+}
+
+.submit-button-wrapper
+ {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.submitButton {
+    display: block;
+    padding: 12px;
 }
 
 matInput {
     text-align: center;
-    width:100%;
+    width: 100%;
 }
 
 #password-icon {
+    cursor: pointer;
+}
+
+.mat-spinner-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 20px);
+}
+
+.spinner {
+    padding: 12px;
+}
+
+
+
+input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
     cursor: pointer;
 }

@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -56,6 +57,9 @@ public abstract class User implements UserDetails {
 
     @Column(name = "cityCountry", nullable = false)
     private String cityCountry;
+
+    @ElementCollection(targetClass=String.class)
+    private Set<String> registrationPapers;
 
     public void setPassword(String password) {
         Timestamp now = new Timestamp(new Date().getTime());

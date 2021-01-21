@@ -47,7 +47,8 @@ export class AuthService {
 
         this.authStore.update((state) => ({
           token: tkn,
-          user: user
+          user: user,
+          role: user.authority
         }))
       }, errorResponse => {
         this.showErrorFromBackend_login(errorResponse);
@@ -73,7 +74,9 @@ export class AuthService {
   logout() {
     this.authStore.update({
       token: null,
-      user: null
+      user: null,
+      role: null,
+      loginTitle: "Enter your credentials",
     })
   }
 

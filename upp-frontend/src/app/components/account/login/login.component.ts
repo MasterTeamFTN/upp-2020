@@ -2,6 +2,7 @@ import { AuthService } from './../../../shared/services/auth/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthQuery } from 'src/app/shared';
 
 @Component({
   selector: 'app-login',
@@ -19,10 +20,19 @@ export class LoginComponent implements OnInit {
   
   constructor(
     private router: Router,
+    private authQuery: AuthQuery,
     private authService: AuthService
     ) { }
 
   ngOnInit() {
+    this.loadTitle();
+  }
+  title: string = '';
+
+  loadTitle=() => {
+    this.authQuery.loginTitle$.subscribe((title) => {
+      this.title = title;
+    })
   }
 
   onSubmit(): void {

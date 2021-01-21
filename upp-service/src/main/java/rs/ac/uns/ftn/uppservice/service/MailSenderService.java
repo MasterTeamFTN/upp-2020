@@ -1,14 +1,13 @@
 package rs.ac.uns.ftn.uppservice.service;
 
 import rs.ac.uns.ftn.uppservice.model.*;
+import rs.ac.uns.ftn.uppservice.dto.response.WriterPaperResourceDto;
 
 import java.util.List;
 
 public interface MailSenderService {
 
     void sendRegistrationMail(ConfirmationToken token);
-
-    void sendBoardMemberNotification(List<String> emails, ConfirmationToken token);
 
     void sendChiefEditorNewBookNotification(User chiefEditor, Book book);
 
@@ -29,4 +28,6 @@ public interface MailSenderService {
     void notifyBookIsPublished(Book book);
 
     void sendRejectBook(Book book);
+
+    void sendBoardMemberNotification(List<String> emails, ConfirmationToken token, List<WriterPaperResourceDto> userPapers);
 }
