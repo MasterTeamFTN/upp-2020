@@ -120,6 +120,32 @@ form_data = {
 submit_form(form_data, headers_writer)
 print('From for full book data is submitted')
 
+################### SEND PDF
+
+task_id = get_form(process_id)
+print(f'Pdf file form task ID: {task_id}')
+
+fin = open('example.pdf', 'rb')
+files = {
+    'file': fin
+}
+
+try:
+  r = requests.post(f'http://localhost:8080/api/file/book?taskId={task_id}', files=files, headers=headers_writer)
+finally:
+	fin.close()
+
+print('Sent pdf file')
+
+
+# .w.s.m.s.DefaultHandlerExceptionResolver : 
+# Resolved [org.springframework.web.method.annotation.MethodArgumentConversionNotSupportedException: 
+# Failed to convert value of type 'org.springframework.web.multipart.support.StandardMultipartHttpServletRequest$StandardMultipartFile' 
+# to required type 'java.lang.String'; nested exception is java.lang.IllegalStateException: 
+# Cannot convert value of type 'org.springframework.web.multipart.support.StandardMultipartHttpServletRequest$StandardMultipartFile' 
+# to required type 'java.lang.String': no matching editors or conversion strategy found]
+
+
 #################### GET FORM - Check if book is plagiarized
 
 task_id = get_form(process_id)

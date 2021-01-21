@@ -108,6 +108,7 @@ public class ProcessEngineServiceImpl implements ProcessEngineService {
         try {
             runtimeService.setVariable(processInstanceId, SUBMIT_FILE_DATA, convertedFile);
             formService.submitTaskForm(taskId, map);
+            System.out.println("SUBMITOVO SAM ALO");
         } catch (FormFieldValidatorException e) {
             throw new ApiRequestException("Failed validation");
         }

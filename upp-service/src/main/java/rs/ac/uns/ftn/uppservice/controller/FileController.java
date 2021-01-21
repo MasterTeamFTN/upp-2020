@@ -41,4 +41,18 @@ public class FileController {
         return new ResponseEntity<>("File successfully uploaded.", HttpStatus.OK);
     }
 
+    @PostMapping("/book")
+    public ResponseEntity<String> handleBookFileUpload(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("taskId") String taskId
+    ) {
+        try {
+            UserFileDto userFileDto = fileService.saveBook(taskId, file);
+            String processInstanceId = processEngineService.submitFile(taskId, file, userFileDto.getFile());
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(e.getMessage());
+        }
+        return new ResponseEntity<>("File successfully uploaded.", HttpStatus.OK);
+    }
+
 }

@@ -11,5 +11,6 @@ import java.io.IOException;
 public interface FileService {
 
     UserFileDto saveFile(String taskId, MultipartFile file) throws IOException;
+    UserFileDto saveBook(String taskId, MultipartFile file) throws IOException;
 
 }
