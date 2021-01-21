@@ -220,3 +220,57 @@ if submit_response.status_code == 200:
     print('From choose beta readers submitted')
 else:
     print(submit_response.json())
+
+# GET FORM TO SUBMIT COMMENT
+
+input_book_form_response = requests.get(f'http://localhost:8080/process/public/form/{process_id}')
+input_book_task_id = input_book_form_response.json()['taskId']
+print(f'Get for for comment submit task ID: {input_book_task_id}')
+
+## SUBMIT FORM - comment 
+
+form_data = {
+    "taskId": f"{input_book_task_id}",
+    "formData": [
+        {
+            "fieldId": "FormField_comment",
+            "fieldValue": "Ovo je neki moj komentar na tvoj rad od baby doe"
+        }
+    ]
+}
+
+headers = login('baby.doe', '123')
+
+submit_response = requests.post('http://localhost:8080/book/submit-comment', json=form_data, headers=headers)
+
+if submit_response.status_code == 200:
+    print('Comment submitted')
+else:
+    print(submit_response.json())
+
+# GET FORM TO SUBMIT COMMENT
+
+input_book_form_response = requests.get(f'http://localhost:8080/process/public/form/{process_id}')
+input_book_task_id = input_book_form_response.json()['taskId']
+print(f'Get for for comment submit task ID: {input_book_task_id}')
+
+## SUBMIT FORM - comment 
+
+form_data = {
+    "taskId": f"{input_book_task_id}",
+    "formData": [
+        {
+            "fieldId": "FormField_comment",
+            "fieldValue": "Ovo je neki moj komentar na tvoj rad od baby2 doe"
+        }
+    ]
+}
+
+headers = login('baby.doe2', '123')
+
+submit_response = requests.post('http://localhost:8080/book/submit-comment', json=form_data, headers=headers)
+
+if submit_response.status_code == 200:
+    print('Comment submitted')
+else:
+    print(submit_response.json())

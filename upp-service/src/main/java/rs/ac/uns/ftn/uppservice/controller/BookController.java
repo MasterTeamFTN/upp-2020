@@ -91,4 +91,11 @@ public class BookController {
         String processInstanceId = processEngineService.submitForm(data);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping(path = "/submit-comment")
+    @PreAuthorize("hasRole('ROLE_READER')")
+    public ResponseEntity submitComment(@RequestBody CamundaFormSubmitDTO data) {
+        String processInstanceId = processEngineService.submitForm(data);
+        return ResponseEntity.ok().build();
+    }
 }

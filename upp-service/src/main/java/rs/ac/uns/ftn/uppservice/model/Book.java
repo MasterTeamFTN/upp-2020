@@ -67,5 +67,6 @@ public class Book {
     @JoinColumn(name="complaint_id")
     private Complaint complaint;
 
-
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<BetaReaderComment> betaReadersComments;
 }

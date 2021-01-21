@@ -9,12 +9,15 @@ import rs.ac.uns.ftn.uppservice.exception.exceptions.ResourceNotFoundException;
 import rs.ac.uns.ftn.uppservice.model.*;
 import rs.ac.uns.ftn.uppservice.repository.BookRepository;
 import rs.ac.uns.ftn.uppservice.repository.GenreRepository;
+import rs.ac.uns.ftn.uppservice.repository.UserRepository;
 import rs.ac.uns.ftn.uppservice.service.BookService;
 import rs.ac.uns.ftn.uppservice.service.MailSenderService;
+import rs.ac.uns.ftn.uppservice.service.ReaderService;
 import rs.ac.uns.ftn.uppservice.service.UserService;
 import rs.ac.uns.ftn.uppservice.util.SetUtils;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -28,6 +31,9 @@ public class BookServiceImpl implements BookService {
     private GenreRepository genreRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private UserService userService;
 
     @Autowired
@@ -35,6 +41,9 @@ public class BookServiceImpl implements BookService {
 
     @Autowired
     private RuntimeService runtimeService;
+
+    @Autowired
+    private ReaderService readerService;
 
 
     @Override
@@ -98,6 +107,14 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public void reject(Long bookId) {
+        // TODO: Brisanje nece da radi iz nekog razloga
+        // mozda je bolje da napravimo rejected polje u Book
+        // pa da njega samo setujem na true
+        bookRepository.deleteById(bookId);
+    }
+
+    @Override
     public void markBookAsPlagiarised(Book book) {
         book.setIsPlagiarized(true);
         bookRepository.save(book);
@@ -125,6 +142,66 @@ public class BookServiceImpl implements BookService {
 
         book = bookRepository.save(book);
         return book;
+    }
+
+    @Override
+    public void addBetaReadersComments(Long bookId, String readerUsername, String comment) {
+        Book book = this.findById(bookId);
+        Reader reader = readerService.findByUsername(readerUsername);
+
+        BetaReaderComment readersComment = new BetaReaderComment();
+        readersComment.setReader(reader);
+        readersComment.setComment(comment);
+        readersComment.setBook(book);
+
+        book.getBetaReadersComments().add(readersComment);
+        bookRepository.save(book);
+    }
+
+    @Override
+    public Suggestion addLecturersComments(Long bookId, String comment) {
+        Book book = this.findById(bookId);
+        Lecturer lecturer = (Lecturer) userRepository.findLecturer().get();
+
+        Set<String> foundErrors = new HashSet<>();
+        foundErrors.add(comment);
+
+        Suggestion suggestion = new Suggestion();
+        suggestion.setLecturer(lecturer);
+        suggestion.setBook(book);
+        suggestion.setFoundErrors(foundErrors);
+
+        book.getSuggestions().add(suggestion);
+        bookRepository.save(book);
+
+        return suggestion;
+    }
+
+    @Override
+    public Suggestion addChiefEditorsComments(Long bookId, String comment) {
+        Book book = this.findById(bookId);
+        ChiefEditor chiefEditor = (ChiefEditor) userRepository.findChiefEditor().get();
+
+        Set<String> foundErrors = new HashSet<>();
+        foundErrors.add(comment);
+
+        Suggestion suggestion = new Suggestion();
+        suggestion.setChiefEditor(chiefEditor);
+        suggestion.setBook(book);
+        suggestion.setFoundErrors(foundErrors);
+
+        book.getSuggestions().add(suggestion);
+        bookRepository.save(book);
+
+        return suggestion;
+    }
+
+    @Override
+    public void publish(Long bookId) {
+        Book book = this.findById(bookId);
+        book.setPublisher("UPP FTN Publisher");
+        book.setIsPublished(true);
+        bookRepository.save(book);
     }
 
 }

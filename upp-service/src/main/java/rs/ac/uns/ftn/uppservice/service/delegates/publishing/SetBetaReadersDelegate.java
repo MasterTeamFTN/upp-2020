@@ -1,4 +1,4 @@
-package rs.ac.uns.ftn.uppservice.service.delegates;
+package rs.ac.uns.ftn.uppservice.service.delegates.publishing;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;

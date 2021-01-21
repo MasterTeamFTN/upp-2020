@@ -1,9 +1,6 @@
 package rs.ac.uns.ftn.uppservice.service;
 
-import rs.ac.uns.ftn.uppservice.model.Book;
-import rs.ac.uns.ftn.uppservice.model.ConfirmationToken;
-import rs.ac.uns.ftn.uppservice.model.Reader;
-import rs.ac.uns.ftn.uppservice.model.User;
+import rs.ac.uns.ftn.uppservice.model.*;
 
 import java.util.List;
 
@@ -24,4 +21,12 @@ public interface MailSenderService {
     void notifyUserBookIsPlagiarised(Book book, String reason);
 
     void notifyReaderLostBetaStatus(Reader reader);
+
+    void sendLecturersCommentsToAuthor(Book book, Suggestion suggestion);
+
+    void sendChiefEditorCommentsToAuthor(Book book, Suggestion suggestion);
+
+    void notifyBookIsPublished(Book book);
+
+    void sendRejectBook(Book book);
 }

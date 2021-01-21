@@ -12,12 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import rs.ac.uns.ftn.uppservice.dto.request.CamundaFormSubmitDTO;
 import rs.ac.uns.ftn.uppservice.dto.response.FormFieldsDto;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ApiRequestException;
+import rs.ac.uns.ftn.uppservice.service.ProcessEngineService;
 
 import java.util.List;
 
@@ -33,6 +32,9 @@ public class ProcessEngineController {
 
     @Autowired
     private RuntimeService runtimeService;
+
+    @Autowired
+    private ProcessEngineService processEngineService;
 
 
     /**
@@ -70,5 +72,11 @@ public class ProcessEngineController {
         }
 
         return new ResponseEntity(new FormFieldsDto(task.getId(), properties, processInstanceId), HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/public/submit")
+    public ResponseEntity submitForm(@RequestBody CamundaFormSubmitDTO data) {
+        String processInstanceId = processEngineService.submitForm(data);
+        return ResponseEntity.ok().build();
     }
 }

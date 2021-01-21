@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import rs.ac.uns.ftn.uppservice.model.Book;
-import rs.ac.uns.ftn.uppservice.model.ConfirmationToken;
-import rs.ac.uns.ftn.uppservice.model.Reader;
-import rs.ac.uns.ftn.uppservice.model.User;
+import rs.ac.uns.ftn.uppservice.model.*;
 import rs.ac.uns.ftn.uppservice.service.MailSenderService;
 
 import java.util.List;
@@ -113,6 +110,62 @@ public class MailSenderServiceImpl implements MailSenderService {
         message.setTo(reader.getEmail());
         message.setText(reader.getFirstName() + ", you lost beta reader status because you have " +
                 reader.getPenaltyPoints() + " penalty points");
+        mailSender.send(message);
+    }
+
+    @Override
+    public void sendLecturersCommentsToAuthor(Book book, Suggestion suggestion) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("Lecturers comments - UPP");
+        message.setFrom("UPP-App");
+        message.setTo(book.getWriter().getEmail());
+
+        StringBuilder body = new StringBuilder();
+        body.append("Lecturer finished review. This is the list with his comments\n");
+
+        for (String error : suggestion.getFoundErrors()) {
+            body.append(error);
+        }
+
+        message.setText(body.toString());
+        mailSender.send(message);
+    }
+
+    @Override
+    public void sendChiefEditorCommentsToAuthor(Book book, Suggestion suggestion) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("Chief editors comments - UPP");
+        message.setFrom("UPP-App");
+        message.setTo(book.getWriter().getEmail());
+
+        StringBuilder body = new StringBuilder();
+        body.append("Chief editor finished review. This is the list with his comments\n");
+
+        for (String error : suggestion.getFoundErrors()) {
+            body.append(error);
+        }
+
+        message.setText(body.toString());
+        mailSender.send(message);
+    }
+
+    @Override
+    public void notifyBookIsPublished(Book book) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("Book published - UPP");
+        message.setFrom("UPP-App");
+        message.setTo(book.getWriter().getEmail());
+        message.setText("Your book " + book.getTitle() + " has been published!");
+        mailSender.send(message);
+    }
+
+    @Override
+    public void sendRejectBook(Book book) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("Book rejected - UPP");
+        message.setFrom("UPP-App");
+        message.setTo(book.getWriter().getEmail());
+        message.setText("Your book " + book.getTitle() + " has been rejected! You didn't make changes in time.");
         mailSender.send(message);
     }
 

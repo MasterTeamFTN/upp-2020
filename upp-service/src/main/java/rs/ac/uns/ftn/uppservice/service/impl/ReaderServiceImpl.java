@@ -52,6 +52,18 @@ public class ReaderServiceImpl implements ReaderService {
 
 
     @Override
+    public Reader findById(Long id) {
+        return readerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Reader doesn't exist"));
+    }
+
+    @Override
+    public Reader findByUsername(String username) {
+        return readerRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Reader doesn't exist"));
+    }
+
+    @Override
     public Reader add(List<FormSubmissionDto> formData, List<FormSubmissionDto> chooseGenresForm, String processInstanceId) {
         Reader reader = new Reader();
         String password = "";
