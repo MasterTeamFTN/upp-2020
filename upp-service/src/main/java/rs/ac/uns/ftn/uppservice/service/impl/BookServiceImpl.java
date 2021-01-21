@@ -16,10 +16,7 @@ import rs.ac.uns.ftn.uppservice.service.ReaderService;
 import rs.ac.uns.ftn.uppservice.service.UserService;
 import rs.ac.uns.ftn.uppservice.util.SetUtils;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -188,6 +185,7 @@ public class BookServiceImpl implements BookService {
     public void publish(Long bookId) {
         Book book = this.findById(bookId);
         book.setPublisher("UPP FTN Publisher");
+        book.setIsbn(UUID.randomUUID().toString());
         book.setIsPublished(true);
         bookRepository.save(book);
     }

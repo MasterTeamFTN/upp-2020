@@ -30,4 +30,6 @@ public interface MailSenderService {
     void sendRejectBook(Book book);
 
     void sendBoardMemberNotification(List<String> emails, ConfirmationToken token, List<WriterPaperResourceDto> userPapers);
+
+    void sendBetaReadersCommentsToAuthor(Book book);
 }

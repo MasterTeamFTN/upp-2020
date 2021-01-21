@@ -30,6 +30,8 @@ def submit_form(form_data, headers):
 headers_writer = login('john.doe', '123')
 headers_chief_editor = login('pera', '123')
 headers_lecturer = login('jane.doe', '123')
+headers_betareader1 = login('baby.doe', '123')
+headers_betareader2 = login('baby.doe2', '123')
 
 ########################## START PROCESS
 
@@ -178,13 +180,87 @@ form_data = {
     "formData": [
         {
             "fieldId": "FormField_sendToBeta",
-            "fieldValue": "false"
+            "fieldValue": "true"
         }
     ]
 }
 
 submit_form(form_data, headers_chief_editor)
 print('From for full book data is submitted')
+
+##################### Choose beta readers
+
+task_id = get_form(process_id)
+print(f'Choose beta readers task id: {task_id}')
+
+form_data = {
+    "taskId": f"{task_id}",
+    "formData": [
+        {
+            "fieldId": "FormField_betaReaders",
+            "fieldValue": [
+                '3', '7'
+            ]
+        }
+    ]
+}
+
+submit_form(form_data, headers_chief_editor)
+print('Form choose beta readers submitted')
+
+##################### BETA READER 1 SUBMIT
+
+task_id = get_form(process_id)
+print(f'Get form for beta readers comments submit: {task_id}')
+
+form_data = {
+    "taskId": f"{task_id}",
+    "formData": [
+        {
+            "fieldId": "FormField_comment",
+            "fieldValue": "Ovo je neki moj komentar na tvoj rad od baby doe"
+        }
+    ]
+}
+
+submit_form(form_data, headers_betareader1)
+print('Beta reader baby.doe submitted comments')
+
+###################### BETA READER 2 SUBMIT
+
+task_id = get_form(process_id)
+print(f'Get form for beta readers comments submit: {task_id}')
+
+form_data = {
+    "taskId": f"{task_id}",
+    "formData": [
+        {
+            "fieldId": "FormField_comment",
+            "fieldValue": "Ovo je neki moj komentar na tvoj rad od baby doe2"
+        }
+    ]
+}
+
+submit_form(form_data, headers_betareader2)
+print('Beta reader baby.doe2 submitted comments')
+
+###################### USER WANTS TO MAKE CHANGES ?
+
+task_id = get_form(process_id)
+print(f'Get form for user want to make changes task id: {task_id}')
+
+form_data = {
+    "taskId": f"{task_id}",
+    "formData": [
+        {
+            "fieldId": "FormField_makeChanges",
+            "fieldValue": "false"
+        }
+    ]
+}
+
+submit_form(form_data, headers_writer)
+print('User want to make changes form submitted')
 
 ##################### LECTURER REVIEW
 
@@ -230,4 +306,36 @@ form_data = {
 submit_form(form_data, headers_chief_editor)
 print('Form for chief editor review is submitted')
 
+#################### SEND NEW VERSION
 
+task_id = get_form(process_id)
+print(f'Pdf file form task ID: {task_id}')
+
+fin = open('files/example.pdf', 'rb')
+files = {
+    'file': fin
+}
+
+try:
+  r = requests.post(f'http://localhost:8080/api/file/book?taskId={task_id}', files=files, headers=headers_writer)
+finally:
+	fin.close()
+
+print('Sent pdf file')
+
+########################## CHIEF EDITOR - NO MORE CHANGES
+task_id = get_form(process_id)
+print(f'Chief editor review task id: {task_id}')
+
+form_data = {
+    "taskId": f"{task_id}",
+    "formData": [
+        {
+            "fieldId": "FormField_moreChanges",
+            "fieldValue": "false"
+        }
+    ]
+}
+
+submit_form(form_data, headers_chief_editor)
+print('Form for chief editor review is submitted')

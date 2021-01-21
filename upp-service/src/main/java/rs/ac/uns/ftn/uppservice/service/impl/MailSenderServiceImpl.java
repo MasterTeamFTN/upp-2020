@@ -187,4 +187,24 @@ public class MailSenderServiceImpl implements MailSenderService {
         mailSender.send(message);
     }
 
+    @Override
+    public void sendBetaReadersCommentsToAuthor(Book book) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("Beta readers comments - UPP");
+        message.setFrom("UPP-App");
+        message.setTo(book.getWriter().getEmail());
+
+        StringBuilder comments = new StringBuilder();
+
+        for (BetaReaderComment comment : book.getBetaReadersComments()) {
+            comments.append(comment.getReader().getFirstName() + " " + comment.getReader().getLastName() + " --> ");
+            comments.append(comment.getComment());
+            comments.append("\n");
+        }
+
+        message.setText(comments.toString());
+
+        mailSender.send(message);
+    }
+
 }
