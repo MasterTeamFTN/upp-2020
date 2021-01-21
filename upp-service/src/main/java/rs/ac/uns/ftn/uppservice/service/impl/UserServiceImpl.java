@@ -8,10 +8,7 @@ import rs.ac.uns.ftn.uppservice.dto.response.UserDTO;
 import rs.ac.uns.ftn.uppservice.dto.response.WriterDto;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ApiRequestException;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ResourceNotFoundException;
-import rs.ac.uns.ftn.uppservice.model.ChiefEditor;
-import rs.ac.uns.ftn.uppservice.model.Editor;
-import rs.ac.uns.ftn.uppservice.model.User;
-import rs.ac.uns.ftn.uppservice.model.Writer;
+import rs.ac.uns.ftn.uppservice.model.*;
 import rs.ac.uns.ftn.uppservice.repository.UserRepository;
 import rs.ac.uns.ftn.uppservice.service.UserService;
 
@@ -57,6 +54,12 @@ public class UserServiceImpl implements UserService {
     public ChiefEditor getChiefEditor() {
         return (ChiefEditor) userRepository.findChiefEditor()
                 .orElseThrow(() -> new ResourceNotFoundException("Chief editor doesn't exist"));
+    }
+
+    @Override
+    public Lecturer getLecturer() {
+        return (Lecturer) userRepository.findLecturer()
+                .orElseThrow(() -> new ResourceNotFoundException("Lecturer doesn't exist"));
     }
 
     @Override

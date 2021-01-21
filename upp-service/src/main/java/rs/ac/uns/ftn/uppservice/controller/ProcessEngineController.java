@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.uppservice.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.camunda.bpm.engine.FormService;
+import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.exception.NullValueException;
@@ -36,6 +37,7 @@ public class ProcessEngineController {
     private final FormService formService;
     private final RuntimeService runtimeService;
     private final ProcessEngineService processEngineService;
+    private final IdentityService identityService;
 
 
     /**
@@ -84,7 +86,13 @@ public class ProcessEngineController {
         return new ResponseEntity(new FormFieldsDto(task.getId(), properties, processInstanceId), HttpStatus.OK);
     }
 
-    @PostMapping(path = "/public/submit")
+    /**
+     * Endpoint for submitting all forms.
+     * Only authenticated users can use.
+     * @param data - form data
+     * @return 200 - OK
+     */
+    @PostMapping(path = "/submit")
     public ResponseEntity submitForm(@RequestBody CamundaFormSubmitDTO data) {
         String processInstanceId = processEngineService.submitForm(data);
         return ResponseEntity.ok().build();

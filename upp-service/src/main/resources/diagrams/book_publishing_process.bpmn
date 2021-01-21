@@ -35,7 +35,7 @@
       <bpmn:outgoing>Flow_0k4bh3y</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_0k4bh3y" sourceRef="Activity_0kuz417" targetRef="Activity_0s5b1a1" />
-    <bpmn:userTask id="Activity_0s5b1a1" name="Review book title &#38; synopsis" camunda:assignee="${firstReviewAssignee}">
+    <bpmn:userTask id="Activity_0s5b1a1" name="Review book title &#38; synopsis">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="FormField_continueReview" label="Continue review" type="boolean">
@@ -45,6 +45,7 @@
           </camunda:formField>
           <camunda:formField id="FormField_reason" label="Reason" type="string" />
         </camunda:formData>
+        <camunda:taskListener class="rs.ac.uns.ftn.uppservice.service.listeners.AssignChiefEditorHandler" event="create" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0k4bh3y</bpmn:incoming>
       <bpmn:outgoing>Flow_1qfe9ez</bpmn:outgoing>
@@ -131,6 +132,7 @@
           </camunda:formField>
           <camunda:formField id="FormField_reason" label="Reason" type="string" />
         </camunda:formData>
+        <camunda:taskListener class="rs.ac.uns.ftn.uppservice.service.listeners.AssignChiefEditorHandler" event="create" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1vyfurr</bpmn:incoming>
       <bpmn:outgoing>Flow_1hvlms4</bpmn:outgoing>
@@ -167,6 +169,7 @@
             </camunda:validation>
           </camunda:formField>
         </camunda:formData>
+        <camunda:taskListener class="rs.ac.uns.ftn.uppservice.service.listeners.AssignChiefEditorHandler" event="create" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0595695</bpmn:incoming>
       <bpmn:outgoing>Flow_1ufnb29</bpmn:outgoing>
@@ -190,6 +193,7 @@
             </camunda:validation>
           </camunda:formField>
         </camunda:formData>
+        <camunda:taskListener class="rs.ac.uns.ftn.uppservice.service.listeners.AssignChiefEditorHandler" event="create" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1in54b1</bpmn:incoming>
       <bpmn:outgoing>Flow_00nwhod</bpmn:outgoing>
@@ -210,7 +214,7 @@
         <bpmn:outgoing>Flow_1hegn1f</bpmn:outgoing>
       </bpmn:startEvent>
       <bpmn:sequenceFlow id="Flow_1hegn1f" sourceRef="Event_194nw66" targetRef="Activity_11h962e" />
-      <bpmn:userTask id="Activity_11h962e" name="Create comments on book">
+      <bpmn:userTask id="Activity_11h962e" name="Create comments on book" camunda:assignee="${betaReaderAssignee}">
         <bpmn:extensionElements>
           <camunda:formData>
             <camunda:formField id="FormField_comment" label="Comment" type="string">
@@ -281,6 +285,7 @@
             </camunda:validation>
           </camunda:formField>
         </camunda:formData>
+        <camunda:taskListener class="rs.ac.uns.ftn.uppservice.service.listeners.AssignLecturerHandler" event="create" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0n7g9ol</bpmn:incoming>
       <bpmn:incoming>Flow_0oqgz23</bpmn:incoming>
@@ -304,6 +309,7 @@
             </camunda:validation>
           </camunda:formField>
         </camunda:formData>
+        <camunda:taskListener class="rs.ac.uns.ftn.uppservice.service.listeners.AssignChiefEditorHandler" event="create" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1rruja3</bpmn:incoming>
       <bpmn:outgoing>Flow_1dpj43y</bpmn:outgoing>
@@ -328,6 +334,7 @@
             </camunda:validation>
           </camunda:formField>
         </camunda:formData>
+        <camunda:taskListener class="rs.ac.uns.ftn.uppservice.service.listeners.AssignChiefEditorHandler" event="create" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0gbtif4</bpmn:incoming>
       <bpmn:incoming>Flow_1mbi943</bpmn:incoming>
@@ -440,7 +447,7 @@
       <bpmn:outgoing>Flow_1vyfurr</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_1rruja3" sourceRef="Activity_03utvqy" targetRef="Activity_15htpo5" />
-    <bpmn:userTask id="Activity_03utvqy" name="Upload new pdf file">
+    <bpmn:userTask id="Activity_03utvqy" name="Upload new pdf file" camunda:assignee="${writer}">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="pdfFile" label="PDF file" type="PdfFile">

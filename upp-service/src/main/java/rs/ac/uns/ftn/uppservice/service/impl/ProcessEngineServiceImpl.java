@@ -6,11 +6,13 @@ import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.impl.form.validator.FormFieldValidatorException;
 import org.camunda.bpm.engine.task.Task;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import rs.ac.uns.ftn.uppservice.dto.request.CamundaFormSubmitDTO;
 import rs.ac.uns.ftn.uppservice.dto.request.FormSubmissionDto;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ApiRequestException;
+import rs.ac.uns.ftn.uppservice.model.User;
 import rs.ac.uns.ftn.uppservice.service.ProcessEngineService;
 
 import java.io.File;
@@ -78,6 +80,17 @@ public class ProcessEngineServiceImpl implements ProcessEngineService {
 
         Task task = taskService.createTaskQuery().taskId(data.getTaskId()).singleResult();
         String processInstanceId = task.getProcessInstanceId();
+
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (task.getAssignee() == null) {
+            throw new ApiRequestException("Task is unassigned");
+        }
+
+        if (!user.getUsername().equals(task.getAssignee())) {
+            System.out.println(task.getAssignee());
+            throw new ApiRequestException("You are not allowed to do this operation");
+        }
 
         try {
             // @Hack: Boris - ovde sam stavio da se setuje svaka forma koja stigne kao procesna varijabla

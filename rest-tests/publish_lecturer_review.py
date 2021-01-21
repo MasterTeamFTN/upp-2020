@@ -19,7 +19,7 @@ def get_form(process_id):
     return form.json()['taskId']
 
 def submit_form(form_data, headers):
-    submit_response = requests.post('http://localhost:8080/process/public/submit', json=form_data, headers=headers)
+    submit_response = requests.post('http://localhost:8080/process/submit', json=form_data, headers=headers)
 
     if submit_response.status_code != 200:
         print("ERROR!")
@@ -85,7 +85,7 @@ form_data = {
     ]
 }
 
-submit_form(form_data, headers_chief_editor)
+submit_form(form_data, headers_chief_editor) 
 print('Form for review title and synopsis is submitted')
 
 #################### GET FORM FOR BOOK SUBMIT
