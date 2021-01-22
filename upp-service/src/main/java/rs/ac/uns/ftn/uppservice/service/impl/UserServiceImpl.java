@@ -3,7 +3,9 @@ package rs.ac.uns.ftn.uppservice.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.uppservice.common.mapper.ReaderMapper;
 import rs.ac.uns.ftn.uppservice.common.mapper.WriterMapper;
+import rs.ac.uns.ftn.uppservice.dto.response.ReaderDto;
 import rs.ac.uns.ftn.uppservice.dto.response.UserDTO;
 import rs.ac.uns.ftn.uppservice.dto.response.WriterDto;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ApiRequestException;
@@ -23,6 +25,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final WriterMapper writerMapper;
+    private final ReaderMapper readerMapper;
 
     @Override
     public UserDTO findById(Long id) throws ApiRequestException {
@@ -73,5 +76,11 @@ public class UserServiceImpl implements UserService {
     public WriterDto getWriter(Long id) {
         Writer writer = (Writer) userRepository.findById(id).orElseThrow(NoSuchElementException::new);
         return writerMapper.entityToDto(writer);
+    }
+
+    @Override
+    public ReaderDto getReader(Long id) {
+        Reader reader = (Reader) userRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        return readerMapper.entityToDto(reader);
     }
 }

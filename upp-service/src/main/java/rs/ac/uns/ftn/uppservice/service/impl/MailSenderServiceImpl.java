@@ -61,7 +61,7 @@ public class MailSenderServiceImpl implements MailSenderService {
                         .append("<br>\n")
                         .append("We are happy to inform you that we <b>ACCEPTED</b> your membership request<br>")
                         .append("We are expecting you to make a payment for membership within the set deadline.\t\n")
-                        .append("Please visit this <a href='http://localhost:4200/pay/?processInstanceId=" + processInstanceId + "'>link</a> ")
+                        .append("Please visit this <a href='http://localhost:4200/login'>link</a> ")
                         .append("and give us your payment information.\n")
                         .append("</p>\n")
                         .append("<h4>Best regards!</h4>")

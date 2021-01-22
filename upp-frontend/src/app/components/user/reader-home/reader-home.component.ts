@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { ReaderService } from 'src/app/shared/services/reader/reader.service';
 
 @Component({
   selector: 'app-reader-home',
@@ -7,9 +9,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ReaderHomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(private readerService: ReaderService) { }
 
   ngOnInit() {
+    this.loadReader();
   }
+
+  getReaderSub: Subscription;
+  reader: any;
+
+  loadReader = () => {
+    this.getReaderSub = this.readerService.getReader().subscribe((reader) => {
+      this.reader = reader;
+    })
+}
 
 }

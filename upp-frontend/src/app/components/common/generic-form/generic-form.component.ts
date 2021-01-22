@@ -21,6 +21,9 @@ export class GenericFormComponent implements OnInit {
 
   constructor(private cd: ChangeDetectorRef) {
   }
+  ngOnChanges() {
+     this.notSubmittedYet = true;
+    }   
 
   ngOnInit() {
     this.notSubmittedYet = true;

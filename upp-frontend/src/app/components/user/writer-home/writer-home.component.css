@@ -20,7 +20,10 @@
     background-image: url('src\assets\images\user.jpg');
     background-size: cover;
   }
-
+.member-header-image {
+    background-image: url('src\assets\images\user-checked.jpg');
+    background-size: cover;
+}
 
   .divider{
     width:10px;
@@ -28,7 +31,7 @@
     display:inline-block;
 }
 
-.container {
+/* .container {
     background-image: url('./images/pero.jpg');
     background-size: cover;
-}
+} */

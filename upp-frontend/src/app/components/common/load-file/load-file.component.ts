@@ -66,7 +66,7 @@ export class LoadFileComponent implements OnInit {
 					this.uploadFormArray.updateValueAndValidity();
 				})
 				this.formDto = {
-					formName: "You need to have at least two papers uploaded.",
+					formName: "Upload PDF file.",
 					formFields: this.uploadForm.get('uploadFormArray')
 				}
 

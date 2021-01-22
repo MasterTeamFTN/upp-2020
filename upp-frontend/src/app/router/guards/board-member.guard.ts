@@ -6,7 +6,7 @@ import { SiteRoutes } from 'src/app/shared/constants';
 
 
 @Injectable()
-export class WriterGuard implements CanActivate {
+export class BoardMemberGuard implements CanActivate {
   constructor(
     private authQuery: AuthQuery,
     private router: Router
@@ -21,11 +21,11 @@ export class WriterGuard implements CanActivate {
    */
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     return new Observable((observer) => {
-      this.authQuery.isWriter$.subscribe((isWriter) => {
-        if (!isWriter) {
-          this.router.navigate([SiteRoutes.HOME], { queryParams: { returnUrl: state.url } });
+      this.authQuery.isBoardMember$.subscribe((isBoardMember) => {
+        if (!isBoardMember) {
+          this.router.navigate([SiteRoutes.HOME]);
         }
-        observer.next(isWriter);
+        observer.next(isBoardMember);
       });
     });
   }

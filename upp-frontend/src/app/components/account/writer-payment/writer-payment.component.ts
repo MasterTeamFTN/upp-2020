@@ -115,7 +115,8 @@ export class WriterPaymentComponent implements OnInit {
 
 					this.showSnack(`You have made a payment for your membership.`)
 					window.location.reload();
-
+					this.router.navigate['/'];
+					
 				})
 	}
 
