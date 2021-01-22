@@ -6,6 +6,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.uppservice.model.*;
+import rs.ac.uns.ftn.uppservice.model.MembershipDecision;
 import rs.ac.uns.ftn.uppservice.dto.response.WriterPaperResourceDto;
 import rs.ac.uns.ftn.uppservice.service.MailSenderService;
 
@@ -32,6 +33,69 @@ public class MailSenderServiceImpl implements MailSenderService {
     @Override
     public void sendBoardMemberNotification(List<String> emails, ConfirmationToken confirmationToken, List<WriterPaperResourceDto> userPapers) {
         emails.stream().forEach(email -> send(email, confirmationToken, userPapers));
+    }
+
+    @Override
+    public void sendDecisionToWriter(String emailTo, MembershipDecision decision, String processInstanceId) {
+        MimeMessage message = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom("UPP-App");
+            helper.setTo(emailTo);
+            helper.setSubject("We have decided about your membership request.");
+            message.setContent(getContentByDecision(decision, processInstanceId), "text/html; charset=utf-8");
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String getContentByDecision(MembershipDecision decision, String processInstanceId) {
+        String content = "";
+        switch (decision) {
+            case APPROVE:
+                content = new StringBuilder().append("<h1>Thank you for sending us a membership request</h1>\n")
+                        .append("<p>\n")
+                        .append("We appreciate you taking the time to register on our website and send us two of your best papers.\n")
+                        .append("<br>\n")
+                        .append("<br>\n")
+                        .append("We are happy to inform you that we <b>ACCEPTED</b> your membership request<br>")
+                        .append("We are expecting you to make a payment for membership within the set deadline.\t\n")
+                        .append("Please visit this <a href='http://localhost:4200/pay/?processInstanceId=" + processInstanceId + "'>link</a> ")
+                        .append("and give us your payment information.\n")
+                        .append("</p>\n")
+                        .append("<h4>Best regards!</h4>")
+                        .toString();
+                break;
+            case REJECT:
+                content = new StringBuilder().append("<h1>Thank you for sending us a membership request</h1>\n")
+                        .append("<p>\n")
+                        .append("We appreciate you taking the time to register on our website and send us two of your best papers.\n")
+                        .append("<br>\n")
+                        .append("<br>\n")
+                        .append("Unfortunately, our board of members has decided to reject your request. We wish you all the best.\t\n")
+                        .append("</p>\n")
+                        .append("<h4>Best regards!</h4>")
+                        .toString();
+                break;
+            case NEED_MORE_INFO:
+                content = new StringBuilder().append("<h1>Thank you for sending us a membership request</h1>\n")
+                        .append("<p>\n")
+                        .append("We appreciate you taking the time to register on our website and send us two of your best papers.\n")
+                        .append("<br>\n")
+                        .append("<br>\n")
+                        .append("Your work is interesting, our board of members has decided to take some time and give you a chance to provide us some more papers.\t\n")
+                        .append("We expect for you to provide us some more papers within the set deadline.\n")
+                        .append("Please visit this <a href='http://localhost:4200/login'>link</a> ")
+                        .append("</p>\n")
+                        .append("<h4>Best regards!</h4>")
+                        .toString();
+                break;
+            default:
+                content = "I dont know what to do with you my man.";
+                break;
+        }
+        return content;
     }
 
     @Override

@@ -13,4 +13,6 @@ public interface FileService {
     UserFileDto saveFile(String taskId, MultipartFile file) throws IOException;
     UserFileDto saveBook(String taskId, MultipartFile file) throws IOException;
 
+    void removeFiles(String directoryName) throws IOException;
+
 }

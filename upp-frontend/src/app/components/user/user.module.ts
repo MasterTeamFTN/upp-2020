@@ -7,6 +7,7 @@ import { ReaderHomeComponent } from './reader-home/reader-home.component';
 import { LecturerHomeComponent } from './lecturer-home/lecturer-home.component';
 import { CommonComponentsModule } from '../common/common-components.module';
 import { BoardMemberHomeComponent } from './board-member-home/board-member-home.component';
+import { AccountModule } from '../account/account.module';
 
 
 
@@ -15,7 +16,8 @@ import { BoardMemberHomeComponent } from './board-member-home/board-member-home.
   imports: [
     CommonModule,
     CoreModule,
-    CommonComponentsModule
+    CommonComponentsModule,
+    AccountModule,
   ],
   exports:[WriterHomeComponent, ReaderHomeComponent, LecturerHomeComponent, BoardMemberHomeComponent]
 })

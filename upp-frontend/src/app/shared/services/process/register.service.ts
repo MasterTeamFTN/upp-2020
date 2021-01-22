@@ -15,9 +15,9 @@ const ENDPOINTS = {
 
     
     SUBMIT_WRITERS_REGISTRATION: '/registration/public/writer-submit',
-    ANSWER_MEMBERSHIP_REQUEST: '/registration/public/answer-membership-request'
-    
+    ANSWER_MEMBERSHIP_REQUEST: '/registration/public/answer-membership-request',
 
+    SUBMIT_PAYMENT: '/registration/public/submit-payment'
 }
 
 @Injectable({
@@ -63,6 +63,10 @@ export class RegisterService {
 
     answerMembershipRequest(camundaFormSubmitDTO: any): Observable<any> {
         return this.http.post(ENDPOINTS.ANSWER_MEMBERSHIP_REQUEST, camundaFormSubmitDTO);
+    }
+
+    submitPayment(camundaFormSubmitDTO: any): Observable<any> {
+        return this.http.post(ENDPOINTS.SUBMIT_PAYMENT, camundaFormSubmitDTO);
     }
 
 }

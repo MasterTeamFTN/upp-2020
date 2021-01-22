@@ -18,9 +18,7 @@ import rs.ac.uns.ftn.uppservice.dto.request.CamundaFormSubmitDTO;
 import rs.ac.uns.ftn.uppservice.dto.response.FormFieldsDto;
 import rs.ac.uns.ftn.uppservice.dto.request.FormSubmissionDto;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ApiRequestException;
-import rs.ac.uns.ftn.uppservice.service.ConfirmationTokenService;
-import rs.ac.uns.ftn.uppservice.service.ProcessEngineService;
-import rs.ac.uns.ftn.uppservice.service.ReaderService;
+import rs.ac.uns.ftn.uppservice.service.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -50,6 +48,11 @@ public class RegistrationController {
     @Autowired
     private ProcessEngineService processEngineService;
 
+    @Autowired
+    private PaymentService paymentService;
+
+    @Autowired
+    private WriterService writerService;
 
     // NOTE: Don't use this endpoint. Instead use /process/public/start/{name}
     // TODO: remove later
@@ -133,6 +136,15 @@ public class RegistrationController {
     @PostMapping(path = "/public/answer-membership-request")
     public ResponseEntity answerRequest(@RequestBody CamundaFormSubmitDTO data) {
         String processInstanceId = processEngineService.submitDecision(data);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(path = "/public/submit-payment")
+    public ResponseEntity submitPayment(@RequestBody CamundaFormSubmitDTO data) {
+        Task task = taskService.createTaskQuery().processInstanceId(data.getTaskId()).list().get(0);    // data.getTaskId contains processInstanceId here (it is 5:32 in the morning.)
+        writerService.activateMembership(data.getTaskId());
+        paymentService.submitPayment(data, task.getId());
+
         return ResponseEntity.ok().build();
     }
 }

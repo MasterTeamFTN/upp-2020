@@ -18,8 +18,14 @@ public class RegisterReviewsDecisionDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        var boardMemberDecision = (List<String>) execution.getVariable(BOARD_MEMBER_DECISIONS);
+        var boardMemberDecisions = (List<String>) execution.getVariable(BOARD_MEMBER_DECISIONS);
         execution.setVariable(DECISION,
-                boardMemberService.registerDecision(boardMemberDecision, execution.getProcessInstanceId(), execution.getId()));
+                boardMemberService.registerDecision(boardMemberDecisions, execution.getProcessInstanceId(), execution.getId()));
+        int loopCount = 1;
+        if (execution.getVariable(LOOP_COUNT) != null) {
+            loopCount = (int) execution.getVariable(LOOP_COUNT);
+            loopCount++;
+        }
+        execution.setVariable(LOOP_COUNT, loopCount);
     }
 }

@@ -1,3 +1,4 @@
+import { WriterPaymentComponent } from './../components/account/writer-payment/writer-payment.component';
 import { AccountConfirmationComponent } from './../components/account/account-confirmation/account-confirmation.component';
 import { MembershipRequestComponent } from './../components/account/membership-request/membership-request.component';
 import { RegisterComponent } from './../components/account/register/register.component';
@@ -54,6 +55,12 @@ export const routes: Routes = [
     {
         path: 'membershipRequest',
         component: MembershipRequestComponent,
-        // canActivate: [LoggedInGuard]
+        canActivate: [LoggedInGuard]
+    },
+    {
+        path: 'pay',
+        component: WriterPaymentComponent,
+        canActivate: [LoggedInGuard]
     }
+    
 ]

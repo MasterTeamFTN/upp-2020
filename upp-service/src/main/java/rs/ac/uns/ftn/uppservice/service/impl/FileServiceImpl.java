@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.uppservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FileUtils;
+import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.task.Task;
@@ -87,4 +88,11 @@ public class FileServiceImpl implements FileService {
 
         return new UserFileDto(user, convertedFile);
     }
+
+    @Override
+    public void removeFiles(String directoryName) throws IOException {
+        FileUtils.cleanDirectory(new File(Paths.get(PAPERS_LOCATION.toString(), directoryName).toString()));
+    }
+
+
 }

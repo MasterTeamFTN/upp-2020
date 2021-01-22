@@ -24,7 +24,7 @@ export class LoggedInGuard implements CanActivate {
     return new Observable((observer) => {
       this.authQuery.isLoggedIn$.subscribe((isLoggedIn) => {
         if (!isLoggedIn) {
-          this.router.navigate([SiteRoutes.LOGIN]);
+          this.router.navigate([SiteRoutes.LOGIN], { queryParams: { returnUrl: state.url }});
         }
         observer.next(isLoggedIn);
       });

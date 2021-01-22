@@ -26,19 +26,27 @@ export class WriterHomeComponent implements OnInit {
       })
   }
 
-  checkIsMember = () => {
-    var decision = false;
+  get membershipDecision() {
+    var decision = "noData";
     if(this.writer != null) {
-      decision = this.writer.isMember;
+      decision = this.writer.membershipDecision;
     }
     return decision;
   }
 
+  checkIsMember = () => {
+    var isMember = false;
+    if(this.writer != null) {
+      isMember = this.writer.member;
+    }
+    return isMember;
+  }
 
-  hasEnoughFiles = () => {
+
+  hasEnoughFiles = (limit: any) => {
     var hasEnough = false;
     if(this.writer != null) {
-      hasEnough = this.writer.registrationPapers.length >= 2;
+      hasEnough = this.writer.registrationPapers.length >= limit;
     }
     return hasEnough;
   }

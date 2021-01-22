@@ -2,10 +2,12 @@
 
 <ng-template #memberContent>
 
-    <div *ngIf="writer!=null">
-        {{writer.firstName}}
+    <div *ngIf="writer!=null" class="container">
+        {{writer.firstName}} {{writer.lastName}}
+        
+        <h1>This is home page of an writer</h1>
+        <h2>Here goes the book publishing logic</h2>
     </div>
-    <h1>This is home page of an writeeer</h1>
 </ng-template>
 
 <ng-template #nonMemberContent>
@@ -13,25 +15,45 @@
         <mat-card class="writer-info-card">
             <mat-card-header>
                 <div mat-card-avatar class="example-header-image"></div>
-                <mat-card-title>You are not a member yet.</mat-card-title>
-                <mat-card-subtitle>Your papers need to be approved.</mat-card-subtitle>
+                <mat-card-title>You are not a member.</mat-card-title>
             </mat-card-header>
             <mat-divider></mat-divider>
+            <div [ngSwitch]="membershipDecision" *ngIf="writer != undefined">
 
-            <mat-card-content class="writer-card-content" *ngIf="hasEnoughFiles()">
-                <p>You have enough files submitted. Do you want to upload some more?</p>
-                <div class="example-button-row">
-                    <button mat-raised-button color="primary">Submit membership request</button>
-                    <div class="divider"></div>
-                    <button mat-raised-button color="warn">Add more files</button>
+                <div *ngSwitchCase="'notSubmittedYet'">
+                    <mat-card-content class="writer-card-content" *ngIf="writer.registrationPapers.length < 2">
+                        <p>You don't have enough papers submitted. Please provide some more.</p>
+                        <app-load-file (onFileUpload)="submit($event)"></app-load-file>
+                    </mat-card-content>
+                    <mat-card-content class="writer-card-content" *ngIf="writer.registrationPapers.length >= 2">
+                        <p>Thanks for submitting your papers. Now we wait for membership decision.</p>
+                    </mat-card-content>
+                </div>
+                <div *ngSwitchCase="'needMoreInfo'">
+                    <mat-card-content class="writer-card-content" *ngIf="writer.registrationPapers.length < 1">
+                        <p>Board members asked you for some additional papers before they make a decision.</p>
+                        <app-load-file (onFileUpload)="submit($event)"></app-load-file>
+                    </mat-card-content>
+                    <mat-card-content class="writer-card-content" *ngIf="writer.registrationPapers.length >= 1">
+                        <p>Thanks for submitting additional papers. Now we wait for membership decision.</p>
+                    </mat-card-content>
+                </div>
+                <div *ngSwitchCase="'reject'">
+                    <mat-card-content class="writer-card-content">
+                        <p>Your membership request has been rejected.</p>
+                    </mat-card-content>
+                </div>
+                <div *ngSwitchCase="'approve'">
+                    <mat-card-content class="writer-card-content">
+                        <p>Board members have accepted your membership requests.</p>
+                        <app-writer-payment></app-writer-payment>
+                    </mat-card-content>
+                </div>
+                <div *ngSwitchCase="'noData'">
                 </div>
 
-            </mat-card-content>
-            <mat-card-content class="writer-card-content" *ngIf="!hasEnoughFiles()">
-                <p>You don't have enough papers submitted. Please provide some more.</p>
-                <app-load-file (onFileUpload)="submit($event)"></app-load-file>
-            </mat-card-content>
 
+            </div>
             <p>Papers submitted</p>
             <ul *ngFor="let paper of writer.registrationPapers">
                 <li><mat-icon>assignment</mat-icon> {{paper.split('\\').pop()}}</li>

@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.uppservice.service;
 import rs.ac.uns.ftn.uppservice.dto.request.FormSubmissionDto;
 import rs.ac.uns.ftn.uppservice.model.Writer;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface WriterService {
@@ -19,4 +20,12 @@ public interface WriterService {
     void activateAccount(String token);
 
     void delete(Writer writer);
+
+    void notifyAboutRejection(String processInstanceId);
+
+    void notifyAboutAcceptance(String processInstanceId);
+
+    void notifyAboutMoreInfo(String processInstanceId) throws IOException;
+
+    void activateMembership(String processInstanceId);
 }

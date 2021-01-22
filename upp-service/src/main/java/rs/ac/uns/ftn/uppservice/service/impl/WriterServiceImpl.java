@@ -2,9 +2,12 @@ package rs.ac.uns.ftn.uppservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.camunda.bpm.engine.IdentityService;
+import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.TaskService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.uppservice.dto.request.FormSubmissionDto;
+import rs.ac.uns.ftn.uppservice.model.MembershipDecision;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ApiRequestException;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ResourceNotFoundException;
 import rs.ac.uns.ftn.uppservice.model.ConfirmationToken;
@@ -14,12 +17,16 @@ import rs.ac.uns.ftn.uppservice.model.Writer;
 import rs.ac.uns.ftn.uppservice.repository.ConfirmationTokenRepository;
 import rs.ac.uns.ftn.uppservice.repository.GenreRepository;
 import rs.ac.uns.ftn.uppservice.repository.UserRepository;
+import rs.ac.uns.ftn.uppservice.service.FileService;
 import rs.ac.uns.ftn.uppservice.service.MailSenderService;
 import rs.ac.uns.ftn.uppservice.service.WriterService;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static rs.ac.uns.ftn.uppservice.common.constants.Constants.REQUESTED_MEMBER;
 
 @RequiredArgsConstructor
 @Service
@@ -31,6 +38,10 @@ public class WriterServiceImpl implements WriterService {
     private final IdentityService identityService;
     private final ConfirmationTokenRepository confTokenRepository;
     private final MailSenderService mailSenderService;
+    private final FileService fileService;
+
+    private final RuntimeService runtimeService;
+    private final TaskService taskService;
 
     @Override
     public Writer add(List<FormSubmissionDto> formData, String processInstanceId) {
@@ -65,6 +76,7 @@ public class WriterServiceImpl implements WriterService {
 
         writer.setEnabled(false);
         writer.setMember(false);
+        writer.setMembershipDecision(MembershipDecision.NOT_SUBMITTED_YET);
         writer = userRepository.save(writer);
 
         org.camunda.bpm.engine.identity.User camundaUser = identityService.newUser(writer.getUsername());
@@ -122,4 +134,43 @@ public class WriterServiceImpl implements WriterService {
         identityService.deleteUser(writer.getUsername());
         userRepository.delete(writer);
     }
+
+    @Override
+    public void notifyAboutRejection(String processInstanceId) {
+        Writer writer = (Writer) runtimeService.getVariable(processInstanceId, REQUESTED_MEMBER);
+        writer.setMember(false);
+        writer.setMembershipDecision(MembershipDecision.REJECT);
+        userRepository.save(writer);
+        mailSenderService.sendDecisionToWriter(writer.getEmail(), MembershipDecision.REJECT, processInstanceId);
+    }
+
+    @Override
+    public void notifyAboutAcceptance(String processInstanceId) {
+        Writer writer = (Writer) runtimeService.getVariable(processInstanceId, REQUESTED_MEMBER);
+        writer.setMembershipDecision(MembershipDecision.APPROVE);
+        writer = userRepository.save(writer);
+        runtimeService.setVariable(processInstanceId, REQUESTED_MEMBER, writer);
+        mailSenderService.sendDecisionToWriter(writer.getEmail(), MembershipDecision.APPROVE, processInstanceId);
+    }
+
+    @Override
+    public void notifyAboutMoreInfo(String processInstanceId) throws IOException {
+        Writer writer = (Writer) runtimeService.getVariable(processInstanceId, REQUESTED_MEMBER);
+        writer.setMembershipDecision(MembershipDecision.NEED_MORE_INFO);
+        writer.getRegistrationPapers().clear();
+        writer = userRepository.save(writer);
+        runtimeService.setVariable(processInstanceId, REQUESTED_MEMBER, writer);
+        fileService.removeFiles(writer.getUsername());
+
+        mailSenderService.sendDecisionToWriter(writer.getEmail(), MembershipDecision.NEED_MORE_INFO, processInstanceId);
+    }
+
+    @Override
+    public void activateMembership(String processInstanceId) {
+        Writer writer = (Writer) runtimeService.getVariable(processInstanceId, REQUESTED_MEMBER);
+        writer.setMember(true);
+        userRepository.save(writer);
+    }
+
+
 }

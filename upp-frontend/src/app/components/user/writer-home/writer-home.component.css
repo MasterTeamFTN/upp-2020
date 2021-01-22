@@ -27,3 +27,8 @@
     height:auto;
     display:inline-block;
 }
+
+.container {
+    background-image: url('./images/pero.jpg');
+    background-size: cover;
+}

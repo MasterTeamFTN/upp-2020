@@ -11,105 +11,105 @@ import { RegisterService } from 'src/app/shared/services/process/register.servic
 import { SnackbarComponent } from '../../common/snackbar/snackbar.component';
 
 @Component({
-  selector: 'app-membership-request',
-  templateUrl: './membership-request.component.html',
-  styleUrls: ['./membership-request.component.css']
+	selector: 'app-membership-request',
+	templateUrl: './membership-request.component.html',
+	styleUrls: ['./membership-request.component.css']
 })
 export class MembershipRequestComponent implements OnInit {
 
-  private processInstanceId: string;
-  formDto: FormDto;
-  membershipRequestForm: FormGroup;
-  getFieldsSub: Subscription;
-  submitDecisionSub: Subscription;
+	private processInstanceId: string;
+	formDto: FormDto;
+	membershipRequestForm: FormGroup;
+	getFieldsSub: Subscription;
+	submitDecisionSub: Subscription;
 
-  membershipRequestFormArray: FormArray;
-  camundaFormSubmitDto: CamundaFormSubmitDto = new CamundaFormSubmitDto();
-  taskId: string;
-  formName: string = 'Answer to membership request';
+	membershipRequestFormArray: FormArray;
+	camundaFormSubmitDto: CamundaFormSubmitDto = new CamundaFormSubmitDto();
+	taskId: string;
+	formName: string = 'Answer to membership request';
 
-  constructor(private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private registerService: RegisterService,
-    private formBuilder: FormBuilder,
-    private authStore: AuthStore,
-    private snackbar: MatSnackBar,
-    private authQuery: AuthQuery) {
+	constructor(private activatedRoute: ActivatedRoute,
+		private router: Router,
+		private registerService: RegisterService,
+		private formBuilder: FormBuilder,
+		private authStore: AuthStore,
+		private snackbar: MatSnackBar,
+		private authQuery: AuthQuery) {
 
-    this.membershipRequestForm = new FormGroup({
-      membershipRequestFormArray: this.formBuilder.array([])
-    })
+		this.membershipRequestForm = new FormGroup({
+			membershipRequestFormArray: this.formBuilder.array([])
+		})
 
-    this.membershipRequestFormArray = this.membershipRequestForm.controls.membershipRequestFormArray as FormArray;
+		this.membershipRequestFormArray = this.membershipRequestForm.controls.membershipRequestFormArray as FormArray;
 
-    this.activatedRoute.queryParams.subscribe(params => {
-      this.processInstanceId = params['processInstanceId'];
-      this.loadForm();
-    })
+		this.activatedRoute.queryParams.subscribe(params => {
+			this.processInstanceId = params['processInstanceId'];
+			this.loadForm();
+		})
 
-  }
+	}
 
-  ngOnInit() {
-  }
+	ngOnInit() {
+	}
 
-  loadForm() {
-    this.reset();
+	loadForm() {
+		this.reset();
 
-    this.getFieldsSub = this.registerService.getForm(this.processInstanceId).subscribe((response) => {
+		this.getFieldsSub = this.registerService.getForm(this.processInstanceId).subscribe((response) => {
 
-      this.membershipRequestFormArray = this.membershipRequestForm.get('membershipRequestFormArray') as FormArray;
+			this.membershipRequestFormArray = this.membershipRequestForm.get('membershipRequestFormArray') as FormArray;
 
-      Object.keys(response.formFields).forEach((i) => {
-        this.membershipRequestFormArray.push(
-          this.formBuilder.group({
-            actualValue: new FormControl(Array.from(this.getValidators(response.formFields[i]))),
-            id: new FormControl({ value: response.formFields[i].id, disabled: true }),
-            type: new FormControl({ value: response.formFields[i].type, disabled: true }),
-            name: new FormControl({ value: response.formFields[i].label, disabled: true }),
-            validationConstraints: new FormControl({ value: response.formFields[i].validationConstraints, disabled: true })
-          })
-        )
-        this.membershipRequestFormArray.updateValueAndValidity();
-      })
+			Object.keys(response.formFields).forEach((i) => {
+				this.membershipRequestFormArray.push(
+					this.formBuilder.group({
+						actualValue: new FormControl(null, Array.from(this.getValidators(response.formFields[i]))),
+						id: new FormControl({ value: response.formFields[i].id, disabled: true }),
+						type: new FormControl({ value: response.formFields[i].type, disabled: true }),
+						name: new FormControl({ value: response.formFields[i].label, disabled: true }),
+						validationConstraints: new FormControl({ value: response.formFields[i].validationConstraints, disabled: true })
+					})
+				)
+				this.membershipRequestFormArray.updateValueAndValidity();
+			})
 
-      this.formDto = {
-        formName: this.formName,
-        formFields: this.membershipRequestForm.get('membershipRequestFormArray')
-      }
+			this.formDto = {
+				formName: this.formName,
+				formFields: this.membershipRequestForm.get('membershipRequestFormArray')
+			}
 
-      this.authStore.update((state) => ({
-        taskId: response.taskId,
-      }))
-    });
-  }
+			this.authStore.update((state) => ({
+				taskId: response.taskId,
+			}))
+		});
+	}
 
-  getValidators = (formField: any) => {
-    const validatorsArray = [];
-    formField.validationConstraints.forEach((valConstraint) => {
-      validatorsArray.push(this.mapValidator(valConstraint.name, valConstraint.configuration));
-    })
-    return validatorsArray;
-  }
+	getValidators = (formField: any) => {
+		const validatorsArray = [];
+		formField.validationConstraints.forEach((valConstraint) => {
+			validatorsArray.push(this.mapValidator(valConstraint.name, valConstraint.configuration));
+		})
+		return validatorsArray;
+	}
 
-  mapValidator(name: string, configuration: any): any {
-    switch (name.toLowerCase()) {
-      case 'required':
-        return Validators.required;
-      case 'min':
-        return Validators.min(configuration);
-      case 'max':
-        return Validators.max(configuration);
-      case 'minlength':
-        return Validators.minLength(configuration);
-      case 'maxlength':
-        return Validators.maxLength(configuration);
-      case 'pattern':
-        return Validators.pattern(configuration);
-      default:
-        return Validators.required;
-    }
-  }
-  
+	mapValidator(name: string, configuration: any): any {
+		switch (name.toLowerCase()) {
+			case 'required':
+				return Validators.required;
+			case 'min':
+				return Validators.min(configuration);
+			case 'max':
+				return Validators.max(configuration);
+			case 'minlength':
+				return Validators.minLength(configuration);
+			case 'maxlength':
+				return Validators.maxLength(configuration);
+			case 'pattern':
+				return Validators.pattern(configuration);
+			default:
+				return Validators.required;
+		}
+	}
+
 	reset = () => {
 		if (this.formDto != undefined) {
 			this.clearFormArray(this.membershipRequestFormArray);
@@ -125,17 +125,17 @@ export class MembershipRequestComponent implements OnInit {
 		}
 	}
 
-  submit(formSubmitData: any) {
-    this.mapCamundaForm(formSubmitData);
-    console.log(formSubmitData);
+	submit(formSubmitData: any) {
+		this.mapCamundaForm(formSubmitData);
+		console.log(formSubmitData);
 
-    this.submitDecisionSub =
+		this.submitDecisionSub =
 			this.registerService
 				.answerMembershipRequest(this.camundaFormSubmitDto)
 				.subscribe((response) => {
-          
-          this.showSnack(`Decision successfully submitted.`)
-          this.router.navigate(['/']);
+
+					this.showSnack(`Decision successfully submitted.`)
+					this.router.navigate(['/']);
 
 				})
 	}
