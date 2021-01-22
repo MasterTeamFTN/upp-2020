@@ -308,6 +308,9 @@ print('Form for chief editor review is submitted')
 
 #################### SEND NEW VERSION
 
+import sys
+sys.exit()
+
 task_id = get_form(process_id)
 print(f'Pdf file form task ID: {task_id}')
 

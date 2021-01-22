@@ -80,23 +80,24 @@ public class BookServiceImpl implements BookService {
 
         mailSenderService.sendWriterRejectBook(book, reason);
 
-        // TODO FIX: ovde ima neki problem, nece da se obrise knjiga iz baze
-        Book b = bookRepository.findById(book.getId()).get();
-        bookRepository.delete(b);
+        Book b = this.findById(book.getId());
+        b.setIsRejected(true);
+        bookRepository.save(b);
     }
 
     @Override
     public void rejectAfterTimeOut(Book book) {
         mailSenderService.notifyWriterFullBookTimedOut(book);
-        bookRepository.deleteById(book.getId());
+        Book b = this.findById(book.getId());
+        b.setIsRejected(true);
+        bookRepository.save(b);
     }
 
     @Override
     public void reject(Long bookId) {
-        // TODO: Brisanje nece da radi iz nekog razloga
-        // mozda je bolje da napravimo rejected polje u Book
-        // pa da njega samo setujem na true
-        bookRepository.deleteById(bookId);
+        Book b = this.findById(bookId);
+        b.setIsRejected(true);
+        bookRepository.save(b);
     }
 
     @Override
