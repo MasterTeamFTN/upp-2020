@@ -9,6 +9,7 @@ import org.camunda.bpm.engine.task.Task;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import rs.ac.uns.ftn.uppservice.common.constants.Constants;
 import rs.ac.uns.ftn.uppservice.dto.request.CamundaFormSubmitDTO;
 import rs.ac.uns.ftn.uppservice.dto.request.FormSubmissionDto;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ApiRequestException;
@@ -16,6 +17,8 @@ import rs.ac.uns.ftn.uppservice.model.User;
 import rs.ac.uns.ftn.uppservice.service.ProcessEngineService;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.*;
 
 import static java.util.Objects.isNull;
@@ -110,8 +113,15 @@ public class ProcessEngineServiceImpl implements ProcessEngineService {
 
 
     @Override
-    public String submitFile(String taskId, MultipartFile file, File convertedFile) {
+    public String submitFile(String taskId, MultipartFile file) throws IOException {
         Map<String, Object> map = new HashMap<>();
+        String tempPath = FILE_TEMP_FOLDER + file.getOriginalFilename();
+
+        File convertedFile = new File(tempPath);
+        convertedFile.createNewFile();
+        FileOutputStream fos = new FileOutputStream(convertedFile);
+        fos.write(file.getBytes());
+        fos.close();
 
         map.put("pdfFile", convertedFile);
 
@@ -120,8 +130,8 @@ public class ProcessEngineServiceImpl implements ProcessEngineService {
 
         try {
             runtimeService.setVariable(processInstanceId, SUBMIT_FILE_DATA, convertedFile);
+            runtimeService.setVariable(processInstanceId, TEMP_FILE_PATH, tempPath);
             formService.submitTaskForm(taskId, map);
-            System.out.println("SUBMITOVO SAM ALO");
         } catch (FormFieldValidatorException e) {
             throw new ApiRequestException("Failed validation");
         }

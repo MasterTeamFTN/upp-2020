@@ -20,5 +20,7 @@ public final class Constants {
     public static final String WORK_COUNT = "workCount";
     public static final String LOOP_COUNT = "loopCount";
     public static final String SUBMIT_FILE_DATA = "submitFileData";
+    public static final String TEMP_FILE_PATH = "tempFilePath";
 
+    public static final String FILE_TEMP_FOLDER = "src/main/resources/temp/";
 }

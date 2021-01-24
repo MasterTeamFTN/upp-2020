@@ -64,10 +64,8 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public UserFileDto saveBook(String taskId, MultipartFile file) throws IOException {
-        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-        String fileName = file.getOriginalFilename();
-        User user = userRepository.findByUsername(task.getAssignee());
+    public UserFileDto saveBook(String username, File file) throws IOException {
+        User user = userRepository.findByUsername(username);
         Path destinationPath;
 
         if (!isNull(user)) {
@@ -82,11 +80,9 @@ public class FileServiceImpl implements FileService {
             LOGGER.info(String.join(" ", new String[]{"Directory ", destinationFile.getName(), " is created."}));
         }
 
-        Files.copy(file.getInputStream(), destinationPath.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
-        File convertedFile = new File(destinationPath.toString(), fileName);
-        FileUtils.writeByteArrayToFile(convertedFile, file.getBytes());
+        Files.copy(Paths.get(file.getPath()), destinationPath.resolve(file.getName()), StandardCopyOption.REPLACE_EXISTING);
 
-        return new UserFileDto(user, convertedFile);
+        return new UserFileDto(user, file);
     }
 
     @Override
