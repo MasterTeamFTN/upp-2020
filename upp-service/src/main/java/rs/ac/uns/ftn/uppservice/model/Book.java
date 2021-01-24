@@ -72,4 +72,10 @@ public class Book {
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<BetaReaderComment> betaReadersComments;
+
+    @Column(name = "processInstanceId")
+    private String processInstanceId;
+
+    @Column(name = "isReviewSubmitted", nullable = false)
+    private Boolean isReviewSubmitted = false;
 }

@@ -63,9 +63,10 @@
 
                         <!-- ENUM FORM FIELD -->
                         <div *ngSwitchCase="'enum'">
-                            <mat-select placeholder="Decide" [formControl]="field.controls.actualValue">
-                                <mat-option *ngFor="let decisionType of enumKeys" [value]="decisionType">
-                                    {{decisionType}}
+                            <mat-select placeholder="Pick" [formControl]="field.controls.actualValue">
+                                <!-- <mat-option *ngFor="let enumType of enumKeys" [value]="enumType"> -->
+                                <mat-option *ngFor="let enumType of enumKeys; let j=index" value="{{j+1}}">
+                                    {{enumType}}
                                 </mat-option>
                             </mat-select>
                         </div>

@@ -1,47 +1,50 @@
-import { RegisterService } from './../../../shared/services/process/register.service';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CamundaFormSubmitDto } from 'src/app/model/dto/CamundaFormSubmitDto';
 import { FormDto } from 'src/app/model/dto/FormDto';
-import { AuthStore, AuthQuery } from 'src/app/shared';
 import { FormSubmissionDto } from 'src/app/model/dto/FormSubmissionDto';
-import { SnackbarComponent } from '../../common/snackbar/snackbar.component';
+import { AuthStore, AuthQuery } from 'src/app/shared';
+import { PublishingService } from 'src/app/shared/services/process/publishing.service';
+import { RegisterService } from 'src/app/shared/services/process/register.service';
 import Utils from 'src/app/shared/util/utils';
+import { SnackbarComponent } from '../../common/snackbar/snackbar.component';
 
 @Component({
-	selector: 'app-writer-payment',
-	templateUrl: './writer-payment.component.html',
-	styleUrls: ['./writer-payment.component.css']
+	selector: 'app-publish',
+	templateUrl: './publish.component.html',
+	styleUrls: ['./publish.component.css']
 })
-export class WriterPaymentComponent implements OnInit {
-
-	private processInstanceId: string;
-	formDto: FormDto;
-	paymentForm: FormGroup;
-	getFieldsSub: Subscription;
-	submitPaymentSub: Subscription;
-
-	paymentFormArray: FormArray;
-	camundaFormSubmitDto: CamundaFormSubmitDto = new CamundaFormSubmitDto();
-	taskId: string;
+export class PublishComponent implements OnInit {
 
 	constructor(
 		private router: Router,
 		private registerService: RegisterService,
+		private publishingService: PublishingService,
 		private formBuilder: FormBuilder,
 		private authStore: AuthStore,
 		private snackbar: MatSnackBar,
 		private authQuery: AuthQuery) {
-		this.paymentForm = new FormGroup({
-			paymentFormArray: this.formBuilder.array([])
+			
+		this.bookForm = new FormGroup({
+			bookFormArray: this.formBuilder.array([])
 		})
 
-		this.paymentFormArray = this.paymentForm.controls.paymentFormArray as FormArray;
-
+		this.bookFormArray = this.bookForm.controls.bookFormArray as FormArray;
 	}
+
+	private processInstanceId: string;
+	formDto: FormDto;
+	bookForm: FormGroup;
+	getFieldsSub: Subscription;
+	submitBookDataSub: Subscription;
+
+	bookFormArray: FormArray;
+	camundaFormSubmitDto: CamundaFormSubmitDto = new CamundaFormSubmitDto();
+	taskId: string;
+
 
 	ngOnInit() {
 		this.loadForm();
@@ -52,7 +55,7 @@ export class WriterPaymentComponent implements OnInit {
 			this.processInstanceId = processId;
 			this.getFieldsSub = this.registerService.getForm(processId).subscribe((response) => {
 				Object.keys(response.formFields).forEach((i) => {
-					this.paymentFormArray.push(
+					this.bookFormArray.push(
 						this.formBuilder.group({
 							actualValue: new FormControl(null, Array.from(Utils.getValidators(response.formFields[i]))),
 							id: new FormControl({ value: response.formFields[i].id, disabled: true }),
@@ -61,12 +64,12 @@ export class WriterPaymentComponent implements OnInit {
 							validationConstraints: new FormControl({ value: response.formFields[i].validationConstraints, disabled: true })
 						})
 					)
-					this.paymentFormArray.updateValueAndValidity();
+					this.bookFormArray.updateValueAndValidity();
 				})
 
 				this.formDto = {
-					formName: 'Please provide your payment credentials.',
-					formFields: this.paymentForm.get('paymentFormArray')
+					formName: 'Please submit basic book details.',
+					formFields: this.bookForm.get('bookFormArray')
 				}
 
 				this.authStore.update((state) => ({
@@ -76,17 +79,16 @@ export class WriterPaymentComponent implements OnInit {
 		});
 	}
 
-	submit(formSubmitData: any) {
+	submit = (formSubmitData: any) => {
 		this.mapCamundaForm(formSubmitData);
 		console.log(formSubmitData);
 
-		this.submitPaymentSub =
-			this.registerService
-				.submitPayment(this.camundaFormSubmitDto)
+		this.submitBookDataSub =
+			this.publishingService
+				.submit(this.camundaFormSubmitDto)
 				.subscribe((response) => {
 
-					this.showSnack(`You have made a payment for your membership.`)
-					window.location.reload();
+					this.showSnack(`You have successfully submited book data.`)
 					this.router.navigate(['/']);
 
 				})
@@ -98,27 +100,30 @@ export class WriterPaymentComponent implements OnInit {
 			panelClass: ['snackbar-success']
 		});
 	}
-
+	
 	mapCamundaForm = (formSubmitData: any) => {
-		this.camundaFormSubmitDto["taskId"] = this.processInstanceId;
+		this.authQuery.taskId$.subscribe((taskId) => {
+			this.taskId = taskId;
+		});
+
+		this.camundaFormSubmitDto["taskId"] = this.taskId;
 		this.camundaFormSubmitDto["formData"] = []
 		Object.entries(formSubmitData).forEach(([key, value]) => {
 			switch (key) {
-				case 'Card Number':
-					this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("cardNumber", value))
+				case 'Title':
+					this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("FormField_title", value))
 					break;
-				case 'MM / YY':
-					this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("mmyy", value))
+				case 'Genre':
+					this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("FormField_genre", value))
 					break;
-				case 'CVC':
-					this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("cvc", value))
+				case 'Synopsis':
+					this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("FormField_synopsis", value))
 					break;
 				default:
-					this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("cardNumber", value))
+					this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("FormField_title", value))
 			}
 		});
 
 	}
-
 
 }
