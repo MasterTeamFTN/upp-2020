@@ -1,3 +1,4 @@
+import { PublishBookModule } from './../../components/publish-book/publish-book.module';
 import { SnackbarComponent } from 'src/app/components/common/snackbar/snackbar.component';
 import { UserModule } from './../../components/user/user.module';
 import { AccountModule } from './../../components/account/account.module';
@@ -17,7 +18,8 @@ import { RegistrationModule } from 'src/app/components/registration/registration
   imports: [
     UserModule,
     AccountModule,
-    RegistrationModule
+    RegistrationModule,
+    PublishBookModule
     // ovde ce biti Home, Admin, User module
   ],
   exports: [],

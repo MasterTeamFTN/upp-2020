@@ -11,6 +11,7 @@ import { StartRegistrationComponent } from '../components/registration/start-reg
 import { LoadFileComponent } from '../components/common/load-file/load-file.component';
 import { LoggedInGuard } from './guards/logged-in.guard';
 import { WriterGuard } from './guards/writer.guard';
+import { PublishComponent } from '../components/publish-book/publish/publish.component';
 
 export const routes: Routes = [
     {
@@ -57,6 +58,11 @@ export const routes: Routes = [
         path: 'membershipRequest',
         component: MembershipRequestComponent,
         canActivate: [LoggedInGuard, BoardMemberGuard]
+    },
+    {
+        path: 'publishBook',
+        component: PublishComponent,
+        // canActivate: [LoggedInGuard]
     }
     
 ]

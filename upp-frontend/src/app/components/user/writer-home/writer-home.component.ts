@@ -1,61 +1,115 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog, MatSnackBar, MatTabChangeEvent, MatTableDataSource } from '@angular/material';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { BookDto } from 'src/app/model/dto/BookDto';
+import { AuthStore } from 'src/app/shared';
+import { BookService } from 'src/app/shared/services/book/book.service';
+import { PublishingService } from 'src/app/shared/services/process/publishing.service';
 import { WriterService } from 'src/app/shared/services/writer/writer.service';
+import { SnackbarComponent } from '../../common/snackbar/snackbar.component';
+import { BookDataDialog } from './dialog/book-data-dialog';
 
 @Component({
-  selector: 'app-writer-home',
-  templateUrl: './writer-home.component.html',
-  styleUrls: ['./writer-home.component.css']
+	selector: 'app-writer-home',
+	templateUrl: './writer-home.component.html',
+	styleUrls: ['./writer-home.component.css']
 })
 export class WriterHomeComponent implements OnInit {
 
-  constructor(
-    private writerService: WriterService
-  ) { }
+	constructor(
+		private writerService: WriterService,
+		private publishingService: PublishingService,
+		private snackbar: MatSnackBar,
+		private router: Router,
+		private authStore: AuthStore,
+		private bookService: BookService,
+		public dialog: MatDialog
+	) { }
 
-  ngOnInit() {
-    this.loadWriter();
-  }
+	ngOnInit() {
+		this.loadWriter();
+	}
 
-  getWriterSub: Subscription;
-  writer: any;
+	publishingSub: Subscription;
+	getWriterSub: Subscription;
+	writer: any;
 
-  loadWriter = () => {
-      this.getWriterSub = this.writerService.getWriter().subscribe((writer) => {
-        this.writer = writer;
-      })
-  }
-
-  get membershipDecision() {
-    var decision = "noData";
-    if(this.writer != null) {
-      decision = this.writer.membershipDecision;
-    }
-    return decision;
-  }
-
-  checkIsMember = () => {
-    var isMember = false;
-    if(this.writer != null) {
-      isMember = this.writer.member;
-    }
-    return isMember;
-  }
+	getMyBooksSub: Subscription;
+	displayedColumns: string[] = ['Title', 'Author', 'Genre', 'IsPublished'];
+	dataSource = new MatTableDataSource<BookDto>([]);
 
 
-  hasEnoughFiles = (limit: any) => {
-    var hasEnough = false;
-    if(this.writer != null) {
-      hasEnough = this.writer.registrationPapers.length >= limit;
-    }
-    return hasEnough;
-  }
+	loadWriter = () => {
+		this.getWriterSub = this.writerService.getWriter().subscribe((writer) => {
+			this.writer = writer;
+		})
+	}
+
+	get membershipDecision() {
+		var decision = "noData";
+		if (this.writer != null) {
+			decision = this.writer.membershipDecision;
+		}
+		return decision;
+	}
+
+	checkIsMember = () => {
+		var isMember = false;
+		if (this.writer != null) {
+			isMember = this.writer.member;
+		}
+		return isMember;
+	}
 
 
-  submit(eventMsg: any) {
-    console.log("uhvation event")
-    alert(eventMsg);
-    this.loadWriter()
-  }
-  
+	hasEnoughFiles = (limit: any) => {
+		var hasEnough = false;
+		if (this.writer != null) {
+			hasEnough = this.writer.registrationPapers.length >= limit;
+		}
+		return hasEnough;
+	}
+
+	publishBook = () => {
+		this.publishingSub = this.publishingService.startPublishing().subscribe((response) => {
+			this.snackbar.openFromComponent(SnackbarComponent, {
+				data: `Camunda process with id ${response} successfully started!`,
+				panelClass: ['snackbar-success']
+			});
+			this.authStore.update((state) => ({
+				processId: response,
+			}))
+			this.router.navigate(['publishBook'])
+		});
+	}
+
+	submit(eventMsg: any) {
+		console.log("uhvation event")
+		alert(eventMsg);
+		this.loadWriter()
+	}
+
+	onLinkClick = (event: MatTabChangeEvent) => {
+		console.log({ event });
+		if (event.tab.textLabel === 'My books') {
+			this.fetchBooks();
+		}
+	}
+
+
+	fetchBooks = () => {
+		this.getMyBooksSub = this.bookService.getBooks().subscribe(data => {
+			this.dataSource = new MatTableDataSource<BookDto>(data);
+		})
+	}
+
+	submitMoreData = (book: BookDto) => {
+		const dialogRef = this.dialog.open(BookDataDialog, {
+			width: '500px',
+			data: book
+		});
+	}
+	
+
 }

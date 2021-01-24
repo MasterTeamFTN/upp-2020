@@ -1,8 +1,19 @@
 
-<app-writer-home *ngIf="isWriter"></app-writer-home>
-<app-reader-home *ngIf="isReader"></app-reader-home> 
-<app-lecturer-home *ngIf="isLecturer"></app-lecturer-home>
-<app-board-member-home *ngIf="isBoardMember"></app-board-member-home>
+<div *ngIf="isWriter">
+	<app-writer-home ></app-writer-home>
+</div>
+<div *ngIf="isReader">
+	<app-reader-home></app-reader-home> 
+</div>
+<div *ngIf="isLecturer">
+	<app-lecturer-home></app-lecturer-home>
+</div>
+<div *ngIf="isBoardMember">
+	<app-board-member-home></app-board-member-home>
+</div>
+<div *ngIf="isChiefEditor">
+	<app-chief-editor-home></app-chief-editor-home>
+</div>
 
 <div class="container" *ngIf="noRole">
     <h1>home page</h1>

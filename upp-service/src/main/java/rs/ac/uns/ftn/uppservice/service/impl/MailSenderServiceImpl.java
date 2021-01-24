@@ -100,16 +100,16 @@ public class MailSenderServiceImpl implements MailSenderService {
 
     @Override
     public void sendChiefEditorNewBookNotification(User chiefEditor, Book book) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setSubject("New book has been added - UPP");
-        message.setFrom("UPP-App");
-        message.setTo(chiefEditor.getEmail());
-        String author = book.getWriter().getFirstName() + " " + book.getWriter().getLastName();
-        message.setText("New book - " + book.getTitle() + " by " + author + " has been added." +
-                "\nTitle: " + book.getTitle() +
-                "\nGenre: " + book.getGenre().getName() +
-                "\nSynopsis: " + book.getSynopsis());
-        mailSender.send(message);
+//        SimpleMailMessage message = new SimpleMailMessage();
+//        message.setSubject("New book has been added - UPP");
+//        message.setFrom("UPP-App");
+//        message.setTo(chiefEditor.getEmail());
+//        String author = book.getWriter().getFirstName() + " " + book.getWriter().getLastName();
+//        message.setText("New book - " + book.getTitle() + " by " + author + " has been added." +
+//                "\nTitle: " + book.getTitle() +
+//                "\nGenre: " + book.getGenre().getName() +
+//                "\nSynopsis: " + book.getSynopsis());
+//        mailSender.send(message);
     }
 
     @Override
@@ -124,12 +124,12 @@ public class MailSenderServiceImpl implements MailSenderService {
 
     @Override
     public void notifyWriterToSendFullBook(Book book) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setSubject("Book accepted - UPP");
-        message.setFrom("UPP-App");
-        message.setTo(book.getWriter().getEmail());
-        message.setText("Book - " + book.getTitle() + " has been accepted. \nPlease send full version");
-        mailSender.send(message);
+//        SimpleMailMessage message = new SimpleMailMessage();
+//        message.setSubject("Book accepted - UPP");
+//        message.setFrom("UPP-App");
+//        message.setTo(book.getWriter().getEmail());
+//        message.setText("Book - " + book.getTitle() + " has been accepted. \nPlease send full version");
+//        mailSender.send(message);
     }
 
     @Override
