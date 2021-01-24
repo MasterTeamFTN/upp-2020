@@ -2,7 +2,6 @@ package rs.ac.uns.ftn.uppservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FileUtils;
-import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.task.Task;

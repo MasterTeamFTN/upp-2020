@@ -1,58 +1,39 @@
 package rs.ac.uns.ftn.uppservice.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.camunda.bpm.engine.FormService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.exception.NullValueException;
 import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
-import org.camunda.bpm.engine.impl.form.validator.FormFieldValidatorException;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.uppservice.dto.request.CamundaFormSubmitDTO;
 import rs.ac.uns.ftn.uppservice.dto.response.FormFieldsDto;
-import rs.ac.uns.ftn.uppservice.dto.request.FormSubmissionDto;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ApiRequestException;
 import rs.ac.uns.ftn.uppservice.service.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import static java.util.Objects.isNull;
 
 @RestController
 @RequestMapping(value = "/registration", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor
 public class RegistrationController {
 
-    @Autowired
-    private RuntimeService runtimeService;
+    private final RuntimeService runtimeService;
+    private final TaskService taskService;
+    private final FormService formService;
+    private final ReaderService readerService;
+    private final ConfirmationTokenService confTokenService;
+    private final ProcessEngineService processEngineService;
+    private final PaymentService paymentService;
+    private final WriterService writerService;
 
-    @Autowired
-    private TaskService taskService;
-
-    @Autowired
-    private FormService formService;
-
-    @Autowired
-    private ReaderService readerService;
-
-    @Autowired
-    private ConfirmationTokenService confTokenService;
-
-    @Autowired
-    private ProcessEngineService processEngineService;
-
-    @Autowired
-    private PaymentService paymentService;
-
-    @Autowired
-    private WriterService writerService;
 
     // NOTE: Don't use this endpoint. Instead use /process/public/start/{name}
     // TODO: remove later

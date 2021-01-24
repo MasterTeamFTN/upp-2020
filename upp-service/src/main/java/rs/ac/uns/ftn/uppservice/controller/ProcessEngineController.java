@@ -2,7 +2,6 @@ package rs.ac.uns.ftn.uppservice.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.camunda.bpm.engine.FormService;
-import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.exception.NullValueException;
@@ -37,7 +36,6 @@ public class ProcessEngineController {
     private final FormService formService;
     private final RuntimeService runtimeService;
     private final ProcessEngineService processEngineService;
-    private final IdentityService identityService;
 
 
     /**

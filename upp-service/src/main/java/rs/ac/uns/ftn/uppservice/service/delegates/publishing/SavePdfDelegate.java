@@ -19,7 +19,7 @@ public class SavePdfDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         File pdfFile = (File) execution.getVariable(Constants.SUBMIT_FILE_DATA);
-        Book book = (Book) execution.getVariable("book");
+        Book book = (Book) execution.getVariable(Constants.BOOK);
         String tempPath = (String) execution.getVariable(Constants.TEMP_FILE_PATH);
 
         fileService.saveBook(book.getWriter().getUsername(), pdfFile);

@@ -1,6 +1,6 @@
 package rs.ac.uns.ftn.uppservice.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -15,10 +15,10 @@ import javax.mail.internet.MimeMessage;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class MailSenderServiceImpl implements MailSenderService {
 
-    @Autowired
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
 
     @Override
     public void sendRegistrationMail(ConfirmationToken token) {

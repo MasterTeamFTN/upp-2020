@@ -1,8 +1,7 @@
 package rs.ac.uns.ftn.uppservice.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.camunda.bpm.engine.IdentityService;
-import org.camunda.bpm.engine.TaskService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.uppservice.dto.request.FormSubmissionDto;
@@ -24,31 +23,16 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class ReaderServiceImpl implements ReaderService {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private ReaderRepository readerRepository;
-
-    @Autowired
-    private ConfirmationTokenRepository confTokenRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private MailSenderService mailSenderService;
-
-    @Autowired
-    private TaskService taskService;
-
-    @Autowired
-    private IdentityService identityService;
-
-    @Autowired
-    private GenreRepository genreRepository;
+    private final UserRepository userRepository;
+    private final ReaderRepository readerRepository;
+    private final ConfirmationTokenRepository confTokenRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final MailSenderService mailSenderService;
+    private final IdentityService identityService;
+    private final GenreRepository genreRepository;
 
 
     @Override
