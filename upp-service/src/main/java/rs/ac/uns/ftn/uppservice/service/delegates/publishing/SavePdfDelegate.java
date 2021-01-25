@@ -22,7 +22,7 @@ public class SavePdfDelegate implements JavaDelegate {
         Book book = (Book) execution.getVariable(Constants.BOOK);
         String tempPath = (String) execution.getVariable(Constants.TEMP_FILE_PATH);
 
-        fileService.saveBook(book.getWriter().getUsername(), pdfFile);
+        fileService.saveFile(book.getWriter().getUsername(), execution.getProcessInstanceId(), pdfFile, false);
 
         File tempFile = new File(tempPath);
         tempFile.delete();

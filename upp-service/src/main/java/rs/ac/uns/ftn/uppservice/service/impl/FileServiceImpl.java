@@ -27,48 +27,21 @@ public class FileServiceImpl implements FileService {
     private final Path PAPERS_LOCATION = Paths.get("src/main/resources/papers");
     private final static Logger LOGGER = Logger.getLogger(FileServiceImpl.class.getName());
 
-    private final TaskService taskService;
     private final UserRepository userRepository;
     private final RuntimeService runtimeService;
 
     @Override
-    public UserFileDto saveFile(String taskId, MultipartFile file) throws IOException {
-        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-        String fileName = file.getOriginalFilename();
-        User user = userRepository.findByUsername(task.getAssignee());
-        Path destinationPath;
-
-        if (!isNull(user)) {
-            destinationPath = Paths.get(PAPERS_LOCATION.toString(), user.getUsername());
-            user.getRegistrationPapers().add(destinationPath.resolve(fileName).toString());
-            user = userRepository.save(user);
-            runtimeService.setVariable(task.getProcessInstanceId(), REQUESTED_MEMBER, user);
-        } else {
-            destinationPath = Paths.get(PAPERS_LOCATION.toString());
-        }
-        File destinationFile = new File(destinationPath.toString());
-
-        if (!destinationFile.exists()) {
-            Files.createDirectories(destinationPath);
-            LOGGER.info(String.join(" ", new String[]{"Directory ", destinationFile.getName(), " is created."}));
-        }
-
-
-        Files.copy(file.getInputStream(), destinationPath.resolve(fileName));
-        File convertedFile = new File(destinationPath.toString(), fileName);
-        FileUtils.writeByteArrayToFile(convertedFile, file.getBytes());
-
-
-        return new UserFileDto(user, convertedFile);
-    }
-
-    @Override
-    public UserFileDto saveBook(String username, File file) throws IOException {
+    public void saveFile(String username, String processInstanceId, File file, boolean isRegistration) throws IOException {
         User user = userRepository.findByUsername(username);
         Path destinationPath;
 
         if (!isNull(user)) {
             destinationPath = Paths.get(PAPERS_LOCATION.toString(), user.getUsername());
+            if(isRegistration) {
+                user.getRegistrationPapers().add(destinationPath.resolve(file.getName()).toString());
+                user = userRepository.save(user);
+                runtimeService.setVariable(processInstanceId, REQUESTED_MEMBER, user);
+            }
         } else {
             destinationPath = Paths.get(PAPERS_LOCATION.toString());
         }
@@ -80,9 +53,29 @@ public class FileServiceImpl implements FileService {
         }
 
         Files.copy(Paths.get(file.getPath()), destinationPath.resolve(file.getName()), StandardCopyOption.REPLACE_EXISTING);
-
-        return new UserFileDto(user, file);
     }
+
+//    @Override
+//    public UserFileDto saveBook(String username, File file) throws IOException {
+//        User user = userRepository.findByUsername(username);
+//        Path destinationPath;
+//
+//        if (!isNull(user)) {
+//            destinationPath = Paths.get(PAPERS_LOCATION.toString(), user.getUsername());
+//        } else {
+//            destinationPath = Paths.get(PAPERS_LOCATION.toString());
+//        }
+//        File destinationFile = new File(destinationPath.toString());
+//
+//        if (!destinationFile.exists()) {
+//            Files.createDirectories(destinationPath);
+//            LOGGER.info(String.join(" ", new String[]{"Directory ", destinationFile.getName(), " is created."}));
+//        }
+//
+//        Files.copy(Paths.get(file.getPath()), destinationPath.resolve(file.getName()), StandardCopyOption.REPLACE_EXISTING);
+//
+//        return new UserFileDto(user, file);
+//    }
 
     @Override
     public void removeFiles(String directoryName) throws IOException {
