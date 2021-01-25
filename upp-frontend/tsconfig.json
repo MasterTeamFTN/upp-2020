@@ -19,6 +19,7 @@
       "dom"
     ],
     "skipLibCheck": true
+    
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
