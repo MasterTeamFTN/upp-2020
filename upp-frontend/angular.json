@@ -126,6 +126,7 @@
   },
   "defaultProject": "upp-frontend",
   "cli": {
+    "analytics": false,
     "defaultCollection": "@datorama/akita"
   }
 }

@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.uppservice.common.constants.Constants;
+import rs.ac.uns.ftn.uppservice.dto.request.CamundaFormSubmitDTO;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ApiRequestException;
 import rs.ac.uns.ftn.uppservice.service.ProcessEngineService;
 
@@ -30,7 +31,7 @@ public class BookController {
         ProcessInstance pi;
 
         try {
-            pi = runtimeService.startProcessInstanceByKey(Constants.PROCESS_PUBLISH_BOOK);
+            pi = runtimeService.startProcessInstanceByKey(Constants.PLAGIARISM_PROCESS);
         } catch (NullValueException e) {
             throw new ApiRequestException("Process with name doesn't exist!");
         }
@@ -40,7 +41,25 @@ public class BookController {
 
         return new ResponseEntity<>(pi.getId(), HttpStatus.OK);
     }
+    @GetMapping(path = "/plagiarism-start-process")
+    @PreAuthorize("hasRole('ROLE_WRITER')")
+    public ResponseEntity<String> startPlagiarismProcess() {
+        ProcessInstance pi;
 
+        try {
+            pi = runtimeService.startProcessInstanceByKey(Constants.PLAGIARISM_PROCESS);
+        } catch (NullValueException e) {
+            throw new ApiRequestException("Process with name doesn't exist!");
+        }
+        return new ResponseEntity<>(pi.getId(), HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/submit-editors")
+    @PreAuthorize("hasRole('ROLE_CHIEF_EDITOR')")
+    public ResponseEntity submitSendToBetaReadersForm(@RequestBody CamundaFormSubmitDTO data) {
+        String processInstanceId = processEngineService.submitForm(data);
+        return ResponseEntity.ok().build();
+    }
 //    @PostMapping(path = "/init-book-submit")
 //    @PreAuthorize("hasRole('ROLE_WRITER')")
 //    public ResponseEntity submitReaderRegistrationData(@RequestBody CamundaFormSubmitDTO data) {

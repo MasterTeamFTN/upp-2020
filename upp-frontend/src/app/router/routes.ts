@@ -9,6 +9,7 @@ import { StartRegistrationComponent } from '../components/registration/start-reg
 import { LoadFileComponent } from '../components/common/load-file/load-file.component';
 import { LoggedInGuard } from './guards/logged-in.guard';
 import { WriterGuard } from './guards/writer.guard';
+import { PlagiarismComponent } from '../components/user/plagiarism-page/plagiarism.component';
 
 export const routes: Routes = [
     {
@@ -44,6 +45,11 @@ export const routes: Routes = [
     {
         path: 'profile',
         component: ProfileComponent,
+        // canActivate: []
+    },
+    {
+        path: 'plagiarism',
+        component: PlagiarismComponent,
         // canActivate: []
     },
     {

@@ -30,4 +30,8 @@ public interface MailSenderService {
     void sendRejectBook(Book book);
 
     void sendBoardMemberNotification(List<String> emails, ConfirmationToken token, List<WriterPaperResourceDto> userPapers);
+
+	void submitPlagiarismForm(ChiefEditor chiefEditor, Book originalBook, Book plagiat);
+
+	void sendChiefEditorPlagiarismNotification(ChiefEditor chiefEditor, Book originalBook, Book plagiat);
 }

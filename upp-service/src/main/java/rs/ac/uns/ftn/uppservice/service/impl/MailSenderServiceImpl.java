@@ -46,7 +46,7 @@ public class MailSenderServiceImpl implements MailSenderService {
                 "\nGenre: " + book.getGenre().getName() +
                 "\nSynopsis: " + book.getSynopsis());
         mailSender.send(message);
-    }
+    }   
 
     @Override
     public void sendWriterRejectBook(Book book, String reason) {
@@ -186,5 +186,23 @@ public class MailSenderServiceImpl implements MailSenderService {
         message.setText("Your book " + book.getTitle() + " has been rejected! You didn't make changes in time.");
         mailSender.send(message);
     }
+
+	@Override
+	public void submitPlagiarismForm(ChiefEditor chiefEditor, Book originalBook, Book plagiat) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void sendChiefEditorPlagiarismNotification(ChiefEditor chiefEditor, Book originalBook, Book plagiat) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("New report has been added");
+        message.setFrom("UPP-App");
+        message.setTo(chiefEditor.getEmail());
+        String author = plagiat.getWriter().getFirstName() + " " + plagiat.getWriter().getLastName();
+        message.setText("Book - " + plagiat.getTitle() + " by " + author + " has been reported as plagiat.");
+        System.out.println(message);
+        //mailSender.send(message);
+	}
 
 }

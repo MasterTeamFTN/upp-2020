@@ -10,6 +10,7 @@ public interface BookService {
 
     Book findById(Long id);
     Book submitInitForm(List<FormSubmissionDto> formData, String processInstanceId);
+    void submitPlagiarismForm(List<FormSubmissionDto> formData, String processInstanceId);
     void rejectFirstReview(List<FormSubmissionDto> formData, Book book);
     void rejectAfterTimeOut(Book book);
     void reject(Long bookId);

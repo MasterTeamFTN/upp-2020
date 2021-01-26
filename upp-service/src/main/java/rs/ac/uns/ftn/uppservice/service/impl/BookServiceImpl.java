@@ -8,6 +8,7 @@ import rs.ac.uns.ftn.uppservice.dto.request.FormSubmissionDto;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ResourceNotFoundException;
 import rs.ac.uns.ftn.uppservice.model.*;
 import rs.ac.uns.ftn.uppservice.repository.BookRepository;
+import rs.ac.uns.ftn.uppservice.repository.ComplaintRepository;
 import rs.ac.uns.ftn.uppservice.repository.GenreRepository;
 import rs.ac.uns.ftn.uppservice.repository.UserRepository;
 import rs.ac.uns.ftn.uppservice.service.BookService;
@@ -27,6 +28,7 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final GenreRepository genreRepository;
+    private final ComplaintRepository complaintRepository;
     private final UserRepository userRepository;
     private final UserService userService;
     private final MailSenderService mailSenderService;
@@ -50,6 +52,40 @@ public class BookServiceImpl implements BookService {
         runtimeService.setVariable(processInstanceId, "book", book);
 
         return book;
+    }
+    @Override
+    public void submitPlagiarismForm(List<FormSubmissionDto> formData, String processInstanceId) {
+    	Book originalBook = null;
+    	Book plagiat = null;
+
+    	for (FormSubmissionDto field : formData) {
+    		System.out.println(field.getFieldId());
+            if(field.getFieldId().equals("FormField_originalBook")) {
+                originalBook = bookRepository.findById(Long.parseLong((String) field.getFieldValue()))
+                        .orElseThrow(() -> new ResourceNotFoundException("Book with title '" + field.getFieldValue() + "' doesn't exist"));
+            }
+            if(field.getFieldId().equals("FormField_plagiarismBook")) {
+            	plagiat = bookRepository.findById(Long.parseLong((String) field.getFieldValue()))
+                        .orElseThrow(() -> new ResourceNotFoundException("Book with title '" + field.getFieldValue() + "' doesn't exist"));
+            }
+
+        }
+        ChiefEditor chiefEditor = userService.getChiefEditor();
+
+        mailSenderService.sendChiefEditorPlagiarismNotification(chiefEditor, originalBook, plagiat);
+        Complaint complaint = new Complaint();
+        complaint.setQuestionedBook(plagiat);
+        Set<Book>originalBooks = new HashSet<Book>();
+        originalBooks.add(originalBook);
+        complaint.setOriginalBooks(originalBooks);
+        complaint.setChiefEditor(chiefEditor);
+        //complaintRepository.save(complaint);
+        plagiat.setComplaint(complaint);
+        bookRepository.save(plagiat);        
+        runtimeService.setVariable(processInstanceId, "firstReviewAssignee", chiefEditor.getUsername());
+        runtimeService.setVariable(processInstanceId, "originalBook", originalBook);
+        runtimeService.setVariable(processInstanceId, "plagiatBook", plagiat);
+
     }
 
     private Book createNewBook(List<FormSubmissionDto> formData) {

@@ -21,6 +21,7 @@ public class SaveChiefEditorsReportAndNotifyDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
+
         List<FormSubmissionDto> form = (List<FormSubmissionDto>) execution.getVariable("formData");
         String comment = (String) form.get(0).getFieldValue();
         Book book = (Book) execution.getVariable("book");

@@ -21,4 +21,6 @@ public final class Constants {
     public static final String WORK_COUNT = "workCount";
     public static final String SUBMIT_FILE_DATA = "submitFileData";
 
+	public static final String PLAGIARISM_PROCESS = "Plagiarism_Process";
+
 }

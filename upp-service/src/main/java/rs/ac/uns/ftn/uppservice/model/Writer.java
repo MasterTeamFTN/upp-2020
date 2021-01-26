@@ -28,4 +28,5 @@ public class Writer extends User {
     private boolean isMember;
 
     //Todo add pdf files
+    
 }
