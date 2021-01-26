@@ -46,7 +46,5 @@ INSERT INTO writer_genre (writer_id, genre_id) VALUES (1, 1);
 INSERT INTO writer_genre (writer_id, genre_id) VALUES (1, 2);
 INSERT INTO reader_genre (reader_id, genre_id) VALUES (3, 7);
 
-INSERT INTO books (id, is_published,is_plagiarized,  num_of_pages, title, genre_id, writer_id, synopsis)
-VALUES (1, true, false, 250, "First book", 1, 1, "")
-INSERT INTO books (id, is_published,is_plagiarized,  num_of_pages, title, genre_id, writer_id, synopsis)
-VALUES (2, true, false, 250, "Plagiat", 1, 2, "")
+INSERT INTO books (id, is_published,is_plagiarized,  num_of_pages, title, genre_id, writer_id, synopsis, year) VALUES (1, true, false, 250, "First book", 1, 1, "", 1111)
+INSERT INTO books (id, is_published,is_plagiarized,  num_of_pages, title, genre_id, writer_id, synopsis, year) VALUES (2, true, false, 250, "Plagiat", 1, 1, "", 1111)

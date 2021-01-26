@@ -79,9 +79,9 @@ public class BookServiceImpl implements BookService {
         originalBooks.add(originalBook);
         complaint.setOriginalBooks(originalBooks);
         complaint.setChiefEditor(chiefEditor);
-        //complaintRepository.save(complaint);
+        complaint = complaintRepository.save(complaint);
         plagiat.setComplaint(complaint);
-        bookRepository.save(plagiat);        
+        bookRepository.save(plagiat);
         runtimeService.setVariable(processInstanceId, "firstReviewAssignee", chiefEditor.getUsername());
         runtimeService.setVariable(processInstanceId, "originalBook", originalBook);
         runtimeService.setVariable(processInstanceId, "plagiatBook", plagiat);
