@@ -42,7 +42,6 @@ public class BookController {
         return new ResponseEntity<>(pi.getId(), HttpStatus.OK);
     }
     @GetMapping(path = "/plagiarism-start-process")
-    @PreAuthorize("hasRole('ROLE_WRITER')")
     public ResponseEntity<String> startPlagiarismProcess() {
         ProcessInstance pi;
 
@@ -57,6 +56,12 @@ public class BookController {
     @PostMapping(path = "/submit-editors")
     @PreAuthorize("hasRole('ROLE_CHIEF_EDITOR')")
     public ResponseEntity submitSendToBetaReadersForm(@RequestBody CamundaFormSubmitDTO data) {
+        String processInstanceId = processEngineService.submitForm(data);
+        return ResponseEntity.ok().build();
+    }
+    @PostMapping(path = "/submit-note")
+    @PreAuthorize("hasRole('ROLE_EDITOR')")
+    public ResponseEntity submitNote(@RequestBody CamundaFormSubmitDTO data) {
         String processInstanceId = processEngineService.submitForm(data);
         return ResponseEntity.ok().build();
     }

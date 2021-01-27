@@ -85,6 +85,8 @@ public class BookServiceImpl implements BookService {
         runtimeService.setVariable(processInstanceId, "firstReviewAssignee", chiefEditor.getUsername());
         runtimeService.setVariable(processInstanceId, "originalBook", originalBook);
         runtimeService.setVariable(processInstanceId, "plagiatBook", plagiat);
+        runtimeService.setVariable(processInstanceId, "complaint", complaint);
+
 
     }
 
@@ -227,5 +229,28 @@ public class BookServiceImpl implements BookService {
         book.setIsPublished(true);
         bookRepository.save(book);
     }
+
+	@Override
+	public void addEditorsNotesComments(Long plagiatId, Long originald, String editorUsername, String comment) {
+		Book book = this.findById(plagiatId);
+		Book original = this.findById(originald);
+
+        CompliantAssignment assigment = new CompliantAssignment();
+        assigment.setNotes(comment);
+        Complaint complaint = book.getComplaint();
+        complaint.getCompliantAssignments().add(assigment);
+        assigment.setComplaint(book.getComplaint());
+        complaint = complaintRepository.save(complaint);
+        bookRepository.save(book);
+		
+	}
+
+	@Override
+	public void notifyChiefEditor() {
+		ChiefEditor chiefEditor = userService.getChiefEditor();
+        mailSenderService.sendChiefEditorNotReview(chiefEditor);
+        
+		
+	}
 
 }

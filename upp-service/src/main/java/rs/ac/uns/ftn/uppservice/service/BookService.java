@@ -20,4 +20,6 @@ public interface BookService {
     Suggestion addLecturersComments(Long bookId, String comment);
     Suggestion addChiefEditorsComments(Long bookId, String comment);
     void publish(Long bookId);
+	void addEditorsNotesComments(Long plagiatId, Long originald, String editorUsername, String comment);
+	void notifyChiefEditor();
 }
