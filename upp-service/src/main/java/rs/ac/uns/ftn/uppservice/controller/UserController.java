@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import rs.ac.uns.ftn.uppservice.dto.request.CamundaFormSubmitDTO;
 import rs.ac.uns.ftn.uppservice.dto.request.PaperDto;
+import rs.ac.uns.ftn.uppservice.dto.response.ReaderDto;
 import rs.ac.uns.ftn.uppservice.dto.response.UserDTO;
 import rs.ac.uns.ftn.uppservice.dto.response.WriterDto;
 import rs.ac.uns.ftn.uppservice.service.ProcessEngineService;
@@ -34,5 +35,10 @@ public class UserController {
     @GetMapping("/{id}/asWriter")
     public ResponseEntity<WriterDto> writer(@PathVariable Long id) {
         return new ResponseEntity<>(userService.getWriter(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/asReader")
+    public ResponseEntity<ReaderDto> reader(@PathVariable Long id) {
+        return new ResponseEntity<>(userService.getReader(id), HttpStatus.OK);
     }
 }

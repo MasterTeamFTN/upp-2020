@@ -63,6 +63,9 @@ public class Book {
     @Column(name = "isPublished")
     private Boolean isPublished;
 
+    @Column(name = "isRejected", nullable = false)
+    private Boolean isRejected = false;
+
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Suggestion> suggestions;
 

@@ -1,1 +1,12 @@
-<p>reader-home works!</p>
+<div *ngIf="reader!=null" class="mat-card-cvr">
+    <mat-card class="reader-info-card">
+        <mat-card-header>
+            <div mat-card-avatar class="member-header-image"></div>
+            <mat-card-title>You are a registered reader. {{reader.firstName}} {{reader.lastName}}</mat-card-title>
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <mat-card-content class="reader-card-content">
+            <p>Here goes the book publishing logic.</p>
+        </mat-card-content>
+    </mat-card>
+</div>

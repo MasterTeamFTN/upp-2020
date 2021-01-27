@@ -1,6 +1,5 @@
 package rs.ac.uns.ftn.uppservice.service.impl;
 
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 
 @Service
-@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
     protected final Log LOGGER = LogFactory.getLog(getClass());
@@ -56,7 +54,6 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() ->
                         new UsernameNotFoundException(
                                 String.format("No user found with username '%s'.", username)));
-
     }
 
 

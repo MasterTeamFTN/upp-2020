@@ -7,18 +7,17 @@ import org.springframework.stereotype.Component;
 
 import static rs.ac.uns.ftn.uppservice.common.constants.Constants.WORK_COUNT;
 
-@RequiredArgsConstructor
 @Component
 public class FileUploadValidateDelegate implements JavaDelegate {
 
 
     @Override
-    public void execute(DelegateExecution delegateExecution) {
+    public void execute(DelegateExecution execution) {
         int workCount = 1;
-        if (delegateExecution.getVariable(WORK_COUNT) != null) {
-            workCount = (int) delegateExecution.getVariable(WORK_COUNT);
+        if (execution.getVariable(WORK_COUNT) != null) {
+            workCount = (int) execution.getVariable(WORK_COUNT);
             workCount++;
         }
-        delegateExecution.setVariable(WORK_COUNT, workCount);
+        execution.setVariable(WORK_COUNT, workCount);
     }
 }

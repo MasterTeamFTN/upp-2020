@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.uppservice.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,16 +22,12 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor
 public class AuthenticationController {
 
-    @Autowired
-    private TokenUtils tokenUtils;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
+    private final TokenUtils tokenUtils;
+    private final AuthenticationManager authenticationManager;
+    private final CustomUserDetailsService userDetailsService;
 
 
     @PostMapping("/login")

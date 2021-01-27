@@ -27,6 +27,10 @@ public class Writer extends User {
     @Column(name = "isMember", columnDefinition = "boolean default false")
     private boolean isMember;
 
+    @Column(length = 32, columnDefinition = "varchar(32) default 'NOT_SUBMITTED_YET'")
+    @Enumerated(value = EnumType.STRING)
+    private MembershipDecision membershipDecision = MembershipDecision.NEED_MORE_INFO;
+
     //Todo add pdf files
     
 }

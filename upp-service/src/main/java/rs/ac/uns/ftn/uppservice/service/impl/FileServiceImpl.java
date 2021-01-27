@@ -2,7 +2,6 @@ package rs.ac.uns.ftn.uppservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FileUtils;
-import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.task.Task;
@@ -15,9 +14,7 @@ import rs.ac.uns.ftn.uppservice.service.FileService;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.util.logging.Logger;
 
 import static java.util.Objects.isNull;
@@ -63,6 +60,33 @@ public class FileServiceImpl implements FileService {
 
 
         return new UserFileDto(user, convertedFile);
+    }
+
+    @Override
+    public UserFileDto saveBook(String username, File file) throws IOException {
+        User user = userRepository.findByUsername(username);
+        Path destinationPath;
+
+        if (!isNull(user)) {
+            destinationPath = Paths.get(PAPERS_LOCATION.toString(), user.getUsername());
+        } else {
+            destinationPath = Paths.get(PAPERS_LOCATION.toString());
+        }
+        File destinationFile = new File(destinationPath.toString());
+
+        if (!destinationFile.exists()) {
+            Files.createDirectories(destinationPath);
+            LOGGER.info(String.join(" ", new String[]{"Directory ", destinationFile.getName(), " is created."}));
+        }
+
+        Files.copy(Paths.get(file.getPath()), destinationPath.resolve(file.getName()), StandardCopyOption.REPLACE_EXISTING);
+
+        return new UserFileDto(user, file);
+    }
+
+    @Override
+    public void removeFiles(String directoryName) throws IOException {
+        FileUtils.cleanDirectory(new File(Paths.get(PAPERS_LOCATION.toString(), directoryName).toString()));
     }
 
 

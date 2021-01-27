@@ -10,6 +10,7 @@ import { GenericFormComponent } from '../common/generic-form/generic-form.compon
 import { MaterialModule } from 'src/app/shared/modules/material.module';
 import { AccountConfirmationComponent } from './account-confirmation/account-confirmation.component';
 import { MembershipRequestComponent } from './membership-request/membership-request.component';
+import { WriterPaymentComponent } from './writer-payment/writer-payment.component';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import { MembershipRequestComponent } from './membership-request/membership-requ
     RegisterComponent,
     AccountConfirmationComponent,
     MembershipRequestComponent,
+    WriterPaymentComponent,
   ],
   imports: [
     CoreModule,
@@ -28,7 +30,8 @@ import { MembershipRequestComponent } from './membership-request/membership-requ
   ],
   exports: [
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    WriterPaymentComponent
   ],
   // providers: [AuthStore]
 })

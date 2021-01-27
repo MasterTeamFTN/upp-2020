@@ -35,18 +35,6 @@ export class WriterService {
         return this.http.get(url);
     }
 
-    // submitFiles(camundaFormSubmitDTO: any): Observable<any> {
-    //     var url = ENDPOINTS.SUBMIT_WRITERS_FILES;
-    //     this.authStore.update((state) => ({
-    //         isMultipartFileRequest: true,
-    //     }))
-
-    //     const data: FormData = new FormData();
-    //     data.append('camundaFormSubmitDTO', camundaFormSubmitDTO);
-
-    //     return this.http.post(url, camundaFormSubmitDTO);
-    // }
-
     submitFiles(file: File): Observable<any> {
         this.authStore.update((state) => ({
             isMultipartFileRequest: true,
@@ -61,14 +49,6 @@ export class WriterService {
         })
 
         data.append('taskId', taskId)
-
-        // let paper: Paper = new Paper()
-        // paper.file = file;
-
-        // var headers = new HttpHeaders();
-        // //'Content-Type': '',
-        // headers.append('Content-Type', 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW')
-
         return this.http.post(ENDPOINTS.SUBMIT_FILE, data, {
             reportProgress: true,
             responseType: 'text'

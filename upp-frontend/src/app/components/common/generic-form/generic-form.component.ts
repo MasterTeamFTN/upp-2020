@@ -21,6 +21,9 @@ export class GenericFormComponent implements OnInit {
 
   constructor(private cd: ChangeDetectorRef) {
   }
+  ngOnChanges() {
+     this.notSubmittedYet = true;
+    }   
 
   ngOnInit() {
     this.notSubmittedYet = true;
@@ -144,33 +147,6 @@ export class GenericFormComponent implements OnInit {
 
   selectFile(event: any) {
     this.selectedFiles = event.target.files;
-
-    // let reader = new FileReader();
-
-    // if(event.target.files && event.target.files.length) {
-    //   const [file] = event.target.files;
-    //   reader.readAsDataURL(file);
-
-    //   reader.onload = () => {
-    //     this.formDto.formFields.controls.forEach(formField => {
-    //       if (formField.controls["name"].value === "PdfFile") {
-    //         // formField.controls["actualValue"].value = reader.result
-    //         formField.controls["actualValue"].value = this.selectedFiles
-
-
-    //         // formField.controls["actualValue"].patchValue({
-    //         //   value: this.selectedFiles
-    //         // })
-    //       }
-    //     })
-    //     // this.formDto.formFields.patchValue({
-    //     //   file: reader.result
-    //     // });
-
-    //     // need to run CD since file load runs outside of zone
-    //     this.cd.markForCheck();
-    //   };
-    // }
   }
 
 

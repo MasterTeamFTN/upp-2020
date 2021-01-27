@@ -3,15 +3,14 @@ package rs.ac.uns.ftn.uppservice.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.uppservice.common.mapper.ReaderMapper;
 import rs.ac.uns.ftn.uppservice.common.mapper.WriterMapper;
+import rs.ac.uns.ftn.uppservice.dto.response.ReaderDto;
 import rs.ac.uns.ftn.uppservice.dto.response.UserDTO;
 import rs.ac.uns.ftn.uppservice.dto.response.WriterDto;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ApiRequestException;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ResourceNotFoundException;
-import rs.ac.uns.ftn.uppservice.model.ChiefEditor;
-import rs.ac.uns.ftn.uppservice.model.Editor;
-import rs.ac.uns.ftn.uppservice.model.User;
-import rs.ac.uns.ftn.uppservice.model.Writer;
+import rs.ac.uns.ftn.uppservice.model.*;
 import rs.ac.uns.ftn.uppservice.repository.UserRepository;
 import rs.ac.uns.ftn.uppservice.service.UserService;
 
@@ -26,6 +25,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final WriterMapper writerMapper;
+    private final ReaderMapper readerMapper;
 
     @Override
     public UserDTO findById(Long id) throws ApiRequestException {
@@ -60,6 +60,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Lecturer getLecturer() {
+        return (Lecturer) userRepository.findLecturer()
+                .orElseThrow(() -> new ResourceNotFoundException("Lecturer doesn't exist"));
+    }
+
+    @Override
     public Editor getRandomEditor() {
         List<User> editors = userRepository.findAllEditors();
         Random random = new Random();
@@ -70,5 +76,11 @@ public class UserServiceImpl implements UserService {
     public WriterDto getWriter(Long id) {
         Writer writer = (Writer) userRepository.findById(id).orElseThrow(NoSuchElementException::new);
         return writerMapper.entityToDto(writer);
+    }
+
+    @Override
+    public ReaderDto getReader(Long id) {
+        Reader reader = (Reader) userRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        return readerMapper.entityToDto(reader);
     }
 }

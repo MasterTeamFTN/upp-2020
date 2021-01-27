@@ -84,7 +84,13 @@ public class ProcessEngineController {
         return new ResponseEntity(new FormFieldsDto(task.getId(), properties, processInstanceId), HttpStatus.OK);
     }
 
-    @PostMapping(path = "/public/submit")
+    /**
+     * Endpoint for submitting all forms.
+     * Only authenticated users can use.
+     * @param data - form data
+     * @return 200 - OK
+     */
+    @PostMapping(path = "/submit")
     public ResponseEntity submitForm(@RequestBody CamundaFormSubmitDTO data) {
         String processInstanceId = processEngineService.submitForm(data);
         return ResponseEntity.ok().build();

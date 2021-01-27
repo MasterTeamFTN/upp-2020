@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.uppservice.dto.response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import rs.ac.uns.ftn.uppservice.model.MembershipDecision;
 
 import java.util.Set;
 
@@ -18,5 +19,6 @@ public class WriterDto {
     private String email;
     private boolean enabled;
     private boolean isMember;
+    private String membershipDecision;
     private Set<String> registrationPapers;
 }

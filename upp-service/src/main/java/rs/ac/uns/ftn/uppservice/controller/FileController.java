@@ -33,11 +33,22 @@ public class FileController {
     ) {
         try {
             UserFileDto userFileDto = fileService.saveFile(taskId, file);
-            String processInstanceId = processEngineService.submitFile(taskId, file, userFileDto.getFile());
-            runtimeService.setVariable(processInstanceId, REQUESTED_MEMBER, userFileDto.getUser());
+            // TODO: ovo sad nece raditi jer submitFile nema treci parametar
+            // jer odavde vise ne pozivamo fileService
+//            String processInstanceId = processEngineService.submitFile(taskId, file, userFileDto.getFile());
+//            runtimeService.setVariable(processInstanceId, REQUESTED_MEMBER, userFileDto.getUser());
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(e.getMessage());
         }
+        return new ResponseEntity<>("File successfully uploaded.", HttpStatus.OK);
+    }
+
+    @PostMapping("/book")
+    public ResponseEntity<String> handleBookFileUpload(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("taskId") String taskId
+    ) throws IOException {
+        processEngineService.submitFile(taskId, file);
         return new ResponseEntity<>("File successfully uploaded.", HttpStatus.OK);
     }
 

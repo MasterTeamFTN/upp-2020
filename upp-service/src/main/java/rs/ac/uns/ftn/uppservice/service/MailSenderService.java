@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.uppservice.service;
 
 import rs.ac.uns.ftn.uppservice.model.*;
+import rs.ac.uns.ftn.uppservice.model.MembershipDecision;
 import rs.ac.uns.ftn.uppservice.dto.response.WriterPaperResourceDto;
 
 import java.util.List;
@@ -34,4 +35,10 @@ public interface MailSenderService {
 	void submitPlagiarismForm(ChiefEditor chiefEditor, Book originalBook, Book plagiat);
 
 	void sendChiefEditorPlagiarismNotification(ChiefEditor chiefEditor, Book originalBook, Book plagiat);
+
+    void sendDecisionToWriter(String emailTo, MembershipDecision decision, String processInstanceId);
+
+    void sendBetaReadersCommentsToAuthor(Book book);
+
+    void sendChiefEditorNotReview(ChiefEditor chiefEditor);
 }

@@ -70,6 +70,11 @@
                             </mat-select>
                         </div>
                         
+                        <!-- LONG FORM FIELD -->
+                        <div *ngSwitchCase="'long'">
+                            <input matInput [formControl]="field.controls.actualValue" id={{field.controls.id.value}}
+                                apperance="fill" [placeholder]="field.controls.name.value" type="number">
+                        </div>
 
                         <mat-error>
                             {{ getErrorMessage(field.controls.name.value) }}

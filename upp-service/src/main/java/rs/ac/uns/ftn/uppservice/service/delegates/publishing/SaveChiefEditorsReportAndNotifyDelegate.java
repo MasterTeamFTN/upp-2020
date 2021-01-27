@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.stereotype.Component;
+import rs.ac.uns.ftn.uppservice.common.constants.Constants;
 import rs.ac.uns.ftn.uppservice.dto.request.FormSubmissionDto;
 import rs.ac.uns.ftn.uppservice.model.Book;
 import rs.ac.uns.ftn.uppservice.model.Suggestion;
@@ -21,10 +22,9 @@ public class SaveChiefEditorsReportAndNotifyDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-
-        List<FormSubmissionDto> form = (List<FormSubmissionDto>) execution.getVariable("formData");
+        List<FormSubmissionDto> form = (List<FormSubmissionDto>) execution.getVariable(Constants.FORM_DATA);
         String comment = (String) form.get(0).getFieldValue();
-        Book book = (Book) execution.getVariable("book");
+        Book book = (Book) execution.getVariable(Constants.BOOK);
 
         Suggestion suggestion = bookService.addChiefEditorsComments(book.getId(), comment);
 

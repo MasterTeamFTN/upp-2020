@@ -13,7 +13,7 @@ import static rs.ac.uns.ftn.uppservice.common.constants.Constants.WRITER;
 @Component
 public class WriterRegistrationTimedOutDelegate implements JavaDelegate {
 
-    private WriterService writerService;
+    private final WriterService writerService;
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {

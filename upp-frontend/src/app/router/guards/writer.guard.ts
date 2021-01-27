@@ -22,10 +22,10 @@ export class WriterGuard implements CanActivate {
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     return new Observable((observer) => {
       this.authQuery.isWriter$.subscribe((isWriter) => {
-        if (isWriter) {
-          this.router.navigate([SiteRoutes.HOME]);
+        if (!isWriter) {
+          this.router.navigate([SiteRoutes.HOME], { queryParams: { returnUrl: state.url } });
         }
-        observer.next(!isWriter);
+        observer.next(isWriter);
       });
     });
   }

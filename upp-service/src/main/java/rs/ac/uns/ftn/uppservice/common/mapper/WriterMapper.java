@@ -16,6 +16,7 @@ public class WriterMapper implements CustomMapper<Writer, WriterDto> {
         writerDto.setEmail(writer.getEmail());
         writerDto.setMember(writer.isMember());
         writerDto.setEnabled(writer.isEnabled());
+        writerDto.setMembershipDecision(writer.getMembershipDecision().getLabel());
         writerDto.setRegistrationPapers(writer.getRegistrationPapers());
         return writerDto;
     }
