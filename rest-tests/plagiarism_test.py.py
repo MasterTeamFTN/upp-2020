@@ -8,10 +8,10 @@ def login(username, password):
 
     login_response = requests.post('http://localhost:8080/auth/login', json=login_data)
     jwt = login_response.json()['token']['accessToken']
-    
+
     print(f'Login successfull as {username}')
     headers = {'Authorization': f'Bearer {jwt}' }
-    
+
     return headers
 
 def get_form(process_id):
@@ -29,7 +29,6 @@ def submit_form(form_data, headers):
 ########################### LOGIN
 headers_writer = login('john.doe', '123')
 headers_chief_editor = login('pera', '123')
-headers_lecturer = login('jane.doe', '123')
 
 ########################## START PROCESS
 
@@ -83,5 +82,59 @@ submit_response = requests.post('http://localhost:8080/book/submit-editors', jso
 
 if submit_response.status_code == 200:
     print('From choose beta readers submitted')
+else:
+    print(submit_response.json())
+
+# GET FORM TO SUBMIT COMMENT
+
+input_book_form_response = requests.get(f'http://localhost:8080/process/public/form/{process_id}')
+input_book_task_id = input_book_form_response.json()['taskId']
+print(f'Get for comment submit task ID: {input_book_task_id}')
+
+## SUBMIT FORM - comment
+
+form_data = {
+    "taskId": f"{input_book_task_id}",
+    "formData": [
+        {
+            "fieldId": "FormField_comment",
+            "fieldValue": "Ovo je neki moj komentar na tvoj rad od ed1"
+        }
+    ]
+}
+
+headers = login('ed1', '123')
+
+submit_response = requests.post('http://localhost:8080/book/submit-note', json=form_data, headers=headers)
+
+if submit_response.status_code == 200:
+    print('Comment submitted')
+else:
+    print(submit_response.json())
+
+# GET FORM TO SUBMIT COMMENT
+
+input_book_form_response = requests.get(f'http://localhost:8080/process/public/form/{process_id}')
+input_book_task_id = input_book_form_response.json()['taskId']
+print(f'Get for for comment submit task ID: {input_book_task_id}')
+
+## SUBMIT FORM - comment
+
+form_data = {
+    "taskId": f"{input_book_task_id}",
+    "formData": [
+        {
+            "fieldId": "FormField_comment",
+            "fieldValue": "Ovo je neki moj komentar na tvoj rad od ed2"
+        }
+    ]
+}
+
+headers = login('ed2', '123')
+
+submit_response = requests.post('http://localhost:8080/book/submit-note', json=form_data, headers=headers)
+
+if submit_response.status_code == 200:
+    print('Comment submitted')
 else:
     print(submit_response.json())
