@@ -97,7 +97,7 @@ form_data = {
     "taskId": f"{input_book_task_id}",
     "formData": [
         {
-            "fieldId": "FormField_comment",
+            "fieldId": "FormField_note",
             "fieldValue": "Ovo je neki moj komentar na tvoj rad od ed1"
         }
     ]
@@ -124,7 +124,7 @@ form_data = {
     "taskId": f"{input_book_task_id}",
     "formData": [
         {
-            "fieldId": "FormField_comment",
+            "fieldId": "FormField_note",
             "fieldValue": "Ovo je neki moj komentar na tvoj rad od ed2"
         }
     ]
