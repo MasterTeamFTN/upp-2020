@@ -36,7 +36,7 @@ export class WriterHomeComponent implements OnInit {
 	writer: any;
 
 	getMyBooksSub: Subscription;
-	displayedColumns: string[] = ['Title', 'Author', 'Genre', 'IsPublished'];
+	displayedColumns: string[] = ['Title', 'Author', 'Genre', 'Action'];
 	dataSource = new MatTableDataSource<BookDto>([]);
 
 
@@ -85,7 +85,7 @@ export class WriterHomeComponent implements OnInit {
 	}
 
 	submit(eventMsg: any) {
-		console.log("uhvation event")
+		console.log("uhvatio event")
 		alert(eventMsg);
 		this.loadWriter()
 	}
@@ -107,9 +107,20 @@ export class WriterHomeComponent implements OnInit {
 	submitMoreData = (book: BookDto) => {
 		const dialogRef = this.dialog.open(BookDataDialog, {
 			width: '500px',
-			data: book
+			data: book,
+		});
+
+
+		dialogRef.afterClosed().subscribe(result => {
+			if (result.event == 'Submited') {
+				this.fetchBooks();
+			} else {
+				console.log("something went wrong")
+			}
 		});
 	}
-	
 
+	moreInfo = (book: BookDto) => {
+		console.log("unimplemented");
+	}
 }

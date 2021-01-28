@@ -18,9 +18,10 @@
                         <div *ngSwitchCase="'MultiSelect'">
                             <mat-select [formControl]="field.controls.actualValue"
                                 placeholder="{{field.controls.name.value}}" multiple>
-                                <mat-option *ngFor="let msValue of multiselectValues; let j=index" value="{{j+1}}">
+                                <mat-option *ngFor="let msValue of multiselectValues; let j=index" value="{{idOfMulti(msValue)}}">
                                     {{msValue}}</mat-option>
                             </mat-select>
+                            
                         </div>
 
                         <!-- PASSWORD FORM FIELD -->

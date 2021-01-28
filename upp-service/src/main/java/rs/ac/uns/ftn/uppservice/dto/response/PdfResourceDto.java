@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class WriterPaperResourceDto {
+public class PdfResourceDto {
 
     private String fileName;
     private ByteArrayResource byteArrayResource;

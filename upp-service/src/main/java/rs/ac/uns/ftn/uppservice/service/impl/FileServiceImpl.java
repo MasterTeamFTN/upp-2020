@@ -5,9 +5,12 @@ import org.apache.commons.io.FileUtils;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.task.Task;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import rs.ac.uns.ftn.uppservice.dto.response.PdfResourceDto;
 import rs.ac.uns.ftn.uppservice.dto.response.UserFileDto;
+import rs.ac.uns.ftn.uppservice.model.Book;
 import rs.ac.uns.ftn.uppservice.model.User;
 import rs.ac.uns.ftn.uppservice.repository.UserRepository;
 import rs.ac.uns.ftn.uppservice.service.FileService;
@@ -31,7 +34,7 @@ public class FileServiceImpl implements FileService {
     private final RuntimeService runtimeService;
 
     @Override
-    public void saveFile(String username, String processInstanceId, File file, boolean isRegistration) throws IOException {
+    public String saveFile(String username, String processInstanceId, File file, boolean isRegistration) throws IOException {
         User user = userRepository.findByUsername(username);
         Path destinationPath;
 
@@ -53,6 +56,7 @@ public class FileServiceImpl implements FileService {
         }
 
         Files.copy(Paths.get(file.getPath()), destinationPath.resolve(file.getName()), StandardCopyOption.REPLACE_EXISTING);
+        return destinationPath.resolve(file.getName()).toString();
     }
 
 //    @Override
@@ -80,6 +84,22 @@ public class FileServiceImpl implements FileService {
     @Override
     public void removeFiles(String directoryName) throws IOException {
         FileUtils.cleanDirectory(new File(Paths.get(PAPERS_LOCATION.toString(), directoryName).toString()));
+    }
+
+    @Override
+    public PdfResourceDto getHandwrite(Book book) {
+        String path = book.getHandwritePath();
+
+        byte[] pdf = new byte[0];
+        try {
+            pdf = Files.readAllBytes(Paths.get(book.getHandwritePath()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String[] tokens = path.split("\\\\");
+        String fileName = tokens[tokens.length - 1];
+
+        return new PdfResourceDto(fileName, new ByteArrayResource(pdf));
     }
 
 

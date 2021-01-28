@@ -5,9 +5,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.uppservice.dto.response.PdfResourceDto;
 import rs.ac.uns.ftn.uppservice.model.*;
-import rs.ac.uns.ftn.uppservice.model.MembershipDecision;
-import rs.ac.uns.ftn.uppservice.dto.response.WriterPaperResourceDto;
 import rs.ac.uns.ftn.uppservice.service.MailSenderService;
 
 import javax.mail.MessagingException;
@@ -31,7 +30,7 @@ public class MailSenderServiceImpl implements MailSenderService {
     }
 
     @Override
-    public void sendBoardMemberNotification(List<String> emails, ConfirmationToken confirmationToken, List<WriterPaperResourceDto> userPapers) {
+    public void sendBoardMemberNotification(List<String> emails, ConfirmationToken confirmationToken, List<PdfResourceDto> userPapers) {
         emails.stream().forEach(email -> send(email, confirmationToken, userPapers));
     }
 
@@ -133,6 +132,16 @@ public class MailSenderServiceImpl implements MailSenderService {
     }
 
     @Override
+    public void notifyWriterToSendNewBook(Book book) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("Send new book - UPP");
+        message.setFrom("UPP-App");
+        message.setTo(book.getWriter().getEmail());
+        message.setText("Book - " + book.getTitle() + " was reviewed and you are asked to change it and send new version");
+        mailSender.send(message);
+    }
+
+    @Override
     public void notifyWriterFullBookTimedOut(Book book) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setSubject("Book rejected - UPP");
@@ -153,7 +162,7 @@ public class MailSenderServiceImpl implements MailSenderService {
         mailSender.send(message);
     }
 
-    private void send(String email, ConfirmationToken confirmationToken, List<WriterPaperResourceDto> userPapers) {
+    private void send(String email, ConfirmationToken confirmationToken, List<PdfResourceDto> userPapers) {
         MimeMessage message = mailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -268,6 +277,44 @@ public class MailSenderServiceImpl implements MailSenderService {
 
         message.setText(comments.toString());
 
+        mailSender.send(message);
+    }
+
+    @Override
+    public void sendNotificationAboutHandwrite(Book book, String emailTo, PdfResourceDto handwrite) {
+        MimeMessage message = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom("UPP-App");
+            helper.setTo(emailTo);
+            helper.setSubject("Book assignment - UPP");
+
+            helper.setText("You have been assigned to read the book "
+                    + book.getTitle()
+                    + " by "
+                    + book.getWriter().getFirstName()
+                    + " "
+                    + book.getWriter().getLastName());
+            try {
+                helper.addAttachment(handwrite.getFileName(), handwrite.getByteArrayResource());
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
+
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void notifyEditorAboutFinishedLecturing(User chiefEditor, Book book) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("Lecturer has finished - UPP");
+        message.setFrom("UPP-App");
+        message.setTo(chiefEditor.getEmail());
+        String author = book.getWriter().getFirstName() + " " + book.getWriter().getLastName();
+        message.setText("Book - " + book.getTitle() + " by " + author + " has passed lecturer review.");
         mailSender.send(message);
     }
 

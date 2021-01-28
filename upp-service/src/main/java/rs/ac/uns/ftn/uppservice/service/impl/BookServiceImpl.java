@@ -59,19 +59,20 @@ public class BookServiceImpl implements BookService {
         Writer writer = (Writer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         for (FormSubmissionDto field : formData) {
-            if(field.getFieldId().equals("FormField_title")) book.setTitle((String) field.getFieldValue());
-            if(field.getFieldId().equals("FormField_genre")) {
+            if (field.getFieldId().equals("FormField_title")) book.setTitle((String) field.getFieldValue());
+            if (field.getFieldId().equals("FormField_genre")) {
                 Genre genre = genreRepository.findById(Long.parseLong((String) field.getFieldValue()))
                         .orElseThrow(() -> new ResourceNotFoundException("Genre with name '" + field.getFieldValue() + "' doesn't exist"));
                 book.setGenre(genre);
             }
-            if(field.getFieldId().equals("FormField_synopsis")) book.setSynopsis((String) field.getFieldValue());
+            if (field.getFieldId().equals("FormField_synopsis")) book.setSynopsis((String) field.getFieldValue());
 
         }
 
         book.setWriter(writer);
         book.setIsPublished(false);
-        book.setIsReviewSubmitted(false);
+
+        book.setJurisdiction(BookPublishingJurisdiction.EDITORS);
         book.setProcessInstanceId(processInstanceId);
         book = bookRepository.save(book);
 
@@ -209,7 +210,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book registerReviewSubmission(Book book) {
         Book bookFromDatabase = bookRepository.findById(book.getId()).orElseThrow(EntityNotFoundException::new);
-        bookFromDatabase.setIsReviewSubmitted(true);
+        book.setJurisdiction(BookPublishingJurisdiction.WRITERS);
         bookRepository.save(bookFromDatabase);
 
         return bookFromDatabase;
@@ -220,6 +221,19 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findAllByWriterUsername(username)
                 .stream()
                 .map(bookMapper::entityToDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookDto> getBooksFromIdsList(Set<Long> bookIds) {
+        return bookRepository.findAll().stream()
+                .map(bookMapper::entityToDto)
+                .filter(book -> bookIds.contains(book.getId())
+        ).collect(Collectors.toList());
+    }
+
+    @Override
+    public Book save(Book book) {
+        return bookRepository.save(book);
     }
 
 }

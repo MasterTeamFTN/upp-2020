@@ -35,4 +35,7 @@ public class Reader extends User implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
     private Set<Genre> betaGenres;
 
+    @ElementCollection(targetClass=Long.class)
+    private Set<Long> idsOfBooksToComment;
+
 }

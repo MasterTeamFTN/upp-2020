@@ -25,13 +25,18 @@
         <ng-container matColumnDef="IsPublished">
             <th mat-header-cell *matHeaderCellDef> IsPublished </th>
             <td mat-cell *matCellDef="let book"> 
-                <div *ngIf="!book.isReviewSubmitted">
-                    <button mat-raised-button (click)="addReview(book)" color="accent" *ngIf="!book.isPublished">AddReview</button>
-                    <button mat-raised-button disabled color="accent" *ngIf="book.isPublished">AddReview</button>
+
+                <div *ngIf="book.isPublished">
+                    <button mat-raised-button disabled color="accent">Book is published</button>
                 </div>
-                <div *ngIf="book.isReviewSubmitted">
-                    <button mat-raised-button (click)="moreInfo()" color="accent" *ngIf="book.isPublished">More info</button>
-                    <button mat-raised-button disabled color="accent" *ngIf="!book.isPublished">Review submitted</button>
+
+                <div *ngIf="!book.isPublished">
+                    <div *ngIf="book.jurisdiction === 'editors_jurisdiction'">
+                        <button mat-raised-button (click)="addReview(book)" color="accent">Continue</button>
+                    </div>
+                    <div *ngIf="book.jurisdiction != 'editors_jurisdiction'">
+                        <button mat-raised-button disabled color="accent">Waiting</button>
+                    </div>
                 </div>
                 
             </td>

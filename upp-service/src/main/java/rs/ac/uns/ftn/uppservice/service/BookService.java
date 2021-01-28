@@ -6,6 +6,7 @@ import rs.ac.uns.ftn.uppservice.model.Book;
 import rs.ac.uns.ftn.uppservice.model.Suggestion;
 
 import java.util.List;
+import java.util.Set;
 
 public interface BookService {
 
@@ -39,5 +40,16 @@ public interface BookService {
      * @return
      */
     List<BookDto> getMyBooks(String username);
+
+    /**
+     * Method provides all books that have id contained inside bookIds list
+     *
+     * @param bookIds
+     * @return
+     */
+    List<BookDto> getBooksFromIdsList(Set<Long> bookIds);
+
+    Book save(Book book);
+
 
 }

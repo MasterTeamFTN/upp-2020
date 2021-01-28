@@ -93,7 +93,7 @@ export class AddReviewDialog implements OnInit {
                 .submit(this.camundaFormSubmitDto)
                 .subscribe((response) => {
                     // this.showSnack(`You have successfully submited book data.`)                    
-                    this.dialogRef.close({event:'Submited'});
+                    this.dialogRef.close({ event: 'Submited' });
                 })
     }
 
@@ -111,6 +111,18 @@ export class AddReviewDialog implements OnInit {
                     break;
                 case 'Reason':
                     this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("FormField_reason", value))
+                    break;
+                case 'Is plagiarised':
+                    this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("FormField_isPlagiarised", value))
+                    break;
+                case 'Send to beta readers':
+                    this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("FormField_sendToBeta", value))
+                    break;
+                case 'Beta readers':
+                    this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("FormField_betaReaders", value))
+                    break;
+                case 'More changes':
+                    this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("FormField_moreChanges", value))
                     break;
                 default:
                     this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("FormField_reason", value))

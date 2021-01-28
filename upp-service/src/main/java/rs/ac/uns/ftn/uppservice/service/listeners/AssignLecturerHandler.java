@@ -15,7 +15,7 @@ public class AssignLecturerHandler implements TaskListener {
 
     @Override
     public void notify(DelegateTask delegateTask) {
-        User chiefEditor = userService.getLecturer();
-        delegateTask.setAssignee(chiefEditor.getUsername());
+        User lecturer = userService.getLecturer();
+        delegateTask.setAssignee(lecturer.getUsername());
     }
 }

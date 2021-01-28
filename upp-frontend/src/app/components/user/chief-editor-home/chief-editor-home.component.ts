@@ -14,7 +14,7 @@ import { PublishingService } from 'src/app/shared/services/process/publishing.se
 import { RegisterService } from 'src/app/shared/services/process/register.service';
 import Utils from 'src/app/shared/util/utils';
 import { SnackbarComponent } from '../../common/snackbar/snackbar.component';
-import { AddReviewDialog } from './add-review-dialog';
+import { AddReviewDialog } from './dialog/add-review-dialog';
 
 @Component({
 	selector: 'app-chief-editor-home',
@@ -81,6 +81,10 @@ export class ChiefEditorHomeComponent {
 				console.log("something went wrong")
 			}
 		  });
+	}
+
+	moreInfo = (book: BookDto) => {
+		console.log("unimplemented");
 	}
 
 }

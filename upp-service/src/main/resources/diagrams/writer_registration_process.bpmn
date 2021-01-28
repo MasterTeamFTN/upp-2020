@@ -240,7 +240,6 @@
             <camunda:value id="needMoreInfo" name="NeedMoreInfo" />
           </camunda:formField>
         </camunda:formData>
-        <camunda:taskListener class="rs.ac.uns.ftn.uppservice.service.listeners.AddDecisionsToEnumField" event="create" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1a54md5</bpmn:incoming>
       <bpmn:outgoing>Flow_032cfhr</bpmn:outgoing>

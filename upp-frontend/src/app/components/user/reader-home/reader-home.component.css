@@ -23,3 +23,7 @@
     height: auto;
     display: inline-block;
 }
+
+table {
+    width: 100%;
+}

@@ -6,6 +6,9 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.stereotype.Component;
 import rs.ac.uns.ftn.uppservice.common.constants.Constants;
 import rs.ac.uns.ftn.uppservice.model.Book;
+import rs.ac.uns.ftn.uppservice.model.BookPublishingJurisdiction;
+import rs.ac.uns.ftn.uppservice.repository.BookRepository;
+import rs.ac.uns.ftn.uppservice.service.BookService;
 import rs.ac.uns.ftn.uppservice.service.FileService;
 
 import java.io.File;
@@ -15,12 +18,17 @@ import java.io.File;
 public class SavePdfDelegate implements JavaDelegate {
 
     private final FileService fileService;
+    private final BookService bookService;
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         File pdfFile = (File) execution.getVariable(Constants.SUBMIT_FILE_DATA);
         Book book = (Book) execution.getVariable(Constants.BOOK);
         String tempPath = (String) execution.getVariable(Constants.TEMP_FILE_PATH);
+
+        book.setJurisdiction(BookPublishingJurisdiction.EDITORS);
+        bookService.save(book);
+        execution.setVariable(Constants.BOOK, book);
 
         fileService.saveFile(book.getWriter().getUsername(), execution.getProcessInstanceId(), pdfFile, false);
 

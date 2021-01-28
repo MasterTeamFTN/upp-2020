@@ -13,7 +13,6 @@ const ENDPOINTS = {
   REFRESH: '/auth/refresh',
   PROFILE: '/public/user/',
   CHANGE_PASSWORD: '/auth/change-password',
-  START_READER_REGISTRATION: '/registration/public/reader-start',
   ACTIVATE_ACCOUNT: '/registration/public/verify-account'
 }
 

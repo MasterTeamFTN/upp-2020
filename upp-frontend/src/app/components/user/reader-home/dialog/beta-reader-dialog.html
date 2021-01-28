@@ -1,0 +1,10 @@
+<div mat-dialog-content>
+    <p>{{data.title}} - {{data.authorsName}}</p>
+    <div id="reviewFormDiv">
+        <app-generic-form [formDto]="formDto" (onFormSubmit)="submit($event)"></app-generic-form>
+    </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+</div>
+

@@ -8,6 +8,7 @@ import { FormDto } from "src/app/model/dto/FormDto";
 import { FormSubmissionDto } from "src/app/model/dto/FormSubmissionDto";
 import { AuthStore, AuthQuery } from "src/app/shared";
 import { BookService } from "src/app/shared/services/book/book.service";
+import { FileService } from "src/app/shared/services/file/file.service";
 import { PublishingService } from "src/app/shared/services/process/publishing.service";
 import { RegisterService } from "src/app/shared/services/process/register.service";
 import Utils from "src/app/shared/util/utils";
@@ -27,12 +28,14 @@ export class BookDataDialog implements OnInit {
     bookFormArray: FormArray;
     camundaFormSubmitDto: CamundaFormSubmitDto = new CamundaFormSubmitDto();
     taskId: string;
+    isPdfForm: boolean = false;
 
     constructor(
         public dialogRef: MatDialogRef<BookDataDialog>,
         @Inject(MAT_DIALOG_DATA) public data: BookDto,
         private registerService: RegisterService,
         private publishingService: PublishingService,
+        private fileService: FileService,
         private formBuilder: FormBuilder,
         private authStore: AuthStore,
         private authQuery: AuthQuery,
@@ -74,6 +77,15 @@ export class BookDataDialog implements OnInit {
             this.authStore.update((state) => ({
                 taskId: response.taskId,
             }))
+
+            // if (this.formDto.formFields.length > 1) {
+            //     this.isPdfForm = false;
+            // } 
+            if (this.formDto.formFields.length == 1) {
+                if(this.formDto.formFields.controls[0].controls["name"].value==='PDF file') {
+                    this.isPdfForm = true;
+                }
+            }
         });
     }
 
@@ -85,16 +97,38 @@ export class BookDataDialog implements OnInit {
 
 
     submit = (formSubmitData: any) => {
-        this.mapCamundaForm(formSubmitData);
-        console.log(formSubmitData);
 
-        this.submitBookSub =
-            this.publishingService
-                .submit(this.camundaFormSubmitDto)
-                .subscribe((response) => {
-                    // this.showSnack(`You have successfully submited book data.`)
-                    this.dialogRef.close();
-                })
+        if (this.isPdfForm) {
+            /** If form contains pdf submit field */
+            var currentFileUpload = formSubmitData.item(0)
+
+            this.fileService.submitFiles(currentFileUpload)
+                .subscribe(response => {
+                    this.authStore.update((state) => ({
+                        isMultipartFileRequest: false,
+                    }))
+                    this.formDto = {
+                        'formName': '',
+                        'formFields': []
+                    };
+                    this.dialogRef.close({ event: 'Submited' });
+                },
+                    err => {
+                        console.log('fail')
+                    });
+        } else {
+            /** If form does not contain pdf submit field */
+            this.mapCamundaForm(formSubmitData);
+            console.log(formSubmitData);
+
+            this.submitBookSub =
+                this.publishingService
+                    .submit(this.camundaFormSubmitDto)
+                    .subscribe((response) => {
+                        this.dialogRef.close({ event: 'Submited' });
+                    })
+        }
+
     }
 
     mapCamundaForm = (formSubmitData: any) => {
@@ -120,6 +154,9 @@ export class BookDataDialog implements OnInit {
                     break;
                 case 'Number of pages':
                     this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("FormField_numOfPages", value))
+                    break;
+                case 'Make changes':
+                    this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("FormField_makeChanges", value))
                     break;
                 default:
                     this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("FormField_cowriters", value))

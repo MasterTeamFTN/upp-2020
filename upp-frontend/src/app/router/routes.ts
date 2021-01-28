@@ -57,7 +57,7 @@ export const routes: Routes = [
     {
         path: 'membershipRequest',
         component: MembershipRequestComponent,
-        canActivate: [LoggedInGuard, BoardMemberGuard]
+        canActivate: [LoggedInGuard]
     },
     {
         path: 'publishBook',

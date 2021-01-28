@@ -10,19 +10,30 @@ import { CommonComponentsModule } from '../common/common-components.module';
 import { BoardMemberHomeComponent } from './board-member-home/board-member-home.component';
 import { AccountModule } from '../account/account.module';
 import { ChiefEditorHomeComponent } from './chief-editor-home/chief-editor-home.component';
-import { AddReviewDialog } from './chief-editor-home/add-review-dialog';
+import { AddReviewDialog } from './chief-editor-home/dialog/add-review-dialog';
+import { BetaReaderDialog } from './reader-home/dialog/beta-reader-dialog';
+import { LecturerDialog } from './lecturer-home/dialog/lecturer-dialog';
 
 
 
 @NgModule({
-  declarations: [ProfileComponent, WriterHomeComponent, ReaderHomeComponent, LecturerHomeComponent, BoardMemberHomeComponent, ChiefEditorHomeComponent, AddReviewDialog, BookDataDialog],
+  declarations: [ProfileComponent,
+    WriterHomeComponent,
+    ReaderHomeComponent,
+    LecturerHomeComponent,
+    BoardMemberHomeComponent,
+    ChiefEditorHomeComponent,
+    AddReviewDialog,
+    BookDataDialog,
+    BetaReaderDialog,
+    LecturerDialog],
   imports: [
     CommonModule,
     CoreModule,
     CommonComponentsModule,
     AccountModule,
   ],
-  entryComponents: [AddReviewDialog, BookDataDialog],
-  exports:[WriterHomeComponent, ReaderHomeComponent, LecturerHomeComponent, BoardMemberHomeComponent, ChiefEditorHomeComponent]
+  entryComponents: [AddReviewDialog, BookDataDialog, BetaReaderDialog, LecturerDialog],
+  exports: [WriterHomeComponent, ReaderHomeComponent, LecturerHomeComponent, BoardMemberHomeComponent, ChiefEditorHomeComponent]
 })
 export class UserModule { }

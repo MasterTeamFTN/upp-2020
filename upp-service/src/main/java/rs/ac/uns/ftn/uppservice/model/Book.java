@@ -76,6 +76,10 @@ public class Book {
     @Column(name = "processInstanceId")
     private String processInstanceId;
 
-    @Column(name = "isReviewSubmitted", nullable = false)
-    private Boolean isReviewSubmitted = false;
+    @Column(name = "handwritePath")
+    private String handwritePath;
+
+    @Column(length = 32, columnDefinition = "varchar(32) default 'WRITERS'")
+    @Enumerated(value = EnumType.STRING)
+    private BookPublishingJurisdiction jurisdiction;
 }

@@ -2,7 +2,7 @@ package rs.ac.uns.ftn.uppservice.service;
 
 import rs.ac.uns.ftn.uppservice.model.*;
 import rs.ac.uns.ftn.uppservice.model.MembershipDecision;
-import rs.ac.uns.ftn.uppservice.dto.response.WriterPaperResourceDto;
+import rs.ac.uns.ftn.uppservice.dto.response.PdfResourceDto;
 
 import java.util.List;
 
@@ -15,6 +15,8 @@ public interface MailSenderService {
     void sendWriterRejectBook(Book book, String reason);
 
     void notifyWriterToSendFullBook(Book book);
+
+    void notifyWriterToSendNewBook(Book book);
 
     void notifyWriterFullBookTimedOut(Book book);
 
@@ -30,9 +32,14 @@ public interface MailSenderService {
 
     void sendRejectBook(Book book);
 
-    void sendBoardMemberNotification(List<String> emails, ConfirmationToken token, List<WriterPaperResourceDto> userPapers);
+    void sendBoardMemberNotification(List<String> emails, ConfirmationToken token, List<PdfResourceDto> userPapers);
 
     void sendDecisionToWriter(String emailTo, MembershipDecision decision, String processInstanceId);
 
     void sendBetaReadersCommentsToAuthor(Book book);
+
+    void sendNotificationAboutHandwrite(Book book, String emailTo, PdfResourceDto handwrite);
+
+    void notifyEditorAboutFinishedLecturing(User chiefEditor, Book book);
+
 }
