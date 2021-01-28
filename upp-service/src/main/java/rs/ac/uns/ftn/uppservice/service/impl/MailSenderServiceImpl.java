@@ -258,15 +258,17 @@ public class MailSenderServiceImpl implements MailSenderService {
 	}
 
 	@Override
-	public void sendChiefEditorPlagiarismNotification(ChiefEditor chiefEditor, Book originalBook, Book plagiat) {
+	public void sendChiefEditorPlagiarismNotification(Complaint complaint) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setSubject("New report has been added");
+        message.setSubject("Plagiarism detected");
         message.setFrom("UPP-App");
-        message.setTo(chiefEditor.getEmail());
-        String author = plagiat.getWriter().getFirstName() + " " + plagiat.getWriter().getLastName();
-        message.setText("Book - " + plagiat.getTitle() + " by " + author + " has been reported as plagiat.");
-        System.out.println(message);
-        //mailSender.send(message);
+        message.setTo(complaint.getChiefEditor().getEmail());
+
+        Book plagiarised = complaint.getPlagiarisedBook();
+        String author = plagiarised.getWriter().getFirstName() + " " + plagiarised.getWriter().getLastName();
+
+        message.setText("Book - " + plagiarised.getTitle() + " by " + author + " has been reported to be plagiarised. Choose editors");
+        mailSender.send(message);
 	}
 
     @Override
@@ -292,6 +294,102 @@ public class MailSenderServiceImpl implements MailSenderService {
     @Override
     public void sendChiefEditorNotReview(ChiefEditor chiefEditor) {
 
+    }
+
+    @Override
+    public void notifyEditorToReviewPlagiarism(Editor editor, Complaint complaint) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("Plagiarism review");
+        message.setFrom("UPP-App");
+        message.setTo(editor.getEmail());
+
+        Book plagiarised = complaint.getPlagiarisedBook();
+        String author = plagiarised.getWriter().getFirstName() + " " + plagiarised.getWriter().getLastName();
+
+        message.setText("Hello " + editor.getFirstName() + " " + editor.getLastName() + ". Book - " + plagiarised.getTitle() + " by " + author + " has been reported to be plagiarised. You are assigned to review it");
+        mailSender.send(message);
+    }
+
+    @Override
+    public void notifyChiefEditorToFindReplacement(String editor, Complaint complaint) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("Plagiarism - find replacement for editor");
+        message.setFrom("UPP-App");
+        message.setTo(complaint.getChiefEditor().getEmail());
+
+        Book plagiarised = complaint.getPlagiarisedBook();
+        String author = plagiarised.getWriter().getFirstName() + " " + plagiarised.getWriter().getLastName();
+
+        message.setText("Book - " + plagiarised.getTitle() + " by " + author + " has been reported to be plagiarised. " +
+                "Find replacement for editor: " + editor);
+        mailSender.send(message);
+    }
+
+    @Override
+    public void notifyBoardMemberToReviewPlagiarism(User boardMember, Complaint complaint) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("Plagiarism - board member review");
+        message.setFrom("UPP-App");
+        message.setTo(boardMember.getEmail());
+
+        Book plagiarised = complaint.getPlagiarisedBook();
+        String author = plagiarised.getWriter().getFirstName() + " " + plagiarised.getWriter().getLastName();
+
+        StringBuilder body = new StringBuilder();
+        body.append("Book - " + plagiarised.getTitle() + " by " + author + " has been reported to be plagiarised.\n");
+        body.append("You are assigned to review it.\nEditors comments:\n");
+
+        for (CompliantAssignment assignment : complaint.getCompliantAssignments()) {
+            body.append(assignment.getEditor().getUsername() + ": " + assignment.getNotes() + "\n");
+        }
+
+        message.setText(body.toString());
+        mailSender.send(message);
+    }
+
+    @Override
+    public void notifyAuthorBookIsNotPlagiarised(Complaint complaint) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("Plagiarism - book is not plagiarised");
+        message.setFrom("UPP-App");
+        message.setTo(complaint.getPlagiarisedBook().getWriter().getEmail());
+
+        Book plagiarised = complaint.getPlagiarisedBook();
+        String author = plagiarised.getWriter().getFirstName() + " " + plagiarised.getWriter().getLastName();
+
+        message.setText("Book - " + plagiarised.getTitle() + " by " + author + " has been reported to be plagiarised. " +
+                "We reviewed it and decided that it is NOT plagiarised!");
+        mailSender.send(message);
+    }
+
+    @Override
+    public void notifyAuthorBookIsPlagiarised(Complaint complaint) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("Plagiarism - book is plagiarised");
+        message.setFrom("UPP-App");
+        message.setTo(complaint.getPlagiarisedBook().getWriter().getEmail());
+
+        Book plagiarised = complaint.getPlagiarisedBook();
+        String author = plagiarised.getWriter().getFirstName() + " " + plagiarised.getWriter().getLastName();
+
+        message.setText("Book - " + plagiarised.getTitle() + " by " + author + " has been reported to be plagiarised. " +
+                "We reviewed it and decided that it is plagiarised!");
+        mailSender.send(message);
+    }
+
+    @Override
+    public void notifyChiefEditorToChooseEditorsAgain(Complaint complaint) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("Plagiarism - choose editors again");
+        message.setFrom("UPP-App");
+        message.setTo(complaint.getChiefEditor().getEmail());
+
+        Book plagiarised = complaint.getPlagiarisedBook();
+        String author = plagiarised.getWriter().getFirstName() + " " + plagiarised.getWriter().getLastName();
+
+        message.setText("Book - " + plagiarised.getTitle() + " by " + author + " has been reported to be plagiarised. " +
+                "Board members haven't decided if book is plagiarised.\nYou need to choose editors again.");
+        mailSender.send(message);
     }
 
 }

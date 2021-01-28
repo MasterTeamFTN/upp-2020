@@ -38,6 +38,11 @@ public class BoardMemberServiceImpl implements BoardMemberService {
     private final CamundaUserMapper camundaUserMapper;
 
     @Override
+    public List<BoardMember> findAll() {
+        return boardMemberRepository.findAll();
+    }
+
+    @Override
     public List<org.camunda.bpm.engine.identity.User> notifyBoardMembers(String processInstanceId) {
         User user = (User) runtimeService.getVariable(processInstanceId, REQUESTED_MEMBER);
 

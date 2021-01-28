@@ -27,21 +27,28 @@ public class AddBooksToEnumField implements TaskListener {
                 .getFormService()
                 .getTaskFormData(delegateTask.getId());
 
-        FormField bookField = formData.getFormFields().stream()
+        FormField originalBookField = formData.getFormFields().stream()
                 .filter(formField -> formField.getId().equals("FormField_originalBook"))
                 .findFirst()
                 .get();
-        FormField plagiatField = formData.getFormFields().stream()
+        FormField plagiarisedBookField = formData.getFormFields().stream()
                 .filter(formField -> formField.getId().equals("FormField_plagiarismBook"))
                 .findFirst()
                 .get();
 
-        EnumFormType fieldType = (EnumFormType) bookField.getType();
-        EnumFormType fieldType2 = (EnumFormType) plagiatField.getType();
+        EnumFormType originalBookFieldType = (EnumFormType) originalBookField.getType();
+        EnumFormType plagiarisedBookFieldType = (EnumFormType) plagiarisedBookField.getType();
         
         List<Book> books = bookRepository.findAll();
-        books.forEach(book -> System.out.println(book.getTitle() + ", " + book.getWriter().getFirstName() + " " + book.getWriter().getLastName()));
-        books.forEach(book -> fieldType.getValues().put(book.getId().toString(), book.getTitle() + ", " + book.getWriter().getFirstName() + " " + book.getWriter().getLastName()));
-        books.forEach(book -> fieldType2.getValues().put(book.getId().toString(), book.getTitle() + ", " + book.getWriter().getFirstName() + " " + book.getWriter().getLastName()));
+
+        books.forEach(book ->
+                originalBookFieldType.getValues().put(book.getId().toString(), bookSignature(book)));
+
+        books.forEach(book ->
+                plagiarisedBookFieldType.getValues().put(book.getId().toString(), bookSignature(book)));
+    }
+
+    private String bookSignature(Book book) {
+        return book.getTitle() + ", " + book.getWriter().getFirstName() + " " + book.getWriter().getLastName();
     }
 }

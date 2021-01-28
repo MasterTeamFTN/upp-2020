@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.camunda.bpm.engine.RuntimeService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.uppservice.common.constants.Constants;
 import rs.ac.uns.ftn.uppservice.dto.request.FormSubmissionDto;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ResourceNotFoundException;
 import rs.ac.uns.ftn.uppservice.model.*;
@@ -11,10 +12,7 @@ import rs.ac.uns.ftn.uppservice.repository.BookRepository;
 import rs.ac.uns.ftn.uppservice.repository.ComplaintRepository;
 import rs.ac.uns.ftn.uppservice.repository.GenreRepository;
 import rs.ac.uns.ftn.uppservice.repository.UserRepository;
-import rs.ac.uns.ftn.uppservice.service.BookService;
-import rs.ac.uns.ftn.uppservice.service.MailSenderService;
-import rs.ac.uns.ftn.uppservice.service.ReaderService;
-import rs.ac.uns.ftn.uppservice.service.UserService;
+import rs.ac.uns.ftn.uppservice.service.*;
 import rs.ac.uns.ftn.uppservice.util.SetUtils;
 
 import java.util.*;
@@ -31,7 +29,7 @@ public class BookServiceImpl implements BookService {
     private final MailSenderService mailSenderService;
     private final RuntimeService runtimeService;
     private final ReaderService readerService;
-
+    private final ComplaintService complaintService;
 
     @Override
     public Book findById(Long id) {
@@ -50,41 +48,43 @@ public class BookServiceImpl implements BookService {
 
         return book;
     }
+
     @Override
-    public void submitPlagiarismForm(List<FormSubmissionDto> formData, String processInstanceId) {
+    public Complaint submitPlagiarismForm(List<FormSubmissionDto> formData) {
     	Book originalBook = null;
     	Book plagiat = null;
 
     	for (FormSubmissionDto field : formData) {
-    		System.out.println(field.getFieldId());
             if(field.getFieldId().equals("FormField_originalBook")) {
-                originalBook = bookRepository.findById(Long.parseLong((String) field.getFieldValue()))
-                        .orElseThrow(() -> new ResourceNotFoundException("Book with title '" + field.getFieldValue() + "' doesn't exist"));
+                originalBook = findById(Long.parseLong((String) field.getFieldValue()));
             }
+
             if(field.getFieldId().equals("FormField_plagiarismBook")) {
-            	plagiat = bookRepository.findById(Long.parseLong((String) field.getFieldValue()))
-                        .orElseThrow(() -> new ResourceNotFoundException("Book with title '" + field.getFieldValue() + "' doesn't exist"));
+            	plagiat = findById(Long.parseLong((String) field.getFieldValue()));
             }
 
         }
+
         ChiefEditor chiefEditor = userService.getChiefEditor();
 
-        mailSenderService.sendChiefEditorPlagiarismNotification(chiefEditor, originalBook, plagiat);
         Complaint complaint = new Complaint();
-        complaint.setQuestionedBook(plagiat);
-        Set<Book>originalBooks = new HashSet<Book>();
-        originalBooks.add(originalBook);
-        complaint.setOriginalBooks(originalBooks);
+        complaint.setOriginalBook(originalBook);
+        complaint.setPlagiarisedBook(plagiat);
         complaint.setChiefEditor(chiefEditor);
+
+//        Set<Book>originalBooks = new HashSet<>();
+//        originalBooks.add(originalBook);
+//        complaint.setOriginalBooks(originalBooks);
+
         complaint = complaintRepository.save(complaint);
         plagiat.setComplaint(complaint);
+
         bookRepository.save(plagiat);
-        runtimeService.setVariable(processInstanceId, "firstReviewAssignee", chiefEditor.getUsername());
-        runtimeService.setVariable(processInstanceId, "originalBook", originalBook);
-        runtimeService.setVariable(processInstanceId, "plagiatBook", plagiat);
-        runtimeService.setVariable(processInstanceId, "complaint", complaint);
 
+        chiefEditor.getComplaints().add(complaint);
+        userRepository.save(chiefEditor);
 
+        return complaint;
     }
 
     private Book createNewBook(List<FormSubmissionDto> formData) {
@@ -141,6 +141,12 @@ public class BookServiceImpl implements BookService {
     @Override
     public void markBookAsPlagiarised(Book book) {
         book.setIsPlagiarized(true);
+        bookRepository.save(book);
+    }
+
+    @Override
+    public void markBookAsNotPlagiarised(Book book) {
+        book.setIsPlagiarized(false);
         bookRepository.save(book);
     }
 
@@ -230,18 +236,18 @@ public class BookServiceImpl implements BookService {
     }
 
 	@Override
-	public void addEditorsNotesComments(Long plagiatId, Long originald, String editorUsername, String comment) {
-		Book book = this.findById(plagiatId);
-		Book original = this.findById(originald);
+	public Complaint addEditorsNotesComments(Long complaintId, String editorUsername, String comment) {
+        Complaint complaint = complaintService.findById(complaintId);
 
-        CompliantAssignment assigment = new CompliantAssignment();
-        assigment.setNotes(comment);
-        Complaint complaint = book.getComplaint();
-        complaint.getCompliantAssignments().add(assigment);
-        assigment.setComplaint(book.getComplaint());
+        CompliantAssignment assignment = new CompliantAssignment();
+        assignment.setNotes(comment);
+        assignment.setEditor((Editor) userRepository.findByUsername(editorUsername));
+        assignment.setComplaint(complaint);
+
+        complaint.getCompliantAssignments().add(assignment);
         complaint = complaintRepository.save(complaint);
-        bookRepository.save(book);
-		
+
+        return complaint;
 	}
 
 	@Override

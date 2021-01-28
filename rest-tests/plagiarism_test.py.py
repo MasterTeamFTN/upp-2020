@@ -19,16 +19,20 @@ def get_form(process_id):
     return form.json()['taskId']
 
 def submit_form(form_data, headers):
-    submit_response = requests.post('http://localhost:8080/process/public/submit', json=form_data, headers=headers)
+    submit_response = requests.post('http://localhost:8080/process/submit', json=form_data, headers=headers)
 
     if submit_response.status_code != 200:
         print("ERROR!")
-        print(submit_response.json())
+        print(submit_response)
 
 
 ########################### LOGIN
 headers_writer = login('john.doe', '123')
 headers_chief_editor = login('pera', '123')
+headers_editor1 = login('ed1', '123')
+headers_editor2 = login('ed2', '123')
+headers_board_member1 = login('board.member', '123')
+headers_board_member2 = login('member.board', '123')
 
 ########################## START PROCESS
 
@@ -36,11 +40,11 @@ start_process_response = requests.get('http://localhost:8080/book/plagiarism-sta
 process_id = start_process_response.text
 print(f'Process started with ID: {process_id}')
 
-########################## GET INPUT FORM
+########################## SEND PLAGIARISM FORM
 
 task_id = get_form(process_id)
 print(f'Plagiarism form - task ID: {task_id}')
-print(task_id)
+
 form_data = {
     "taskId": f"{task_id}",
     "formData": [
@@ -57,84 +61,91 @@ form_data = {
 
 submit_form(form_data, headers_writer)
 print('Init plagiarism form is submitted')
-print('\tChief editor should have received an email')
 
-# GET FORM CHOOSE EDITORS
-input_book_form_response = requests.get(f'http://localhost:8080/process/public/form/{process_id}')
-input_book_task_id = input_book_form_response.json()['taskId']
-print(f'Choose editors: {input_book_task_id}')
+############################ CHOOSE EDITORS FORM
 
-# SUBMIT CHOOSE EDITORS
+task_id = get_form(process_id)
+print(f'Choose editors form task id: {task_id}')
 
 form_data = {
-    "taskId": f"{input_book_task_id}",
+    "taskId": f"{task_id}",
     "formData": [
         {
             "fieldId": "FormField_editors",
-            "fieldValue": [
-                '10', '11','12'
-            ]
+            "fieldValue": ['10', '11']
         }
     ]
 }
 
-submit_response = requests.post('http://localhost:8080/book/submit-editors', json=form_data, headers=headers_chief_editor)
+submit_form(form_data, headers_chief_editor)
+print('Choose editors form submitted')
 
-if submit_response.status_code == 200:
-    print('From choose beta readers submitted')
-else:
-    print(submit_response.json())
-
-# GET FORM TO SUBMIT COMMENT
-
-input_book_form_response = requests.get(f'http://localhost:8080/process/public/form/{process_id}')
-input_book_task_id = input_book_form_response.json()['taskId']
-print(f'Get for comment submit task ID: {input_book_task_id}')
-
-## SUBMIT FORM - comment
+################################## GET FORM EDITORS COMMENT 1
+task_id = get_form(process_id)
+print(f'Get comment form task id: {task_id}')
 
 form_data = {
-    "taskId": f"{input_book_task_id}",
+    "taskId": f"{task_id}",
     "formData": [
         {
             "fieldId": "FormField_note",
-            "fieldValue": "Ovo je neki moj komentar na tvoj rad od ed1"
+            "fieldValue": "ovo je komentar od prvog editora"
         }
     ]
 }
 
-headers = login('ed1', '123')
+submit_form(form_data, headers_editor1)
+print('Editors 1 notes form submitted')
 
-submit_response = requests.post('http://localhost:8080/book/submit-note', json=form_data, headers=headers)
-
-if submit_response.status_code == 200:
-    print('Comment submitted')
-else:
-    print(submit_response.json())
-
-# GET FORM TO SUBMIT COMMENT
-
-input_book_form_response = requests.get(f'http://localhost:8080/process/public/form/{process_id}')
-input_book_task_id = input_book_form_response.json()['taskId']
-print(f'Get for for comment submit task ID: {input_book_task_id}')
-
-## SUBMIT FORM - comment
+################################ GET FORM EDITORS COMMENT 2
+task_id = get_form(process_id)
+print(f'Get comment form task id: {task_id}')
 
 form_data = {
-    "taskId": f"{input_book_task_id}",
+    "taskId": f"{task_id}",
     "formData": [
         {
             "fieldId": "FormField_note",
-            "fieldValue": "Ovo je neki moj komentar na tvoj rad od ed2"
+            "fieldValue": "ovo je komentar od drugog editora"
         }
     ]
 }
 
-headers = login('ed2', '123')
+submit_form(form_data, headers_editor2)
+print('Editors 2 notes form submitted')
 
-submit_response = requests.post('http://localhost:8080/book/submit-note', json=form_data, headers=headers)
+############################## BOARD MEMBERS VOTE 1
 
-if submit_response.status_code == 200:
-    print('Comment submitted')
-else:
-    print(submit_response.json())
+task_id = get_form(process_id)
+print(f'Board members vote form - task ID: {task_id}')
+
+form_data = {
+    "taskId": f"{task_id}",
+    "formData": [
+        {
+            "fieldId": "FormField_decision",
+            "fieldValue": "no"
+        }
+    ]
+}
+
+submit_form(form_data, headers_board_member1)
+print('Board member 1 vote form is submitted')
+
+############################### BOARD MEMBERS VOTE 2
+
+task_id = get_form(process_id)
+print(f'Board members vote form form - task ID: {task_id}')
+
+form_data = {
+    "taskId": f"{task_id}",
+    "formData": [
+        {
+            "fieldId": "FormField_decision",
+            "fieldValue": "yes"
+        }
+    ]
+}
+
+submit_form(form_data, headers_board_member2)
+print('Board member 2 vote form is submitted')

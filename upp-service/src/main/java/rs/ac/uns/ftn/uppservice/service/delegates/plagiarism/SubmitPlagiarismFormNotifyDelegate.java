@@ -8,25 +8,24 @@ import rs.ac.uns.ftn.uppservice.common.constants.Constants;
 import rs.ac.uns.ftn.uppservice.dto.request.FormSubmissionDto;
 import rs.ac.uns.ftn.uppservice.model.Complaint;
 import rs.ac.uns.ftn.uppservice.service.BookService;
+import rs.ac.uns.ftn.uppservice.service.MailSenderService;
 
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class SaveEditorsNotesDelegate implements JavaDelegate {
+public class SubmitPlagiarismFormNotifyDelegate implements JavaDelegate {
 
     private final BookService bookService;
+    private final MailSenderService mailSenderService;
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        List<FormSubmissionDto> commentsForm = (List<FormSubmissionDto>) execution.getVariable(Constants.FORM_DATA);
-        String comment = (String) commentsForm.get(0).getFieldValue();
-        String editorUsername = (String) execution.getVariable(Constants.EDITORS_ASSIGNEE);
-        Complaint complaint = (Complaint) execution.getVariable(Constants.COMPLAINT);
-
-        complaint = bookService.addEditorsNotesComments(complaint.getId(), editorUsername, comment);
-
-        // update complaint
+        List<FormSubmissionDto> formData = (List<FormSubmissionDto>) execution.getVariable(Constants.FORM_DATA);
+        Complaint complaint = bookService.submitPlagiarismForm(formData);
         execution.setVariable(Constants.COMPLAINT, complaint);
+
+        mailSenderService.sendChiefEditorPlagiarismNotification(complaint);
     }
+
 }

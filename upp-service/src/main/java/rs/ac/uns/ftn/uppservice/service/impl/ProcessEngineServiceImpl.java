@@ -90,7 +90,6 @@ public class ProcessEngineServiceImpl implements ProcessEngineService {
         }
 
         if (!user.getUsername().equals(task.getAssignee())) {
-            System.out.println(task.getAssignee());
             throw new ApiRequestException("You are not allowed to do this operation");
         }
 

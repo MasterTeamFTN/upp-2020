@@ -23,6 +23,17 @@ public final class Constants {
     public static final String BETA_READER_ASSIGNEE = "betaReaderAssignee";
     public static final String BETA_READERS = "betaReaders";
 
+    // Constants from process plagiarism
+    public static final String COMPLAINT = "complaint";
+    public static final String EDITORS = "editors";
+    public static final String EDITORS_ASSIGNEE = "editorAssignee";
+    public static final String NEW_EDITORS = "newEditors";
+    public static final String BOARD_MEMBERS_REVIEW = "boardMembers";
+    public static final String BOARD_MEMBERS_VOTES = "boardMembersVotes";
+    public static final String VOTES_TOTAL = "votesTotal";
+    public static final String NUM_YES_VOTES = "numOfYesVotes";
+    public static final String NUM_NO_VOTES = "numOfNoVotes";
+
     public static final String BOARD_MEMBER_DECISIONS = "boardMemberDecisions";
     public static final String DECISION = "decision";
     public static final String WORK_COUNT = "workCount";

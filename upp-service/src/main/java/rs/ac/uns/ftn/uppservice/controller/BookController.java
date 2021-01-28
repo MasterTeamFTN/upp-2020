@@ -42,14 +42,18 @@ public class BookController {
     }
 
     @GetMapping(path = "/plagiarism-start-process")
+    @PreAuthorize("hasRole('ROLE_WRITER')")
     public ResponseEntity<String> startPlagiarismProcess() {
         ProcessInstance pi;
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         try {
+            identityService.setAuthenticatedUserId(user.getUsername());
             pi = runtimeService.startProcessInstanceByKey(Constants.PROCESS_PLAGIARISM);
         } catch (NullValueException e) {
             throw new ApiRequestException("Process with name doesn't exist!");
         }
+
         return new ResponseEntity<>(pi.getId(), HttpStatus.OK);
     }
 

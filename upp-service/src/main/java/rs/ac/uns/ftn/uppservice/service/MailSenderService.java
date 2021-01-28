@@ -34,11 +34,23 @@ public interface MailSenderService {
 
 	void submitPlagiarismForm(ChiefEditor chiefEditor, Book originalBook, Book plagiat);
 
-	void sendChiefEditorPlagiarismNotification(ChiefEditor chiefEditor, Book originalBook, Book plagiat);
+	void sendChiefEditorPlagiarismNotification(Complaint complaint);
 
     void sendDecisionToWriter(String emailTo, MembershipDecision decision, String processInstanceId);
 
     void sendBetaReadersCommentsToAuthor(Book book);
 
     void sendChiefEditorNotReview(ChiefEditor chiefEditor);
+
+    void notifyEditorToReviewPlagiarism(Editor editor, Complaint complaint);
+
+    void notifyChiefEditorToFindReplacement(String editor, Complaint complaint);
+
+    void notifyBoardMemberToReviewPlagiarism(User boardMember, Complaint complaint);
+
+    void notifyAuthorBookIsNotPlagiarised(Complaint complaint);
+
+    void notifyAuthorBookIsPlagiarised(Complaint complaint);
+
+    void notifyChiefEditorToChooseEditorsAgain(Complaint complaint);
 }

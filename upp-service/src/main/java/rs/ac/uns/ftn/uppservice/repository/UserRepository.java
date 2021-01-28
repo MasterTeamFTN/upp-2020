@@ -22,4 +22,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u JOIN u.authorities a WHERE a.name LIKE 'ROLE_LECTURER'")
     Optional<User> findLecturer();
+
+    @Query("SELECT u FROM User u JOIN u.authorities a WHERE a.name LIKE 'ROLE_BOARD_MEMBER'")
+    List<User> findBoardMembers();
 }

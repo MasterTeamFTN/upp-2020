@@ -17,6 +17,7 @@ import rs.ac.uns.ftn.uppservice.service.UserService;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service

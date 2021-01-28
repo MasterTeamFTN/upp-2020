@@ -1,8 +1,12 @@
 package rs.ac.uns.ftn.uppservice.service;
 
+import rs.ac.uns.ftn.uppservice.model.BoardMember;
+
 import java.util.List;
 
 public interface BoardMemberService {
+
+    List<BoardMember> findAll();
 
     /**
      * Method used to send notifications to all board members about user membership request
