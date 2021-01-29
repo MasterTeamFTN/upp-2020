@@ -7,7 +7,6 @@ import { AuthQuery, AuthStore } from "../..";
 
 const ENDPOINTS = {
     GET_CURRENT_WRITER: '/api/user/',
-    SUBMIT_WRITERS_FILES: '/api/file/uploadAlternative',
     SUBMIT_FILE: '/api/file/upload'
 }
 

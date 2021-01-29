@@ -50,3 +50,7 @@ INSERT INTO reader_genre (reader_id, genre_id) VALUES (3, 7);
 
 INSERT INTO books (id, is_published,is_plagiarized,  num_of_pages, title, genre_id, writer_id, synopsis, year, is_rejected) VALUES (1, true, false, 250, "First book", 1, 1, "", 1111, false)
 INSERT INTO books (id, is_published,is_plagiarized,  num_of_pages, title, genre_id, writer_id, synopsis, year, is_rejected) VALUES (2, true, false, 250, "Plagiat", 1, 13, "", 1111, false)
+
+INSERT INTO decisions (name) VALUES ("Approve");
+INSERT INTO decisions (name) VALUES ("Reject");
+INSERT INTO decisions (name) VALUES ("NeedMoreInfo");

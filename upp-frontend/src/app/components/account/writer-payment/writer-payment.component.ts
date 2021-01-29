@@ -9,6 +9,7 @@ import { FormDto } from 'src/app/model/dto/FormDto';
 import { AuthStore, AuthQuery } from 'src/app/shared';
 import { FormSubmissionDto } from 'src/app/model/dto/FormSubmissionDto';
 import { SnackbarComponent } from '../../common/snackbar/snackbar.component';
+import Utils from 'src/app/shared/util/utils';
 
 @Component({
 	selector: 'app-writer-payment',
@@ -53,7 +54,7 @@ export class WriterPaymentComponent implements OnInit {
 				Object.keys(response.formFields).forEach((i) => {
 					this.paymentFormArray.push(
 						this.formBuilder.group({
-							actualValue: new FormControl(null, Array.from(this.getValidators(response.formFields[i]))),
+							actualValue: new FormControl(null, Array.from(Utils.getValidators(response.formFields[i]))),
 							id: new FormControl({ value: response.formFields[i].id, disabled: true }),
 							type: new FormControl({ value: response.formFields[i].type, disabled: true }),
 							name: new FormControl({ value: response.formFields[i].label, disabled: true }),
@@ -75,35 +76,6 @@ export class WriterPaymentComponent implements OnInit {
 		});
 	}
 
-
-	getValidators = (formField: any) => {
-		const validatorsArray = [];
-		formField.validationConstraints.forEach((valConstraint) => {
-			validatorsArray.push(this.mapValidator(valConstraint.name, valConstraint.configuration));
-		})
-		return validatorsArray;
-	}
-
-
-	mapValidator(name: string, configuration: any): any {
-		switch (name.toLowerCase()) {
-			case 'required':
-				return Validators.required;
-			case 'min':
-				return Validators.min(configuration);
-			case 'max':
-				return Validators.max(configuration);
-			case 'minlength':
-				return Validators.minLength(configuration);
-			case 'maxlength':
-				return Validators.maxLength(configuration);
-			case 'pattern':
-				return Validators.pattern(configuration);
-			default:
-				return Validators.required;
-		}
-	}
-
 	submit(formSubmitData: any) {
 		this.mapCamundaForm(formSubmitData);
 		console.log(formSubmitData);
@@ -115,8 +87,8 @@ export class WriterPaymentComponent implements OnInit {
 
 					this.showSnack(`You have made a payment for your membership.`)
 					window.location.reload();
-					this.router.navigate['/'];
-					
+					this.router.navigate(['/']);
+
 				})
 	}
 

@@ -5,7 +5,9 @@ import org.camunda.bpm.engine.RuntimeService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.uppservice.common.constants.Constants;
+import rs.ac.uns.ftn.uppservice.common.mapper.BookMapper;
 import rs.ac.uns.ftn.uppservice.dto.request.FormSubmissionDto;
+import rs.ac.uns.ftn.uppservice.dto.response.BookDto;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ResourceNotFoundException;
 import rs.ac.uns.ftn.uppservice.model.*;
 import rs.ac.uns.ftn.uppservice.repository.BookRepository;
@@ -15,7 +17,9 @@ import rs.ac.uns.ftn.uppservice.repository.UserRepository;
 import rs.ac.uns.ftn.uppservice.service.*;
 import rs.ac.uns.ftn.uppservice.util.SetUtils;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +34,7 @@ public class BookServiceImpl implements BookService {
     private final RuntimeService runtimeService;
     private final ReaderService readerService;
     private final ComplaintService complaintService;
+    private final BookMapper bookMapper;
 
     @Override
     public Book findById(Long id) {
@@ -39,7 +44,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book submitInitForm(List<FormSubmissionDto> formData, String processInstanceId) {
-        Book book = createNewBook(formData);
+        Book book = createNewBook(formData, processInstanceId);
         ChiefEditor chiefEditor = userService.getChiefEditor();
         mailSenderService.sendChiefEditorNewBookNotification(chiefEditor, book);
 
@@ -87,22 +92,26 @@ public class BookServiceImpl implements BookService {
         return complaint;
     }
 
-    private Book createNewBook(List<FormSubmissionDto> formData) {
+    private Book createNewBook(List<FormSubmissionDto> formData, String processInstanceId) {
         Book book = new Book();
         Writer writer = (Writer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         for (FormSubmissionDto field : formData) {
-            if(field.getFieldId().equals("FormField_title")) book.setTitle((String) field.getFieldValue());
-            if(field.getFieldId().equals("FormField_genre")) {
+            if (field.getFieldId().equals("FormField_title")) book.setTitle((String) field.getFieldValue());
+            if (field.getFieldId().equals("FormField_genre")) {
                 Genre genre = genreRepository.findById(Long.parseLong((String) field.getFieldValue()))
                         .orElseThrow(() -> new ResourceNotFoundException("Genre with name '" + field.getFieldValue() + "' doesn't exist"));
                 book.setGenre(genre);
             }
-            if(field.getFieldId().equals("FormField_synopsis")) book.setSynopsis((String) field.getFieldValue());
+            if (field.getFieldId().equals("FormField_synopsis")) book.setSynopsis((String) field.getFieldValue());
 
         }
 
         book.setWriter(writer);
+        book.setIsPublished(false);
+
+        book.setJurisdiction(BookPublishingJurisdiction.EDITORS);
+        book.setProcessInstanceId(processInstanceId);
         book = bookRepository.save(book);
 
         return book;
@@ -165,7 +174,7 @@ public class BookServiceImpl implements BookService {
                 book.setKeywords(SetUtils.fromListToSet(keywords));
             }
 
-            if (field.getFieldId().equals("FormField_year")) book.setYear(Integer.parseInt((String) field.getFieldValue()));
+            if (field.getFieldId().equals("FormField_year")) book.setYear((Integer) field.getFieldValue());
             if (field.getFieldId().equals("FormField_cityCountry")) book.setCityCountry((String) field.getFieldValue());
             if (field.getFieldId().equals("FormField_numOfPages")) book.setNumOfPages((Integer) field.getFieldValue());
         }
@@ -255,5 +264,40 @@ public class BookServiceImpl implements BookService {
 		ChiefEditor chiefEditor = userService.getChiefEditor();
         mailSenderService.sendChiefEditorNotReview(chiefEditor);
 	}
+    @Override
+    public List<BookDto> getAll() {
+        return bookRepository.findAll()
+                .stream()
+                .map(bookMapper::entityToDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public Book registerReviewSubmission(Book book) {
+        Book bookFromDatabase = bookRepository.findById(book.getId()).orElseThrow(EntityNotFoundException::new);
+        book.setJurisdiction(BookPublishingJurisdiction.WRITERS);
+        bookRepository.save(bookFromDatabase);
+
+        return bookFromDatabase;
+    }
+
+    @Override
+    public List<BookDto> getMyBooks(String username) {
+        return bookRepository.findAllByWriterUsername(username)
+                .stream()
+                .map(bookMapper::entityToDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookDto> getBooksFromIdsList(Set<Long> bookIds) {
+        return bookRepository.findAll().stream()
+                .map(bookMapper::entityToDto)
+                .filter(book -> bookIds.contains(book.getId())
+        ).collect(Collectors.toList());
+    }
+
+    @Override
+    public Book save(Book book) {
+        return bookRepository.save(book);
+    }
 
 }

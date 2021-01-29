@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import rs.ac.uns.ftn.uppservice.dto.request.CamundaFormSubmitDTO;
 import rs.ac.uns.ftn.uppservice.dto.request.FormSubmissionDto;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ApiRequestException;
+import rs.ac.uns.ftn.uppservice.model.MembershipDecision;
 import rs.ac.uns.ftn.uppservice.model.User;
 import rs.ac.uns.ftn.uppservice.service.ProcessEngineService;
 
@@ -144,9 +145,12 @@ public class ProcessEngineServiceImpl implements ProcessEngineService {
         String decisionVariable = (String) data.getFormData().get(0).getFieldValue();
 
         Map<String, Object> map = new HashMap<>();
-        map.put("decision", decisionVariable.substring(0, 1).toLowerCase() + decisionVariable.substring(1));
+        String decision = mapDecision(decisionVariable);
 
-        saveToRuntime(task, decisionVariable);
+//        map.put("decision", decisionVariable.substring(0, 1).toLowerCase() + decisionVariable.substring(1));
+        map.put(DECISION, decision);
+
+        saveToRuntime(task, decision);
         try {
             formService.submitTaskForm(task.getId(), map);
         } catch (FormFieldValidatorException e) {
@@ -155,6 +159,25 @@ public class ProcessEngineServiceImpl implements ProcessEngineService {
 
 
         return processInstanceId;
+    }
+
+    private String mapDecision(String id) {
+        MembershipDecision membershipDecision = null;
+        switch (id) {
+            case "1":
+                membershipDecision = MembershipDecision.APPROVE;
+                break;
+            case "2":
+                membershipDecision = MembershipDecision.REJECT;
+                break;
+            case "3":
+                membershipDecision = MembershipDecision.NEED_MORE_INFO;
+                break;
+            default:
+                membershipDecision = MembershipDecision.APPROVE;
+                break;
+        }
+        return membershipDecision.getLabel();
     }
 
     /**

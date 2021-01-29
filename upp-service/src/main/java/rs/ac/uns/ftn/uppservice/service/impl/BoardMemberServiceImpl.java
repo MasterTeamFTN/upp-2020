@@ -6,7 +6,7 @@ import org.camunda.bpm.engine.RuntimeService;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.uppservice.common.mapper.CamundaUserMapper;
-import rs.ac.uns.ftn.uppservice.dto.response.WriterPaperResourceDto;
+import rs.ac.uns.ftn.uppservice.dto.response.PdfResourceDto;
 import rs.ac.uns.ftn.uppservice.model.BoardMember;
 import rs.ac.uns.ftn.uppservice.model.ConfirmationToken;
 import rs.ac.uns.ftn.uppservice.model.User;
@@ -83,9 +83,9 @@ public class BoardMemberServiceImpl implements BoardMemberService {
                 decisions.stream().collect(Collectors.groupingBy(decision -> decision, Collectors.counting()));
 
         Map<String, Long> decisionMap = Stream.of(new Object[][]{
-                {"reject", count.containsKey("Reject") ? count.get("Reject") : 0L},
-                {"approve", count.containsKey("Approve") ? count.get("Approve") : 0L},
-                {"needMoreInfo", count.containsKey("NeedMoreInfo") ? count.get("NeedMoreInfo") : 0L},
+                {"reject", count.containsKey("reject") ? count.get("reject") : 0L},
+                {"approve", count.containsKey("approve") ? count.get("approve") : 0L},
+                {"needMoreInfo", count.containsKey("needMoreInfo") ? count.get("needMoreInfo") : 0L},
         }).collect(Collectors.toMap(data -> (String) data[0], data -> (Long) data[1]));
 
 
@@ -108,14 +108,14 @@ public class BoardMemberServiceImpl implements BoardMemberService {
     }
 
     /**
-     * Method used to read all files from list of user papers and create WriterPaperResourceDto for each
+     * Method used to read all files from list of user papers and create PdfResourceDto for each
      * Todo: read all files from papers/{username}
      *
      * @param user
      * @return
      */
-    private List<WriterPaperResourceDto> getUserPapers(User user) {
-        List<WriterPaperResourceDto> papers = new ArrayList<>();
+    private List<PdfResourceDto> getUserPapers(User user) {
+        List<PdfResourceDto> papers = new ArrayList<>();
 
         user.getRegistrationPapers().stream().forEach(path -> {
             try {
@@ -123,7 +123,7 @@ public class BoardMemberServiceImpl implements BoardMemberService {
                 String[] tokens = path.split("\\\\");
                 String fileName = tokens[tokens.length - 1];
 
-                papers.add(new WriterPaperResourceDto(fileName, new ByteArrayResource(pdf)));
+                papers.add(new PdfResourceDto(fileName, new ByteArrayResource(pdf)));
             } catch (IOException e) {
                 e.printStackTrace();
             }

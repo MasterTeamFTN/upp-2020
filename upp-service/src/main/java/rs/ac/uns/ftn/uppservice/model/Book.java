@@ -75,4 +75,14 @@ public class Book {
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<BetaReaderComment> betaReadersComments;
+
+    @Column(name = "processInstanceId")
+    private String processInstanceId;
+
+    @Column(name = "handwritePath")
+    private String handwritePath;
+
+    @Column(length = 32, columnDefinition = "varchar(32) default 'WRITERS'")
+    @Enumerated(value = EnumType.STRING)
+    private BookPublishingJurisdiction jurisdiction;
 }

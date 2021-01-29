@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import rs.ac.uns.ftn.uppservice.common.constants.Constants;
 import rs.ac.uns.ftn.uppservice.dto.request.FormSubmissionDto;
 import rs.ac.uns.ftn.uppservice.model.Book;
+import rs.ac.uns.ftn.uppservice.model.BookPublishingJurisdiction;
 import rs.ac.uns.ftn.uppservice.model.Suggestion;
 import rs.ac.uns.ftn.uppservice.service.BookService;
 import rs.ac.uns.ftn.uppservice.service.MailSenderService;
@@ -28,6 +29,7 @@ public class SaveChiefEditorsReportAndNotifyDelegate implements JavaDelegate {
 
         Suggestion suggestion = bookService.addChiefEditorsComments(book.getId(), comment);
 
+        book.setJurisdiction(BookPublishingJurisdiction.WRITERS);
         Book savedBook = bookService.findById(book.getId());
         mailSenderService.sendChiefEditorCommentsToAuthor(savedBook, suggestion);
     }

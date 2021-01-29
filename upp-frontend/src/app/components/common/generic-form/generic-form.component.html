@@ -18,9 +18,10 @@
                         <div *ngSwitchCase="'MultiSelect'">
                             <mat-select [formControl]="field.controls.actualValue"
                                 placeholder="{{field.controls.name.value}}" multiple>
-                                <mat-option *ngFor="let msValue of multiselectValues; let j=index" value="{{j+1}}">
+                                <mat-option *ngFor="let msValue of multiselectValues; let j=index" value="{{idOfMulti(msValue)}}">
                                     {{msValue}}</mat-option>
                             </mat-select>
+                            
                         </div>
 
                         <!-- PASSWORD FORM FIELD -->
@@ -63,9 +64,10 @@
 
                         <!-- ENUM FORM FIELD -->
                         <div *ngSwitchCase="'enum'">
-                            <mat-select placeholder="Decide" [formControl]="field.controls.actualValue">
-                                <mat-option *ngFor="let decisionType of enumKeys" [value]="decisionType">
-                                    {{decisionType}}
+                            <mat-select placeholder="Pick" [formControl]="field.controls.actualValue">
+                                <!-- <mat-option *ngFor="let enumType of enumKeys" [value]="enumType"> -->
+                                <mat-option *ngFor="let enumType of enumKeys; let j=index" value="{{j+1}}">
+                                    {{enumType}}
                                 </mat-option>
                             </mat-select>
                         </div>

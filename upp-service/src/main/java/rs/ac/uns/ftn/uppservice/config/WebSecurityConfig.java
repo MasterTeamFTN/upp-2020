@@ -61,6 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
+                .antMatchers("/book/publish-start-process").hasRole("WRITER")
                 .antMatchers("/api/file/**").authenticated()
                 .anyRequest().authenticated().and();
         http.apply(securityConfigurer);

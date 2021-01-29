@@ -235,6 +235,9 @@
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="decision" label="Decision" type="enum">
+            <camunda:validation>
+              <camunda:constraint name="required" config="true" />
+            </camunda:validation>
             <camunda:value id="approve" name="Approve" />
             <camunda:value id="reject" name="Reject" />
             <camunda:value id="needMoreInfo" name="NeedMoreInfo" />
@@ -264,6 +267,10 @@
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_WriterRegistration">
+      <bpmndi:BPMNEdge id="Flow_1slijyh_di" bpmnElement="Flow_1slijyh">
+        <di:waypoint x="2500" y="177" />
+        <di:waypoint x="2535" y="177" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1qpuwg8_di" bpmnElement="Flow_1qpuwg8">
         <di:waypoint x="2220" y="490" />
         <di:waypoint x="2300" y="490" />
@@ -401,10 +408,6 @@
         <di:waypoint x="198" y="177" />
         <di:waypoint x="310" y="177" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1slijyh_di" bpmnElement="Flow_1slijyh">
-        <di:waypoint x="2500" y="177" />
-        <di:waypoint x="2535" y="177" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="162" y="159" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -459,8 +462,17 @@
       <bpmndi:BPMNShape id="Activity_0xuxjpy_di" bpmnElement="Activity_0lrc7ge">
         <dc:Bounds x="2110" y="137" width="100" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1jndu4s_di" bpmnElement="Activity_1jndu4s">
+        <dc:Bounds x="2250" y="137" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1rz4yz3_di" bpmnElement="Activity_0aqz8iz">
         <dc:Bounds x="1550" y="137" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0on94g5_di" bpmnElement="Gateway_0on94g5" isMarkerVisible="true">
+        <dc:Bounds x="2535" y="152" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2519" y="209" width="86" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_03r6beh_di" bpmnElement="Activity_03r6beh">
         <dc:Bounds x="2120" y="450" width="100" height="80" />
@@ -483,15 +495,6 @@
       <bpmndi:BPMNShape id="Activity_0hxhc52_di" bpmnElement="Activity_0pa98ff">
         <dc:Bounds x="1840" y="137" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1jndu4s_di" bpmnElement="Activity_1jndu4s">
-        <dc:Bounds x="2250" y="137" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0on94g5_di" bpmnElement="Gateway_0on94g5" isMarkerVisible="true">
-        <dc:Bounds x="2535" y="152" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2519" y="209" width="86" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1j0hkpd_di" bpmnElement="Activity_1j0hkpd">
         <dc:Bounds x="2400" y="137" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -501,16 +504,16 @@
           <dc:Bounds x="2408" y="470" width="83" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0x5b82b_di" bpmnElement="Event_0x5b82b">
-        <dc:Bounds x="722" y="199" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="662" y="236" width="76" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0mo4svf_di" bpmnElement="Event_0mo4svf">
         <dc:Bounds x="2302" y="199" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="2239" y="236" width="83" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0x5b82b_di" bpmnElement="Event_0x5b82b">
+        <dc:Bounds x="722" y="199" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="662" y="236" width="76" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>

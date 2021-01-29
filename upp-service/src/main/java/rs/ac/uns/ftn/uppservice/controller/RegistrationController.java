@@ -34,28 +34,6 @@ public class RegistrationController {
     private final PaymentService paymentService;
     private final WriterService writerService;
 
-
-    // NOTE: Don't use this endpoint. Instead use /process/public/start/{name}
-    // TODO: remove later
-    /**
-     * Call this endpoint when you want to start reader registration.
-     * @return Returns form fields that frontend app needs to generate forms
-     */
-    @GetMapping(path = "/public/reader-start")
-    public ResponseEntity<FormFieldsDto> startReaderRegistration() {
-        ProcessInstance pi = runtimeService.startProcessInstanceByKey("Process_ReaderRegistration");
-        Task task = taskService.createTaskQuery().processInstanceId(pi.getId()).list().get(0);
-
-        TaskFormData tfd = formService.getTaskFormData(task.getId());
-        List<FormField> properties = tfd.getFormFields();
-
-        for(FormField fp : properties) {
-            System.out.println(fp.getId() + fp.getType());
-        }
-
-        return new ResponseEntity(new FormFieldsDto(task.getId(), properties, pi.getId()), HttpStatus.OK);
-    }
-
     /**
      * When user fills out the from on the frontend and wants to submit it, then you call this endpoint.
      * @param data - Data from the from
