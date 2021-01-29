@@ -11,11 +11,7 @@ import { StartRegistrationComponent } from '../components/registration/start-reg
 import { LoadFileComponent } from '../components/common/load-file/load-file.component';
 import { LoggedInGuard } from './guards/logged-in.guard';
 import { WriterGuard } from './guards/writer.guard';
-<<<<<<< HEAD
-import { PlagiarismComponent } from '../components/user/plagiarism-page/plagiarism.component';
-=======
 import { PublishComponent } from '../components/publish-book/publish/publish.component';
->>>>>>> main
 
 export const routes: Routes = [
     {
@@ -54,11 +50,6 @@ export const routes: Routes = [
         canActivate: [LoggedInGuard]
     },
     {
-        path: 'plagiarism',
-        component: PlagiarismComponent,
-        // canActivate: []
-    },
-    {
         path: 'verify',
         component: AccountConfirmationComponent,
         // canActivate: []
@@ -73,9 +64,5 @@ export const routes: Routes = [
         component: PublishComponent,
         // canActivate: [LoggedInGuard]
     }
-<<<<<<< HEAD
 ]
-=======
     
-]
->>>>>>> main
