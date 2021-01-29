@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public interface FileService {
 
-    String saveFile(String taskId, String processInstanceId, File file, boolean isRegistration) throws IOException;
+    String saveFile(String username, String processInstanceId, File file, boolean isRegistration) throws IOException;
 
     //    UserFileDto saveBook(String username, File file) throws IOException;
     void removeFiles(String directoryName) throws IOException;

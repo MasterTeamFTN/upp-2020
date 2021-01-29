@@ -40,3 +40,6 @@ INSERT INTO writer_genre (writer_id, genre_id) VALUES (1, 1);
 INSERT INTO writer_genre (writer_id, genre_id) VALUES (1, 2);
 INSERT INTO reader_genre (reader_id, genre_id) VALUES (3, 7);
 
+INSERT INTO decisions (name) VALUES ("Approve");
+INSERT INTO decisions (name) VALUES ("Reject");
+INSERT INTO decisions (name) VALUES ("NeedMoreInfo");

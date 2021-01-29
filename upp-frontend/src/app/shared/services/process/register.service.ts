@@ -5,6 +5,8 @@ import { Observable } from "rxjs/internal/Observable";
 import { AuthQuery, AuthStore } from "../..";
 
 const ENDPOINTS = {
+    START_PROCESS : '',
+
     START_READER_REGISTRATION: '/process/public/start/Process_ReaderRegistration',
     START_WRITER_REGISTRATION: '/process/public/start/Process_WriterRegistration',
 

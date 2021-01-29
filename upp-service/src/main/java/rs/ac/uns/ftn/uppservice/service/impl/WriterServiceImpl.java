@@ -7,13 +7,10 @@ import org.camunda.bpm.engine.TaskService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.uppservice.dto.request.FormSubmissionDto;
-import rs.ac.uns.ftn.uppservice.model.MembershipDecision;
+import rs.ac.uns.ftn.uppservice.model.*;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ApiRequestException;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ResourceNotFoundException;
-import rs.ac.uns.ftn.uppservice.model.ConfirmationToken;
-import rs.ac.uns.ftn.uppservice.model.Genre;
-import rs.ac.uns.ftn.uppservice.model.User;
-import rs.ac.uns.ftn.uppservice.model.Writer;
+import rs.ac.uns.ftn.uppservice.repository.AuthorityRepository;
 import rs.ac.uns.ftn.uppservice.repository.ConfirmationTokenRepository;
 import rs.ac.uns.ftn.uppservice.repository.GenreRepository;
 import rs.ac.uns.ftn.uppservice.repository.UserRepository;
@@ -21,7 +18,9 @@ import rs.ac.uns.ftn.uppservice.service.FileService;
 import rs.ac.uns.ftn.uppservice.service.MailSenderService;
 import rs.ac.uns.ftn.uppservice.service.WriterService;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,6 +38,7 @@ public class WriterServiceImpl implements WriterService {
     private final ConfirmationTokenRepository confTokenRepository;
     private final MailSenderService mailSenderService;
     private final FileService fileService;
+    private final AuthorityRepository authorityRepository;
 
     private final RuntimeService runtimeService;
     private final TaskService taskService;
@@ -77,6 +77,9 @@ public class WriterServiceImpl implements WriterService {
         writer.setEnabled(false);
         writer.setMember(false);
         writer.setMembershipDecision(MembershipDecision.NOT_SUBMITTED_YET);
+
+        Authority writer_authority = authorityRepository.findByName("ROLE_WRITER").orElseThrow(EntityNotFoundException::new);
+        writer.setAuthorities(Arrays.asList(writer_authority));
         writer = userRepository.save(writer);
 
         org.camunda.bpm.engine.identity.User camundaUser = identityService.newUser(writer.getUsername());

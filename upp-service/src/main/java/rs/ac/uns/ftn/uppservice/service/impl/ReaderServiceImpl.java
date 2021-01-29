@@ -7,17 +7,13 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.uppservice.dto.request.FormSubmissionDto;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ApiRequestException;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ResourceNotFoundException;
-import rs.ac.uns.ftn.uppservice.model.ConfirmationToken;
-import rs.ac.uns.ftn.uppservice.model.Genre;
-import rs.ac.uns.ftn.uppservice.model.Reader;
-import rs.ac.uns.ftn.uppservice.model.User;
-import rs.ac.uns.ftn.uppservice.repository.ConfirmationTokenRepository;
-import rs.ac.uns.ftn.uppservice.repository.GenreRepository;
-import rs.ac.uns.ftn.uppservice.repository.ReaderRepository;
-import rs.ac.uns.ftn.uppservice.repository.UserRepository;
+import rs.ac.uns.ftn.uppservice.model.*;
+import rs.ac.uns.ftn.uppservice.repository.*;
 import rs.ac.uns.ftn.uppservice.service.MailSenderService;
 import rs.ac.uns.ftn.uppservice.service.ReaderService;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,6 +29,7 @@ public class ReaderServiceImpl implements ReaderService {
     private final MailSenderService mailSenderService;
     private final IdentityService identityService;
     private final GenreRepository genreRepository;
+    private final AuthorityRepository authorityRepository;
 
 
     @Override
@@ -85,6 +82,10 @@ public class ReaderServiceImpl implements ReaderService {
         if (userRepository.findByEmail(reader.getEmail()).isPresent()) {
             throw new ApiRequestException("User with that email already exist");
         }
+
+
+        Authority reader_authority = authorityRepository.findByName("ROLE_READER").orElseThrow(EntityNotFoundException::new);
+        reader.setAuthorities(Arrays.asList(reader_authority));
 
         reader.setEnabled(false);
         reader = userRepository.save(reader);

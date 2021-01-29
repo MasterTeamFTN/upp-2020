@@ -235,6 +235,9 @@
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="decision" label="Decision" type="enum">
+            <camunda:validation>
+              <camunda:constraint name="required" config="true" />
+            </camunda:validation>
             <camunda:value id="approve" name="Approve" />
             <camunda:value id="reject" name="Reject" />
             <camunda:value id="needMoreInfo" name="NeedMoreInfo" />

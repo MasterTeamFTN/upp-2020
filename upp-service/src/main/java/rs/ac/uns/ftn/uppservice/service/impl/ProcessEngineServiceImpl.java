@@ -149,9 +149,9 @@ public class ProcessEngineServiceImpl implements ProcessEngineService {
         String decision = mapDecision(decisionVariable);
 
 //        map.put("decision", decisionVariable.substring(0, 1).toLowerCase() + decisionVariable.substring(1));
-        map.put("decision", decision);
+        map.put(DECISION, decision);
 
-        saveToRuntime(task, decisionVariable);
+        saveToRuntime(task, decision);
         try {
             formService.submitTaskForm(task.getId(), map);
         } catch (FormFieldValidatorException e) {
@@ -165,13 +165,13 @@ public class ProcessEngineServiceImpl implements ProcessEngineService {
     private String mapDecision(String id) {
         MembershipDecision membershipDecision = null;
         switch (id) {
-            case "0":
+            case "1":
                 membershipDecision = MembershipDecision.APPROVE;
                 break;
-            case "1":
+            case "2":
                 membershipDecision = MembershipDecision.REJECT;
                 break;
-            case "2":
+            case "3":
                 membershipDecision = MembershipDecision.NEED_MORE_INFO;
                 break;
             default:

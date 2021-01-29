@@ -35,7 +35,6 @@ public class BookController {
 
 
     @GetMapping(path = "/publish-start-process")
-    @PreAuthorize("hasRole('ROLE_WRITER')")
     public ResponseEntity<String> startProcess() {
         ProcessInstance pi;
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

@@ -78,9 +78,9 @@ public class BoardMemberServiceImpl implements BoardMemberService {
                 decisions.stream().collect(Collectors.groupingBy(decision -> decision, Collectors.counting()));
 
         Map<String, Long> decisionMap = Stream.of(new Object[][]{
-                {"reject", count.containsKey("Reject") ? count.get("Reject") : 0L},
-                {"approve", count.containsKey("Approve") ? count.get("Approve") : 0L},
-                {"needMoreInfo", count.containsKey("NeedMoreInfo") ? count.get("NeedMoreInfo") : 0L},
+                {"reject", count.containsKey("reject") ? count.get("reject") : 0L},
+                {"approve", count.containsKey("approve") ? count.get("approve") : 0L},
+                {"needMoreInfo", count.containsKey("needMoreInfo") ? count.get("needMoreInfo") : 0L},
         }).collect(Collectors.toMap(data -> (String) data[0], data -> (Long) data[1]));
 
 
