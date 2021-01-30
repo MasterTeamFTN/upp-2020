@@ -6,7 +6,9 @@ import { AuthQuery, AuthStore } from "../..";
 
 const ENDPOINTS = {
     GET_ALL_BOOKS: '/book/all',
-    GET_MY_BOOKS: '/book/myBooks'
+    GET_MY_BOOKS: '/book/myBooks',
+
+    START_PLAGIARISM_PROCESS: '/book/plagiarism-start-process'
 }
 
 
@@ -28,6 +30,10 @@ export class BookService {
 
     getMyBooks(): Observable<any> {
         return this.http.get(ENDPOINTS.GET_MY_BOOKS);
+    }
+
+    startPlagiarismProcess() : Observable<any> {
+        return this.http.get(ENDPOINTS.START_PLAGIARISM_PROCESS,{responseType: 'text'});
     }
 
 

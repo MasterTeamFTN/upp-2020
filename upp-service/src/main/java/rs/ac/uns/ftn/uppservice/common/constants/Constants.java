@@ -29,6 +29,7 @@ public final class Constants {
     public static final String EDITORS_ASSIGNEE = "editorAssignee";
     public static final String NEW_EDITORS = "newEditors";
     public static final String BOARD_MEMBERS_REVIEW = "boardMembers";
+    public static final String BOARD_MEMBER_ASSIGNEE = "boardMemberAssignee";
     public static final String BOARD_MEMBERS_VOTES = "boardMembersVotes";
     public static final String VOTES_TOTAL = "votesTotal";
     public static final String NUM_YES_VOTES = "numOfYesVotes";

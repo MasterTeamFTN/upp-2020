@@ -3,7 +3,6 @@ package rs.ac.uns.ftn.uppservice.dto.response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import rs.ac.uns.ftn.uppservice.model.BookPublishingJurisdiction;
 
 import java.util.Set;
 

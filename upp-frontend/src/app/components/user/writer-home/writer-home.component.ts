@@ -40,6 +40,8 @@ export class WriterHomeComponent implements OnInit {
 	dataSource = new MatTableDataSource<BookDto>([]);
 
 
+	plagiarismSub: Subscription;
+
 	loadWriter = () => {
 		this.getWriterSub = this.writerService.getWriter().subscribe((writer) => {
 			this.writer = writer;
@@ -82,6 +84,35 @@ export class WriterHomeComponent implements OnInit {
 			}))
 			this.router.navigate(['publishBook'])
 		});
+	}
+
+	reportPlagiarism = () => {
+		this.plagiarismSub = this.bookService.startPlagiarismProcess().subscribe((response) => {
+
+
+			this.snackbar.openFromComponent(SnackbarComponent, {
+				data: `Camunda process with id ${response} successfully started!`,
+				panelClass: ['snackbar-success']
+			});
+			this.authStore.update((state) => ({
+				processId: response,
+			}))
+
+			const dialogRef = this.dialog.open(BookDataDialog, {
+				width: '500px',
+				data: {title: 'Start plagiarism process', processInstanceId: response},
+			});
+	
+	
+			dialogRef.afterClosed().subscribe(result => {
+				if (result.event == 'Submited') {
+					this.fetchBooks();
+				} else {
+					console.log("something went wrong")
+				}
+			});
+
+		})
 	}
 
 	submit(eventMsg: any) {

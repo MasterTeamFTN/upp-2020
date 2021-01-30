@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.uppservice.service;
 
 import rs.ac.uns.ftn.uppservice.model.BoardMember;
+import rs.ac.uns.ftn.uppservice.model.Complaint;
 
 import java.util.List;
 
@@ -25,4 +26,5 @@ public interface BoardMemberService {
      * @return
      */
     String registerDecision(List<String> decision, String processInstanceId, String executionId);
+
 }

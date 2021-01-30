@@ -13,7 +13,7 @@ public interface BookService {
 
     Book findById(Long id);
     Book submitInitForm(List<FormSubmissionDto> formData, String processInstanceId);
-    Complaint submitPlagiarismForm(List<FormSubmissionDto> formData);
+    Complaint submitPlagiarismForm(List<FormSubmissionDto> formData, String processInstanceId);
     void rejectFirstReview(List<FormSubmissionDto> formData, Book book);
     void rejectAfterTimeOut(Book book);
     void reject(Long bookId);
@@ -25,6 +25,7 @@ public interface BookService {
     Suggestion addChiefEditorsComments(Long bookId, String comment);
     void publish(Long bookId);
 	Complaint addEditorsNotesComments(Long complaintId, String editorUsername, String comment);
+    Complaint addBoardMembersDecision(Long complaintId, String boardMembersUsername, Boolean decision);
 	void notifyChiefEditor();
 
     /**

@@ -62,6 +62,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/book/publish-start-process").hasRole("WRITER")
+                .antMatchers("/complaints").hasAnyRole("CHIEF_EDITOR", "EDITOR", "BOARD_MEMBER")
+                .antMatchers("/editorComplaints/**").hasRole("EDITOR")
                 .antMatchers("/api/file/**").authenticated()
                 .anyRequest().authenticated().and();
         http.apply(securityConfigurer);

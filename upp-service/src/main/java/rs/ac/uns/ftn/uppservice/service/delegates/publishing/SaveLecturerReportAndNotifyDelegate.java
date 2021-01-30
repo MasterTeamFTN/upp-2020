@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import rs.ac.uns.ftn.uppservice.common.constants.Constants;
 import rs.ac.uns.ftn.uppservice.dto.request.FormSubmissionDto;
 import rs.ac.uns.ftn.uppservice.model.Book;
-import rs.ac.uns.ftn.uppservice.model.BookPublishingJurisdiction;
+import rs.ac.uns.ftn.uppservice.model.Jurisdiction;
 import rs.ac.uns.ftn.uppservice.model.Suggestion;
 import rs.ac.uns.ftn.uppservice.service.BookService;
 import rs.ac.uns.ftn.uppservice.service.MailSenderService;
@@ -27,7 +27,7 @@ public class SaveLecturerReportAndNotifyDelegate implements JavaDelegate {
         String comment = (String) form.get(0).getFieldValue();
         Book book = (Book) execution.getVariable(Constants.BOOK);
 
-        book.setJurisdiction(BookPublishingJurisdiction.WRITERS);
+        book.setJurisdiction(Jurisdiction.WRITERS);
         book = bookService.save(book);
         execution.setVariable(Constants.BOOK, book);
 

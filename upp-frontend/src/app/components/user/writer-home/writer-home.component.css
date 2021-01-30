@@ -1,13 +1,13 @@
-.writer-info-card{ 
-    display:inline-block;
+.writer-info-card {
+    display: inline-block;
     width: 55%;
-    text-align:left;
+    text-align: left;
 }
 
 .mat-card-cvr {
-   width: 100%;
-   text-align:center;
-   /* height: 100vh;
+    width: 100%;
+    text-align: center;
+    /* height: 100vh;
    display: flex;
    justify-content: center;
    align-items: center; */
@@ -17,18 +17,18 @@
 }
 
 .example-header-image {
-    background-image: url('src\assets\images\user.jpg');
+    background-image: url("src\assets\images\user.jpg");
     background-size: cover;
-  }
+}
 .member-header-image {
-    background-image: url('src\assets\images\user-checked.jpg');
+    background-image: url("src\assets\images\user-checked.jpg");
     background-size: cover;
 }
 
-  .divider{
-    width:10px;
-    height:auto;
-    display:inline-block;
+.divider {
+    width: 10px;
+    height: auto;
+    display: inline-block;
 }
 
 /* .container {
@@ -38,4 +38,21 @@
 
 table {
     width: 100%;
-  }
+    text-align: center;
+}
+
+mat-grid-tile {
+    background: black;
+    cursor: pointer;
+    color: white;
+}
+mat-grid-tile:hover {
+    background-color: #ccc;
+}
+
+#homeContainer, #reportsContainer {
+    margin-top: 30px;
+    text-align: center;
+    justify-content: center;
+}
+

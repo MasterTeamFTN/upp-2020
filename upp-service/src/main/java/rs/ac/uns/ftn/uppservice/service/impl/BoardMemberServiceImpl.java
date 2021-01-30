@@ -7,9 +7,8 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.uppservice.common.mapper.CamundaUserMapper;
 import rs.ac.uns.ftn.uppservice.dto.response.PdfResourceDto;
-import rs.ac.uns.ftn.uppservice.model.BoardMember;
-import rs.ac.uns.ftn.uppservice.model.ConfirmationToken;
-import rs.ac.uns.ftn.uppservice.model.User;
+import rs.ac.uns.ftn.uppservice.model.*;
+import rs.ac.uns.ftn.uppservice.repository.BoardMemberDecisionRepository;
 import rs.ac.uns.ftn.uppservice.repository.BoardMemberRepository;
 import rs.ac.uns.ftn.uppservice.repository.ConfirmationTokenRepository;
 import rs.ac.uns.ftn.uppservice.service.BoardMemberService;
@@ -36,6 +35,7 @@ public class BoardMemberServiceImpl implements BoardMemberService {
     private final IdentityService identityService;
     private final RuntimeService runtimeService;
     private final CamundaUserMapper camundaUserMapper;
+
 
     @Override
     public List<BoardMember> findAll() {
@@ -96,6 +96,7 @@ public class BoardMemberServiceImpl implements BoardMemberService {
         removeBoardMembers(executionId);
         return finalDecision;
     }
+
 
     private void removeBoardMembers(String executionId) {
         List<org.camunda.bpm.engine.identity.User> boardMembers = (List<org.camunda.bpm.engine.identity.User>)

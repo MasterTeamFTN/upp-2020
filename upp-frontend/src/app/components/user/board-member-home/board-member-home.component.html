@@ -6,13 +6,47 @@
                     list_alt
                 </span>
             </div>
-            <mat-card-title>List of requests for writer membership.</mat-card-title>
-            <mat-card-subtitle>You should do a review of the submited science papers and make a decision if they are
-                going to become members or not.</mat-card-subtitle>
+            <mat-card-title>List of complaints.</mat-card-title>
         </mat-card-header>
-        <mat-divider></mat-divider>
-        <mat-card-content class="board-member-card-content">
-            Todo: check here if files are already uploaded and wait for acceptance.
+        <mat-divider></mat-divider>  
+        <mat-card-content>
+            <table mat-table [dataSource]="dataSourceComplaints">
+                <ng-container matColumnDef="Id">
+                    <th mat-header-cell *matHeaderCellDef style="text-align:center;"> Id </th>
+                    <td mat-cell *matCellDef="let complaint"> {{complaint.id}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="plagiarisedBook">
+                    <th mat-header-cell *matHeaderCellDef style="text-align:center;"> Plagiarised book </th>
+                    <td mat-cell *matCellDef="let complaint"> {{complaint.plagiarisedBook}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="originalBook">
+                    <th mat-header-cell *matHeaderCellDef style="text-align:center;"> Original book </th>
+                    <td mat-cell *matCellDef="let complaint"> {{complaint.originalBook}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Action">
+                    <th mat-header-cell *matHeaderCellDef style="text-align:center;"> Action </th>
+                    <td mat-cell *matCellDef="let complaint"> 
+
+                        <div *ngIf="complaint.jurisdiction === 'board_members_jurisdiction'">
+                            <div *ngIf="!haveISubmitted(complaint)">
+                                <button mat-raised-button (click)="actOnComplaint(complaint)" color="accent">Continue</button>
+                            </div>
+                            <div *ngIf="haveISubmitted(complaint)">
+                                <button mat-raised-button disabled color="accent">Commment submitted</button>
+                            </div>
+                        </div>
+                        <div *ngIf="complaint.jurisdiction != 'board_members_jurisdiction'">
+                            <button mat-raised-button disabled color="accent">Waiting</button>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedComplaintColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedComplaintColumns;"></tr>
+            </table>
         </mat-card-content>
     </mat-card>
 </div>

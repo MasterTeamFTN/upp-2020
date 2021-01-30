@@ -1,9 +1,7 @@
 package rs.ac.uns.ftn.uppservice.service;
 
-import rs.ac.uns.ftn.uppservice.dto.response.ReaderDto;
-import rs.ac.uns.ftn.uppservice.dto.response.UserDTO;
+import rs.ac.uns.ftn.uppservice.dto.response.*;
 import rs.ac.uns.ftn.uppservice.model.*;
-import rs.ac.uns.ftn.uppservice.dto.response.WriterDto;
 
 import java.util.List;
 
@@ -17,4 +15,6 @@ public interface UserService {
     Editor getRandomEditor();
     WriterDto getWriter(Long id);
     ReaderDto getReader(Long id);
+    EditorDto getEditor(Long id);
+    BoardMemberDto getBoardMember(Long id);
 }

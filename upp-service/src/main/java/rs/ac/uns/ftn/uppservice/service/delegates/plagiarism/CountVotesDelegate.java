@@ -16,7 +16,7 @@ public class CountVotesDelegate implements JavaDelegate {
         int noVotes = 0;
 
         for (String vote : votes) {
-            if (vote.equals("yes")) {
+            if (vote.equals("1")) {
                 ++yesVotes;
             } else {
                 ++noVotes;

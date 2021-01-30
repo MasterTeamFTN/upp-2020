@@ -124,8 +124,20 @@ export class AddReviewDialog implements OnInit {
                 case 'More changes':
                     this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("FormField_moreChanges", value))
                     break;
+                case 'Editors':
+                    this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("FormField_editors", value))
+                    break;
+                case 'Comment':
+                    this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("FormField_note", value))
+                    break;
+                case 'New editor':
+                    this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("FormField_newEditor", value))
+                    break;
+                case 'Is plagiarised':
+                    this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("FormField_decision", value))
+                    break;
                 default:
-                    this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("FormField_reason", value))
+                    this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("FormField_editors", value))
             }
         });
 

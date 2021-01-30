@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import rs.ac.uns.ftn.uppservice.dto.request.CamundaFormSubmitDTO;
 import rs.ac.uns.ftn.uppservice.dto.request.PaperDto;
-import rs.ac.uns.ftn.uppservice.dto.response.ReaderDto;
-import rs.ac.uns.ftn.uppservice.dto.response.UserDTO;
-import rs.ac.uns.ftn.uppservice.dto.response.WriterDto;
+import rs.ac.uns.ftn.uppservice.dto.response.*;
 import rs.ac.uns.ftn.uppservice.model.User;
 import rs.ac.uns.ftn.uppservice.service.ProcessEngineService;
 import rs.ac.uns.ftn.uppservice.service.UserService;
@@ -41,5 +39,15 @@ public class UserController {
     @GetMapping("/{id}/asReader")
     public ResponseEntity<ReaderDto> reader(@PathVariable Long id) {
         return new ResponseEntity<>(userService.getReader(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/asEditor")
+    public ResponseEntity<EditorDto> editor(@PathVariable Long id) {
+        return new ResponseEntity<>(userService.getEditor(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/asBoardMember")
+    public ResponseEntity<BoardMemberDto> boardMember(@PathVariable Long id) {
+        return new ResponseEntity<>(userService.getBoardMember(id), HttpStatus.OK);
     }
 }

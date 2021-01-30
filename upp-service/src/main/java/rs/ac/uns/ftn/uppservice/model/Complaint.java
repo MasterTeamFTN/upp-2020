@@ -34,4 +34,11 @@ public class Complaint {
     @ManyToOne
     @JoinColumn(name = "chiefEditor_id", nullable = false)
     private ChiefEditor chiefEditor;
+
+    @Column(name = "processInstanceId")
+    private String processInstanceId;
+
+    @Column(length = 32, columnDefinition = "varchar(32) default 'EDITORS'")
+    @Enumerated(value = EnumType.STRING)
+    private Jurisdiction jurisdiction;
 }

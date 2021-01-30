@@ -6,7 +6,7 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.stereotype.Component;
 import rs.ac.uns.ftn.uppservice.common.constants.Constants;
 import rs.ac.uns.ftn.uppservice.model.Book;
-import rs.ac.uns.ftn.uppservice.model.BookPublishingJurisdiction;
+import rs.ac.uns.ftn.uppservice.model.Jurisdiction;
 import rs.ac.uns.ftn.uppservice.service.BookService;
 import rs.ac.uns.ftn.uppservice.service.PlagiarismService;
 
@@ -20,7 +20,7 @@ public class CheckIfPlagiarismDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         Book book = (Book) execution.getVariable(Constants.BOOK);
-        book.setJurisdiction(BookPublishingJurisdiction.EDITORS);
+        book.setJurisdiction(Jurisdiction.EDITORS);
         plagiarismService.checkIfPlagiarised(bookService.save(book));
     }
 }

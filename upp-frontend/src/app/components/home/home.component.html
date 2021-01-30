@@ -14,7 +14,9 @@
 <div *ngIf="isChiefEditor">
 	<app-chief-editor-home></app-chief-editor-home>
 </div>
-
+<div *ngIf="isEditor">
+	<app-editor-home></app-editor-home>
+</div>
 <div class="container" *ngIf="noRole">
     <h1>home page</h1>
 </div>

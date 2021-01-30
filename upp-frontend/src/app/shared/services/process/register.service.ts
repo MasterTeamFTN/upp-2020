@@ -10,7 +10,7 @@ const ENDPOINTS = {
     START_READER_REGISTRATION: '/process/public/start/Process_ReaderRegistration',
     START_WRITER_REGISTRATION: '/process/public/start/Process_WriterRegistration',
 
-    GET_REGISTRATION_FORM_FIELDS: '/process/public/form/',
+    GET_FORM_FIELDS: '/process/public/form/',
 
     SUBMIT_READERS_REGISTRATION: '/registration/public/reader-submit',
     SUBMIT_READERS_GENRES: '/registration/public/reader-genres-submit',
@@ -44,7 +44,7 @@ export class RegisterService {
 
     getForm(processInstanceId: any): Observable<any> {
         console.log('get form');
-        var url = ENDPOINTS.GET_REGISTRATION_FORM_FIELDS;
+        var url = ENDPOINTS.GET_FORM_FIELDS;
         return this.http.get(url.concat(processInstanceId));
     }
 

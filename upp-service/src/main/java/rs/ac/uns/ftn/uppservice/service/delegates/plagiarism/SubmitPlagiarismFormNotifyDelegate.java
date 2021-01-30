@@ -22,7 +22,7 @@ public class SubmitPlagiarismFormNotifyDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         List<FormSubmissionDto> formData = (List<FormSubmissionDto>) execution.getVariable(Constants.FORM_DATA);
-        Complaint complaint = bookService.submitPlagiarismForm(formData);
+        Complaint complaint = bookService.submitPlagiarismForm(formData, execution.getProcessInstanceId());
         execution.setVariable(Constants.COMPLAINT, complaint);
 
         mailSenderService.sendChiefEditorPlagiarismNotification(complaint);

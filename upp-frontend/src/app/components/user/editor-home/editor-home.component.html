@@ -1,0 +1,38 @@
+<h1>List of complaints</h1>
+<table mat-table [dataSource]="dataSourceComplaints">
+    <ng-container matColumnDef="Id">
+        <th mat-header-cell *matHeaderCellDef style="text-align:center;"> Id </th>
+        <td mat-cell *matCellDef="let complaint"> {{complaint.id}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="plagiarisedBook">
+        <th mat-header-cell *matHeaderCellDef style="text-align:center;"> Plagiarised book </th>
+        <td mat-cell *matCellDef="let complaint"> {{complaint.plagiarisedBook}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="originalBook">
+        <th mat-header-cell *matHeaderCellDef style="text-align:center;"> Original book </th>
+        <td mat-cell *matCellDef="let complaint"> {{complaint.originalBook}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Action">
+        <th mat-header-cell *matHeaderCellDef style="text-align:center;"> Action </th>
+        <td mat-cell *matCellDef="let complaint"> 
+        
+            <div *ngIf="complaint.jurisdiction === 'simple_editors_jurisdiction'">
+                <div *ngIf="!haveISubmitted(complaint)">
+                    <button mat-raised-button (click)="actOnComplaint(complaint)" color="accent">Continue</button>
+                </div>
+                <div *ngIf="haveISubmitted(complaint)">
+                    <button mat-raised-button disabled color="accent">Commment submitted</button>
+                </div>
+            </div>
+            <div *ngIf="complaint.jurisdiction != 'simple_editors_jurisdiction'">
+                <button mat-raised-button disabled color="accent">Waiting</button>
+            </div>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedComplaintColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedComplaintColumns;"></tr>
+</table>

@@ -13,6 +13,7 @@ import { ChiefEditorHomeComponent } from './chief-editor-home/chief-editor-home.
 import { AddReviewDialog } from './chief-editor-home/dialog/add-review-dialog';
 import { BetaReaderDialog } from './reader-home/dialog/beta-reader-dialog';
 import { LecturerDialog } from './lecturer-home/dialog/lecturer-dialog';
+import { EditorHomeComponent } from './editor-home/editor-home.component';
 
 
 
@@ -26,7 +27,8 @@ import { LecturerDialog } from './lecturer-home/dialog/lecturer-dialog';
     AddReviewDialog,
     BookDataDialog,
     BetaReaderDialog,
-    LecturerDialog],
+    LecturerDialog,
+    EditorHomeComponent],
   imports: [
     CommonModule,
     CoreModule,
@@ -34,6 +36,6 @@ import { LecturerDialog } from './lecturer-home/dialog/lecturer-dialog';
     AccountModule,
   ],
   entryComponents: [AddReviewDialog, BookDataDialog, BetaReaderDialog, LecturerDialog],
-  exports: [WriterHomeComponent, ReaderHomeComponent, LecturerHomeComponent, BoardMemberHomeComponent, ChiefEditorHomeComponent]
+  exports: [WriterHomeComponent, ReaderHomeComponent, LecturerHomeComponent, BoardMemberHomeComponent, ChiefEditorHomeComponent, EditorHomeComponent]
 })
 export class UserModule { }

@@ -6,11 +6,10 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.stereotype.Component;
 import rs.ac.uns.ftn.uppservice.common.constants.Constants;
 import rs.ac.uns.ftn.uppservice.dto.request.FormSubmissionDto;
-import rs.ac.uns.ftn.uppservice.model.Complaint;
-import rs.ac.uns.ftn.uppservice.model.CompliantAssignment;
-import rs.ac.uns.ftn.uppservice.model.Editor;
-import rs.ac.uns.ftn.uppservice.model.User;
+import rs.ac.uns.ftn.uppservice.model.*;
 import rs.ac.uns.ftn.uppservice.repository.UserRepository;
+import rs.ac.uns.ftn.uppservice.service.BookService;
+import rs.ac.uns.ftn.uppservice.service.ComplaintService;
 import rs.ac.uns.ftn.uppservice.service.MailSenderService;
 
 import java.util.ArrayList;
@@ -23,6 +22,8 @@ public class SetEditorsDelegate implements JavaDelegate {
 
     private final UserRepository userRepository;
     private final MailSenderService mailSenderService;
+    private final BookService bookService;
+    private final ComplaintService complaintService;
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
@@ -45,7 +46,13 @@ public class SetEditorsDelegate implements JavaDelegate {
         execution.setVariable(Constants.NEW_EDITORS, new ArrayList<String>());
 
         Complaint complaint = (Complaint) execution.getVariable(Constants.COMPLAINT);
-        editors.forEach(editor -> mailSenderService.notifyEditorToReviewPlagiarism(editor, complaint));
+        complaint.setJurisdiction(Jurisdiction.SIMPLE_EDITORS);
+        complaintService.save(complaint);
+        execution.setVariable(Constants.COMPLAINT, complaint);
+
+        editors.forEach(editor -> {
+            bookService.addEditorsNotesComments(complaint.getId(), editor.getUsername(), null);
+            mailSenderService.notifyEditorToReviewPlagiarism(editor, complaint);});
     }
 
 }

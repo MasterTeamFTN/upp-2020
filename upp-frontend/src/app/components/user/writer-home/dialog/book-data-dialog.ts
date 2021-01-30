@@ -158,6 +158,12 @@ export class BookDataDialog implements OnInit {
                 case 'Make changes':
                     this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("FormField_makeChanges", value))
                     break;
+                case 'Original book':
+                    this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("FormField_originalBook", value))
+                    break;
+                case 'Plagiat book':
+                    this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("FormField_plagiarismBook", value))
+                    break;
                 default:
                     this.camundaFormSubmitDto["formData"].push(new FormSubmissionDto("FormField_cowriters", value))
             }

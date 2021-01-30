@@ -31,6 +31,5 @@ public class Writer extends User {
     @Enumerated(value = EnumType.STRING)
     private MembershipDecision membershipDecision = MembershipDecision.NEED_MORE_INFO;
 
-    //Todo add pdf files
-    
+
 }

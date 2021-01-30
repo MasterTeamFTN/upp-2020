@@ -1,13 +1,13 @@
-.membership-requests-card{ 
-    display:inline-block;
+.membership-requests-card {
+    display: inline-block;
     width: 55%;
-    text-align:left;
+    text-align: left;
 }
 
 .mat-card-cvr {
-   width: 100%;
-   text-align:center;
-   /* height: 100vh;
+    width: 100%;
+    text-align: center;
+    /* height: 100vh;
    display: flex;
    justify-content: center;
    align-items: center; */
@@ -18,4 +18,12 @@
 
 .example-header-image {
     background-size: cover;
-  }
+}
+
+table {
+    width: 100%;
+    text-align: center;
+}
+th {
+    text-align: center;
+}

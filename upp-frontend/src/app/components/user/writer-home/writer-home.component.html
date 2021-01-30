@@ -12,28 +12,36 @@
 
                 <mat-tab-group dynamicHeight backgroundColor="primary" mat-align-tabs="center" (selectedTabChange)="onLinkClick($event)">
 
-                    <mat-tab label="Home">
-                        <button mat-raised-button (click)="publishBook()" color="accent">Start book publishing process</button>
+                    <mat-tab label="Home" id="homeContainer">
+                        <mat-grid-list cols="2" rowHeight="2:1">
+                            <mat-grid-tile (click)="publishBook()">
+                                <h2>Publish a book</h2>
+                            </mat-grid-tile>
+                            <mat-grid-tile (click)="reportPlagiarism()">
+                                <h2>Create a plagiarism report</h2>
+                            </mat-grid-tile>
+                        </mat-grid-list>
                     </mat-tab>
-                    <mat-tab label="My books">
+
+                    <mat-tab label="My books" id="booksContainer">
                            <table mat-table [dataSource]="dataSource">
                                 <ng-container matColumnDef="Title">
-                                    <th mat-header-cell *matHeaderCellDef> Title </th>
+                                    <th mat-header-cell *matHeaderCellDef style="text-align:center;"> Title </th>
                                     <td mat-cell *matCellDef="let book"> {{book.title}} </td>
                                 </ng-container>
 
                                 <ng-container matColumnDef="Author">
-                                    <th mat-header-cell *matHeaderCellDef> Author </th>
+                                    <th mat-header-cell *matHeaderCellDef style="text-align:center;"> Author </th>
                                     <td mat-cell *matCellDef="let book"> {{book.authorsName}} </td>
                                 </ng-container>
 
                                 <ng-container matColumnDef="Genre">
-                                    <th mat-header-cell *matHeaderCellDef> Genre </th>
+                                    <th mat-header-cell *matHeaderCellDef style="text-align:center;"> Genre </th>
                                     <td mat-cell *matCellDef="let book"> {{book.genre}} </td>
                                 </ng-container>
 
                                 <ng-container matColumnDef="Action">
-                                    <th mat-header-cell *matHeaderCellDef> Action </th>
+                                    <th mat-header-cell *matHeaderCellDef style="text-align:center;"> Action </th>
                                     <td mat-cell *matCellDef="let book"> 
 
                                         <div *ngIf="book.isPublished">
@@ -57,7 +65,6 @@
                                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                             </table>
                     </mat-tab>
-                    
                 </mat-tab-group>
             </mat-card-content>
         </mat-card>

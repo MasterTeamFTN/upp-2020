@@ -4,16 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.camunda.bpm.engine.RuntimeService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import rs.ac.uns.ftn.uppservice.common.constants.Constants;
 import rs.ac.uns.ftn.uppservice.common.mapper.BookMapper;
 import rs.ac.uns.ftn.uppservice.dto.request.FormSubmissionDto;
 import rs.ac.uns.ftn.uppservice.dto.response.BookDto;
 import rs.ac.uns.ftn.uppservice.exception.exceptions.ResourceNotFoundException;
 import rs.ac.uns.ftn.uppservice.model.*;
-import rs.ac.uns.ftn.uppservice.repository.BookRepository;
-import rs.ac.uns.ftn.uppservice.repository.ComplaintRepository;
-import rs.ac.uns.ftn.uppservice.repository.GenreRepository;
-import rs.ac.uns.ftn.uppservice.repository.UserRepository;
+import rs.ac.uns.ftn.uppservice.repository.*;
 import rs.ac.uns.ftn.uppservice.service.*;
 import rs.ac.uns.ftn.uppservice.util.SetUtils;
 
@@ -35,6 +31,8 @@ public class BookServiceImpl implements BookService {
     private final ReaderService readerService;
     private final ComplaintService complaintService;
     private final BookMapper bookMapper;
+    private final ComplaintAssignmentRepository complaintAssignmentRepository;
+    private final BoardMemberDecisionRepository boardMemberDecisionRepository;
 
     @Override
     public Book findById(Long id) {
@@ -55,7 +53,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Complaint submitPlagiarismForm(List<FormSubmissionDto> formData) {
+    public Complaint submitPlagiarismForm(List<FormSubmissionDto> formData, String processInstanceId) {
     	Book originalBook = null;
     	Book plagiat = null;
 
@@ -76,6 +74,8 @@ public class BookServiceImpl implements BookService {
         complaint.setOriginalBook(originalBook);
         complaint.setPlagiarisedBook(plagiat);
         complaint.setChiefEditor(chiefEditor);
+        complaint.setProcessInstanceId(processInstanceId);
+        complaint.setJurisdiction(Jurisdiction.EDITORS);
 
 //        Set<Book>originalBooks = new HashSet<>();
 //        originalBooks.add(originalBook);
@@ -110,7 +110,7 @@ public class BookServiceImpl implements BookService {
         book.setWriter(writer);
         book.setIsPublished(false);
 
-        book.setJurisdiction(BookPublishingJurisdiction.EDITORS);
+        book.setJurisdiction(Jurisdiction.EDITORS);
         book.setProcessInstanceId(processInstanceId);
         book = bookRepository.save(book);
 
@@ -245,19 +245,48 @@ public class BookServiceImpl implements BookService {
     }
 
 	@Override
-	public Complaint addEditorsNotesComments(Long complaintId, String editorUsername, String comment) {
+    public Complaint addEditorsNotesComments(Long complaintId, String editorUsername, String comment) {
         Complaint complaint = complaintService.findById(complaintId);
 
-        CompliantAssignment assignment = new CompliantAssignment();
-        assignment.setNotes(comment);
-        assignment.setEditor((Editor) userRepository.findByUsername(editorUsername));
-        assignment.setComplaint(complaint);
+        Optional<CompliantAssignment> assignment = complaintAssignmentRepository.findByIdAndEditorUsername(complaintId, editorUsername);
+        CompliantAssignment compliantAssignment = new CompliantAssignment();
 
-        complaint.getCompliantAssignments().add(assignment);
+        if(assignment.isPresent()) {
+            compliantAssignment = assignment.get();
+            compliantAssignment.setNotes(comment);
+        } else {
+            compliantAssignment.setNotes(comment);
+            compliantAssignment.setEditor((Editor) userRepository.findByUsername(editorUsername));
+            compliantAssignment.setComplaint(complaint);
+        }
+
+        complaint.getCompliantAssignments().add(compliantAssignment);
         complaint = complaintRepository.save(complaint);
 
         return complaint;
-	}
+    }
+
+    @Override
+    public Complaint addBoardMembersDecision(Long complaintId, String boardMembersUsername, Boolean decision) {
+        Complaint complaint = complaintService.findById(complaintId);
+
+        Optional<BoardMemberDecision> bmDec = boardMemberDecisionRepository.findByIdAndBoardMemberUsername(complaintId, boardMembersUsername);
+        BoardMemberDecision boardMemberDecision = new BoardMemberDecision();
+
+        if(bmDec.isPresent()) {
+            boardMemberDecision = bmDec.get();
+            boardMemberDecision.setIsPlagiarized(decision);
+        } else {
+            boardMemberDecision.setIsPlagiarized(decision);
+            boardMemberDecision.setBoardMember((BoardMember) userRepository.findByUsername(boardMembersUsername));
+            boardMemberDecision.setComplaint(complaint);
+        }
+
+        complaint.getBoardMemberDecisions().add(boardMemberDecision);
+        complaint = complaintRepository.save(complaint);
+
+        return complaint;
+    }
 
 	@Override
 	public void notifyChiefEditor() {
@@ -274,7 +303,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book registerReviewSubmission(Book book) {
         Book bookFromDatabase = bookRepository.findById(book.getId()).orElseThrow(EntityNotFoundException::new);
-        book.setJurisdiction(BookPublishingJurisdiction.WRITERS);
+        book.setJurisdiction(Jurisdiction.WRITERS);
         bookRepository.save(bookFromDatabase);
 
         return bookFromDatabase;

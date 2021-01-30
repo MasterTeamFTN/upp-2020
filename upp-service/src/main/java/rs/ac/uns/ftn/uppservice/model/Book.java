@@ -1,7 +1,6 @@
 package rs.ac.uns.ftn.uppservice.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -84,5 +83,5 @@ public class Book {
 
     @Column(length = 32, columnDefinition = "varchar(32) default 'WRITERS'")
     @Enumerated(value = EnumType.STRING)
-    private BookPublishingJurisdiction jurisdiction;
+    private Jurisdiction jurisdiction;
 }
