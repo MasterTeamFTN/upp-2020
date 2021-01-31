@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatSnackBar, MatTabChangeEvent, MatTableDataSource } from '@angular/material';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialog, MatSnackBar, MatTabChangeEvent, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { BookDto } from 'src/app/model/dto/BookDto';
@@ -152,6 +152,16 @@ export class WriterHomeComponent implements OnInit {
 	}
 
 	moreInfo = (book: BookDto) => {
-		console.log("unimplemented");
+		this.dialog.open(BookInfoDialog, {
+			data: book
+		  });
 	}
 }
+
+@Component({
+	selector: 'book-info-dialog',
+	templateUrl: 'dialog/book-info-dialog.html',
+  })
+  export class BookInfoDialog {
+	constructor(@Inject(MAT_DIALOG_DATA) public data: BookDto) {}
+  }

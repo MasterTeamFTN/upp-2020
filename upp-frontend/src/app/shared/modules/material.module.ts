@@ -27,7 +27,8 @@ import {
   MatSnackBarModule,
   MatOptionModule,
   MatTabsModule,
-  MatButtonToggleModule
+  MatButtonToggleModule,
+  MatListModule
 } from '@angular/material';
 // import {FlexLayoutModule} from "@angular/flex-layout";
 
@@ -64,7 +65,8 @@ const MATERIAL_MODULES = [
   MatProgressSpinnerModule,
   MatOptionModule,
   MatTabsModule,
-  MatButtonToggleModule
+  MatButtonToggleModule,
+  MatListModule
 ];
 
 /**

@@ -1,26 +1,72 @@
-.example-small-box, .example-large-box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 16px;
-    padding: 16px;
-    border-radius: 8px;
-  }
-  
-  .example-small-box {
-    height: 100px;
-    width: 100px;
-  }
-  
-  .example-large-box {
-    height: 300px;
-    width: 300px;
-  }
+.example-small-box,
+.example-large-box {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 16px;
+	padding: 16px;
+	border-radius: 8px;
+}
 
-  table {
-    width: 100%;
-    text-align: center;
-  }
-  th {
-    text-align: center;
-  }
+.example-small-box {
+	height: 100px;
+	width: 100px;
+}
+
+.example-large-box {
+	height: 300px;
+	width: 300px;
+}
+
+table {
+	width: 100%;
+	text-align: center;
+}
+th {
+	text-align: center;
+}
+.chief-editor-home-card {
+	display: inline-block;
+	width: 55%;
+	text-align: left;
+}
+
+.mat-card-cvr {
+	width: 100%;
+	text-align: center;
+}
+.chief-editor-card-content {
+	padding-top: 25px;
+}
+
+.member-header-image {
+	background-image: url("src\assets\images\user-checked.jpg");
+	background-size: cover;
+}
+
+.divider {
+	width: 10px;
+	height: auto;
+	display: inline-block;
+}
+
+table {
+	width: 100%;
+	text-align: center;
+}
+
+mat-grid-tile {
+	background: black;
+	cursor: pointer;
+	color: white;
+}
+mat-grid-tile:hover {
+	background-color: #ccc;
+}
+
+#homeContainer,
+#tasksContainer {
+	margin-top: 30px;
+	text-align: center;
+	justify-content: center;
+}

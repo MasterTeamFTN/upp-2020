@@ -1,3 +1,4 @@
+import { CommonComponentsModule } from './components/common/common-components.module';
 import { UserModule } from './components/user/user.module';
 import { NavbarModule } from './components/navbar/navbar.module';
 import { MainModule } from './shared/modules/main.module';

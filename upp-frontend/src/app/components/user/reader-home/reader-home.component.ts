@@ -1,10 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatSnackBar, MatTabChangeEvent, MatTableDataSource } from '@angular/material';
-import { Router } from '@angular/router';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialog, MatSnackBar, MatTabChangeEvent, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { BookDto } from 'src/app/model/dto/BookDto';
-import { AuthStore } from 'src/app/shared';
-import { PublishingService } from 'src/app/shared/services/process/publishing.service';
 import { ReaderService } from 'src/app/shared/services/reader/reader.service';
 import { SnackbarComponent } from '../../common/snackbar/snackbar.component';
 import { BetaReaderDialog } from './dialog/beta-reader-dialog';
@@ -68,9 +65,7 @@ export class ReaderHomeComponent implements OnInit {
 		});
 	}
 
-	moreInfo = (book: BookDto) => {
-		console.log("unimplemented");
-	}
 
 
 }
+

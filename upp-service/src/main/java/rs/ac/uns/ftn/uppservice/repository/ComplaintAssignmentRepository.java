@@ -12,4 +12,6 @@ public interface ComplaintAssignmentRepository extends JpaRepository<CompliantAs
     Optional<CompliantAssignment> findByIdAndEditorUsername(Long complaintId, String editorUsername);
 
     List<CompliantAssignment> findAllByEditorUsername(String editorsUsername);
+
+    Optional<CompliantAssignment> findByIdAndEditorId(Long complaintId, Long id);
 }

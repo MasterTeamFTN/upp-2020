@@ -54,9 +54,11 @@ export class GenericFormComponent implements OnInit {
 					const values = field.controls.type.value.values;
 
 					for (let key of Object.keys(values)) {
-						var lower = values[key]
-						lower[0].toLowerCase()
-						enums.push(lower);
+						if(enums[parseInt(key)-1] === undefined) {
+							var lower = values[key]
+							lower[0].toLowerCase()
+							enums.push(lower);
+						}
 					}
 				}
 			}
@@ -72,8 +74,10 @@ export class GenericFormComponent implements OnInit {
 					const values = field.controls.type.value.values;
 
 					for (let key of Object.keys(values)) {
-						multiValues.push(values[key]);
-						this.multiKeys.push({ "id": key, "value": values[key] });
+						if(multiValues[parseInt(key)-1] === undefined) {
+							multiValues.push(values[key]);
+							this.multiKeys.push({ "id": key, "value": values[key] });
+						}
 					}
 				}
 			}

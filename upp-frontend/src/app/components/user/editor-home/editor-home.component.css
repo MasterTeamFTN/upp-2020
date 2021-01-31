@@ -1,8 +1,22 @@
+table {
+	width: 100%;
+	text-align: center;
+}
+th {
+	text-align: center;
+}
 
-  table {
-    width: 100%;
-    text-align: center;
-  }
-  th {
-    text-align: center;
-  }
+.editor-home-card {
+	display: inline-block;
+	width: 55%;
+	text-align: left;
+}
+
+.mat-card-cvr {
+	width: 100%;
+	text-align: center;
+}
+
+.example-header-image {
+	background-size: cover;
+}

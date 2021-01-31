@@ -45,7 +45,7 @@
                                     <td mat-cell *matCellDef="let book"> 
 
                                         <div *ngIf="book.isPublished">
-                                            <button mat-raised-button disabled color="accent">Book is published</button>
+                                            <button mat-raised-button (click)="moreInfo(book)" color="accent">Book is published</button>
                                         </div>
 
                                         <div *ngIf="!book.isPublished">

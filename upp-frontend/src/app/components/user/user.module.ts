@@ -14,6 +14,7 @@ import { AddReviewDialog } from './chief-editor-home/dialog/add-review-dialog';
 import { BetaReaderDialog } from './reader-home/dialog/beta-reader-dialog';
 import { LecturerDialog } from './lecturer-home/dialog/lecturer-dialog';
 import { EditorHomeComponent } from './editor-home/editor-home.component';
+import { MaterialModule } from 'src/app/shared/modules/material.module';
 
 
 
@@ -34,6 +35,7 @@ import { EditorHomeComponent } from './editor-home/editor-home.component';
     CoreModule,
     CommonComponentsModule,
     AccountModule,
+    MaterialModule
   ],
   entryComponents: [AddReviewDialog, BookDataDialog, BetaReaderDialog, LecturerDialog],
   exports: [WriterHomeComponent, ReaderHomeComponent, LecturerHomeComponent, BoardMemberHomeComponent, ChiefEditorHomeComponent, EditorHomeComponent]

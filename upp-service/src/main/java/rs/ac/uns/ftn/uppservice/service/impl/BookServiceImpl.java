@@ -248,20 +248,24 @@ public class BookServiceImpl implements BookService {
     public Complaint addEditorsNotesComments(Long complaintId, String editorUsername, String comment) {
         Complaint complaint = complaintService.findById(complaintId);
 
-        Optional<CompliantAssignment> assignment = complaintAssignmentRepository.findByIdAndEditorUsername(complaintId, editorUsername);
+        Editor editor = (Editor) userRepository.findByUsername(editorUsername);
+
+        Optional<CompliantAssignment> assignment = complaintAssignmentRepository.findByIdAndEditorId(complaintId, editor.getId());
         CompliantAssignment compliantAssignment = new CompliantAssignment();
 
         if(assignment.isPresent()) {
             compliantAssignment = assignment.get();
             compliantAssignment.setNotes(comment);
+            complaintAssignmentRepository.save(compliantAssignment);
         } else {
             compliantAssignment.setNotes(comment);
             compliantAssignment.setEditor((Editor) userRepository.findByUsername(editorUsername));
             compliantAssignment.setComplaint(complaint);
+
+            complaint.getCompliantAssignments().add(compliantAssignment);
+            complaint = complaintRepository.save(complaint);
         }
 
-        complaint.getCompliantAssignments().add(compliantAssignment);
-        complaint = complaintRepository.save(complaint);
 
         return complaint;
     }

@@ -31,5 +31,11 @@ public class Writer extends User {
     @Enumerated(value = EnumType.STRING)
     private MembershipDecision membershipDecision = MembershipDecision.NEED_MORE_INFO;
 
+    @Column(name = "processInstanceId")
+    private String processInstanceId;
+
+    @Column(length = 32, columnDefinition = "varchar(32) default 'WRITERS'")
+    @Enumerated(value = EnumType.STRING)
+    private Jurisdiction jurisdiction;
 
 }

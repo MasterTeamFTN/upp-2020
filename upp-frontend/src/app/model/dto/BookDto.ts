@@ -3,8 +3,8 @@ import { BetaReaderCommentDto } from "./BetaReaderCommentDto";
 export interface BookDto {
     id: string;
     title: string;
-    authorsName: number;
-    genre: number;
+    authorsName: string;
+    genre: string;
     isPublished: boolean;
     processInstanceId: string;
     cityCountry: string;
