@@ -19,6 +19,8 @@ public class BookMapper implements CustomMapper<Book, BookDto> {
         bookDto.setAuthorsName(book.getWriter().getFirstName() + " " + book.getWriter().getLastName());
         bookDto.setGenre(book.getGenre().getName());
         bookDto.setIsPublished(book.getIsPublished());
+        bookDto.setIsPlagiarized(book.getIsPlagiarized());
+        bookDto.setIsRejected(book.getIsRejected());
         bookDto.setProcessInstanceId(book.getProcessInstanceId());
         bookDto.setCityCountry(book.getCityCountry());
         bookDto.setHandwritePath(book.getHandwritePath());

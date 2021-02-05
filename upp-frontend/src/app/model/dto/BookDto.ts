@@ -10,6 +10,8 @@ export interface BookDto {
     cityCountry: string;
     handwritePath: string;
     betaReadersComments: BetaReaderCommentDto[];
+    isPlagiarized: boolean;
+    isRejected: boolean;
 
     jurisdiction: string;
 }

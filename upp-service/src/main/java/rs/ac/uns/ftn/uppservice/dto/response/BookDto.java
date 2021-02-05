@@ -16,6 +16,8 @@ public class BookDto {
     private String authorsName;
     private String genre;
     private Boolean isPublished;
+    private Boolean isPlagiarized;
+    private Boolean isRejected;
     private String processInstanceId;
     private String handwritePath;
     private Set<BetaReaderCommentDto> betaReadersComments;

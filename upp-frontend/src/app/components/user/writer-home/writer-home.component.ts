@@ -130,7 +130,7 @@ export class WriterHomeComponent implements OnInit {
 
 
 	fetchBooks = () => {
-		this.getMyBooksSub = this.bookService.getBooks().subscribe(data => {
+		this.getMyBooksSub = this.bookService.getMyBooks().subscribe(data => {
 			this.dataSource = new MatTableDataSource<BookDto>(data);
 		})
 	}

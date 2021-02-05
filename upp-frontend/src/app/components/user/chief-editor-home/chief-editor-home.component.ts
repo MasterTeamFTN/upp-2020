@@ -30,7 +30,7 @@ export class ChiefEditorHomeComponent {
 	formDto: FormDto;
 
 
-	displayedColumns: string[] = ['Title', 'Author', 'Genre', 'IsPublished'];
+	displayedColumns: string[] = ['Title', 'Author', 'Genre', 'Action'];
 	dataSource = new MatTableDataSource<BookDto>([]);
 
 	displayedComplaintColumns: string[] = ['Id', 'plagiarisedBook', 'originalBook', 'Action'];

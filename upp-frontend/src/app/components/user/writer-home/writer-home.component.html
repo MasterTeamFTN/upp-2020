@@ -49,11 +49,23 @@
                                         </div>
 
                                         <div *ngIf="!book.isPublished">
-                                            <div *ngIf="book.jurisdiction === 'writers_jurisdiction'">
-                                                <button mat-raised-button (click)="submitMoreData(book)" color="accent">Continue</button>
+                                        
+                                            <div *ngIf="book.isRejected">
+                                                <button mat-raised-button disabled color="accent">REJECTED</button>
                                             </div>
-                                            <div *ngIf="book.jurisdiction != 'writers_jurisdiction'">
-                                                <button mat-raised-button disabled color="accent">Waiting</button>
+
+                                            <div *ngIf="!book.isRejected">
+                                                <div *ngIf="book.isPlagiarized">
+                                                    <button mat-raised-button disabled color="accent">PLAGIARIZED</button>
+                                                </div>
+                                                <div *ngIf="!book.isPlagiarized">
+                                                    <div *ngIf="book.jurisdiction === 'writers_jurisdiction'">
+                                                        <button mat-raised-button (click)="submitMoreData(book)" color="accent">Continue</button>
+                                                    </div>
+                                                    <div *ngIf="book.jurisdiction != 'writers_jurisdiction'">
+                                                        <button mat-raised-button disabled color="accent">Waiting</button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
